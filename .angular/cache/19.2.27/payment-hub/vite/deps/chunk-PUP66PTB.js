@@ -1,16 +1,7 @@
 import {
-  TuiCell,
-  TuiLabel,
-  TuiWithOptionContent,
-  tuiAsDataListHost
-} from "./chunk-AWBPCIIW.js";
-import {
-  TuiDropdownContent,
-  TuiDropdownDirective,
-  TuiDropdownFixed,
-  TuiDropdownOpen,
-  TuiWithDropdownOpen
-} from "./chunk-BGIQAKTU.js";
+  TUI_ITEMS_HANDLERS,
+  TuiWithItemsHandlers
+} from "./chunk-5S7PSX6H.js";
 import {
   TuiControl
 } from "./chunk-6VPGTAQ5.js";
@@ -18,15 +9,11 @@ import {
   TuiItem
 } from "./chunk-UBR7MOSE.js";
 import {
-  PolymorpheusComponent,
-  PolymorpheusOutlet,
-  injectContext,
-  tuiFocusedIn
-} from "./chunk-RYNVTAQW.js";
-import {
-  TUI_ITEMS_HANDLERS,
-  TuiWithItemsHandlers
-} from "./chunk-5S7PSX6H.js";
+  TuiCell,
+  TuiLabel,
+  TuiWithOptionContent,
+  tuiAsDataListHost
+} from "./chunk-BHMVI56K.js";
 import {
   TUI_BUTTON_OPTIONS,
   TuiAppearance,
@@ -34,6 +21,13 @@ import {
   TuiWithIcons,
   tuiButtonOptionsProvider
 } from "./chunk-HS3QXMX2.js";
+import {
+  TuiDropdownContent,
+  TuiDropdownDirective,
+  TuiDropdownFixed,
+  TuiDropdownOpen,
+  TuiWithDropdownOpen
+} from "./chunk-ZZFJWFYX.js";
 import {
   TUI_AUXILIARY,
   TUI_CLEAR_WORD,
@@ -43,6 +37,12 @@ import {
   TuiScrollControls,
   TuiScrollRef
 } from "./chunk-EGF74S7Z.js";
+import {
+  PolymorpheusComponent,
+  PolymorpheusOutlet,
+  injectContext,
+  tuiFocusedIn
+} from "./chunk-RYNVTAQW.js";
 import {
   TUI_DEFAULT_MATCHER,
   TUI_STRICT_MATCHER,
@@ -1173,4 +1173,4 @@ export {
   TuiTextfieldContent,
   TuiWithNativePicker
 };
-//# sourceMappingURL=chunk-WUV6VXJZ.js.map
+//# sourceMappingURL=chunk-PUP66PTB.js.map

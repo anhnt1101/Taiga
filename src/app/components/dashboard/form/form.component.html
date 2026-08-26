@@ -119,7 +119,7 @@
       <!-- Row 2: 2 columns (each spans 2 of 4 grid columns) -->
       <!-- Ngày hiệu lực -->
       <div class="field field--span-2"
-        [class.field--invalid]="submitted && (isFieldInvalid('effectiveDate') || effectiveDateError) || duplicateFields.exitsDate">
+        [class.field--invalid]="submitted && (isFieldInvalid('effectiveDate') || effectiveDateError) || duplicateFields.effectiveDate">
         <label>Ngày hiệu lực <span class="required">*</span></label>
         <div class="date-input-wrap">
           <tui-textfield [tuiTextfieldCleaner]="true">
@@ -141,7 +141,7 @@
         <div class="error-msg">
           {{ effectiveDateError }}
         </div>
-        }@else if (duplicateFields.exitsDate) {
+        }@else if (duplicateFields.effectiveDate) {
         <span class="error-msg">Ngày hiệu lực đã tồn tại</span>
         }
         <ng-template #calendarTplEffective>
@@ -151,7 +151,7 @@
       </div>
 
       <!-- Ngày hết hiệu lực -->
-      <div class="field field--span-2" [class.field--invalid]="!!endEffectiveDateError || duplicateFields.exitsDate">
+      <div class="field field--span-2" [class.field--invalid]="!!endEffectiveDateError || duplicateFields.effectiveDate">
         <label>Ngày hết hiệu lực </label>
         <div class="date-input-wrap">
           <tui-textfield [tuiTextfieldCleaner]="true">
@@ -174,7 +174,7 @@
         <div class="error-msg">
           {{ endEffectiveDateError }}
         </div>
-        }@else if (duplicateFields.exitsDate) {
+        }@else if (duplicateFields.effectiveDate) {
         <span class="error-msg">Ngày hết hiệu lực đã tồn tại</span>
         }
         <ng-template #calendarTplEndEffective>

@@ -34,7 +34,8 @@ export class FormComponent implements OnInit {
   @Input() duplicateFields = {
     paramValue: false,
     paramType: false,
-    exitsDate: false
+    effectiveDate: false,
+    endEffectiveDate: false
   };
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<{ row: Partial<DanhMucRow>; submitForApproval: boolean }>();
@@ -42,7 +43,7 @@ export class FormComponent implements OnInit {
   submitted = false;
   componentCodeItems: string[] = [];
   selectedComponentCodes: string[] = [];
-  
+
   //Validation date
   effectiveDateError = '';
   endEffectiveDateError = '';
@@ -150,8 +151,8 @@ export class FormComponent implements OnInit {
     this.danhMucService.getComponentCodes().subscribe((options) => {
       if (options && options.length > 0) {
         for (const opt of options) {
-          if (!this.componentCodeItems.includes(opt.componentCode)) {
-            this.componentCodeItems.push(opt.componentCode);
+          if (!this.componentCodeItems.includes(opt.componentCode + " - " + opt.componentName)) {
+            this.componentCodeItems.push(opt.componentCode + " - " + opt.componentName);
           }
         }
       }

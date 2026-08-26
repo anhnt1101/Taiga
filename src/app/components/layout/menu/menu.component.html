@@ -11,14 +11,14 @@
   <ul class="rail__list">
     @for (item of items; track item.label + $index) {
       <li class="rail__item" [class.rail__item--active]="item.active">
-        <span class="rail__icon" ></span>
+        <span class="rail__icon" [innerHTML]="item.icon"></span>
         <span class="rail__label" [title]="item.label">{{ item.label }}</span>
       </li>
     }
   </ul>
 
-  <div class="rail__logout" title="Đăng xuất">
-    <span class="rail__icon" ></span>
+  <div class="rail__logout" title="Đăng xuất" (click)="onLogout()">
+    <span class="rail__icon" [innerHTML]="logoutIcon"></span>
     <span class="rail__label">Đăng xuất</span>
   </div>
 </nav>

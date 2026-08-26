@@ -45,10 +45,11 @@ export class DanhMucTheoNhomComponent implements OnInit {
   } | null>(null);
 
   readonly duplicateFields = signal({
-    paramValue: false,
-    paramType: false,
-    exitsDate: false
-  });
+  paramValue: false,
+  paramType: false,
+  effectiveDate: false,
+  endEffectiveDate: false
+});
 
   readonly batchModal = signal<{
     show: boolean;
@@ -203,7 +204,8 @@ export class DanhMucTheoNhomComponent implements OnInit {
     this.duplicateFields.set({
       paramValue: false,
       paramType: false,
-      exitsDate: false
+      effectiveDate: false,
+      endEffectiveDate: false
     });
   }
 
@@ -217,7 +219,8 @@ export class DanhMucTheoNhomComponent implements OnInit {
     this.duplicateFields.set({
       paramValue: false,
       paramType: false,
-      exitsDate: false
+      effectiveDate: false,
+      endEffectiveDate: false
     });
   }
 
@@ -397,12 +400,15 @@ export class DanhMucTheoNhomComponent implements OnInit {
   }
 
   handleDuplicateError(err: any): void {
-    if (err.status !== 409) { return; }
-    const message = err.error?.message ?? '';
+    if (err.status !== 409) {
+      return;
+    }
+
     this.duplicateFields.set({
-      paramValue: message.includes('paramValue'),
-      paramType: message.includes('paramType'),
-      exitsDate: message.includes('exitsDate')
+      paramValue: true,
+      paramType: true,
+      effectiveDate: true,
+      endEffectiveDate: true
     });
   }
 

@@ -1,4 +1,18 @@
 import {
+  TUI_DARK_MODE,
+  TUI_SELECTION_STREAM,
+  TUI_VIEWPORT,
+  TuiScrollbar
+} from "./chunk-EGF74S7Z.js";
+import {
+  Meta
+} from "./chunk-46UQNXDB.js";
+import {
+  EVENT_MANAGER_PLUGINS,
+  EventManagerPlugin,
+  REMOVE_STYLES_ON_COMPONENT_DESTROY
+} from "./chunk-6D3FKYJ5.js";
+import {
   PolymorpheusComponent,
   PolymorpheusOutlet,
   PolymorpheusTemplate,
@@ -13,12 +27,6 @@ import {
   tuiIsFocusable,
   tuiIsFocusedIn
 } from "./chunk-RYNVTAQW.js";
-import {
-  TUI_DARK_MODE,
-  TUI_SELECTION_STREAM,
-  TUI_VIEWPORT,
-  TuiScrollbar
-} from "./chunk-EGF74S7Z.js";
 import {
   CHAR_NO_BREAK_SPACE,
   CHAR_ZERO_WIDTH_SPACE,
@@ -60,14 +68,6 @@ import {
   tuiZonefree,
   tuiZonefreeScheduler
 } from "./chunk-QU4OCGII.js";
-import {
-  Meta
-} from "./chunk-EYFUUXEU.js";
-import {
-  EVENT_MANAGER_PLUGINS,
-  EventManagerPlugin,
-  REMOVE_STYLES_ON_COMPONENT_DESTROY
-} from "./chunk-6D3FKYJ5.js";
 import {
   DOCUMENT,
   isPlatformBrowser
@@ -2391,4 +2391,4 @@ export {
   TuiWithDropdownOpen,
   TuiDropdown
 };
-//# sourceMappingURL=chunk-BGIQAKTU.js.map
+//# sourceMappingURL=chunk-ZZFJWFYX.js.map

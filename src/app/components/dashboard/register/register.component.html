@@ -1,0 +1,263 @@
+<div class="register-page">
+  <!-- Background elements -->
+  <div class="register-backdrop">
+    <div class="register-backdrop__pattern"></div>
+  </div>
+
+  <div class="register-container">
+    <!-- Brand Header -->
+    <div class="register-brand">
+      <div class="register-logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <rect x="2" y="5" width="20" height="14" rx="2" />
+          <line x1="2" y1="10" x2="22" y2="10" />
+          <line x1="7" y1="15" x2="11" y2="15" />
+        </svg>
+      </div>
+      <div class="register-brand__text">
+        <h1 class="register-brand__title">PAYMENT HUB</h1>
+        <span class="register-brand__subtitle">Cổng Thông tin & Quản trị Hệ thống</span>
+      </div>
+    </div>
+
+    <!-- Register Card -->
+    <div class="register-card">
+      <div class="register-card__header">
+        <h2 class="register-card__title">Đăng ký tài khoản cán bộ</h2>
+        <p class="register-card__desc">Khởi tạo thông tin người dùng mới trong hệ thống Payment Hub</p>
+      </div>
+
+      <!-- Alert message if register failed -->
+      @if (authService.registerError(); as errorMsg) {
+        <div class="register-alert" role="alert">
+          <svg class="register-alert__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+          <span>{{ errorMsg }}</span>
+        </div>
+      }
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form" id="register-form">
+        <!-- 2-column grid row 1: Full name & Username -->
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="reg-fullname">
+              Họ và tên <span class="required-star">*</span>
+            </label>
+            <tui-textfield class="reg-input-field">
+              <input
+                tuiTextfield
+                id="reg-fullname"
+                name="fullName"
+                formControlName="fullName"
+                placeholder="Ví dụ: Nguyễn Văn An"
+                autocomplete="name"
+              />
+            </tui-textfield>
+            @if (registerForm.controls.fullName.touched && registerForm.controls.fullName.invalid) {
+              <span class="field-error">Vui lòng nhập họ và tên</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-username">
+              Tên đăng nhập <span class="required-star">*</span>
+            </label>
+            <tui-textfield class="reg-input-field">
+              <input
+                tuiTextfield
+                id="reg-username"
+                name="username"
+                formControlName="username"
+                placeholder="Ví dụ: annv"
+                autocomplete="username"
+              />
+            </tui-textfield>
+            @if (registerForm.controls.username.touched && registerForm.controls.username.invalid) {
+              <span class="field-error">Tên đăng nhập tối thiểu 3 ký tự</span>
+            }
+          </div>
+        </div>
+
+        <!-- 2-column grid row 2: Email & Phone -->
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="reg-email">
+              Email cơ quan <span class="required-star">*</span>
+            </label>
+            <tui-textfield class="reg-input-field">
+              <input
+                tuiTextfield
+                id="reg-email"
+                name="email"
+                type="email"
+                formControlName="email"
+                placeholder="an.nv@paymenthub.vn"
+                autocomplete="email"
+              />
+            </tui-textfield>
+            @if (registerForm.controls.email.touched && registerForm.controls.email.invalid) {
+              <span class="field-error">Email không đúng định dạng</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-phone">
+              Số điện thoại
+            </label>
+            <tui-textfield class="reg-input-field">
+              <input
+                tuiTextfield
+                id="reg-phone"
+                name="phone"
+                type="tel"
+                formControlName="phone"
+                placeholder="0987 654 321"
+                autocomplete="tel"
+              />
+            </tui-textfield>
+          </div>
+        </div>
+
+        <!-- 2-column grid row 3: Department & Role -->
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="reg-department">
+              Phòng ban / Đơn vị <span class="required-star">*</span>
+            </label>
+            <tui-textfield class="reg-input-field">
+              <select tuiTextfield id="reg-department" name="department" formControlName="department">
+                @for (dept of departments; track dept) {
+                  <option [value]="dept">{{ dept }}</option>
+                }
+              </select>
+            </tui-textfield>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-role">
+              Chức vụ / Vai trò <span class="required-star">*</span>
+            </label>
+            <tui-textfield class="reg-input-field">
+              <select tuiTextfield id="reg-role" name="role" formControlName="role">
+                @for (role of roles; track role) {
+                  <option [value]="role">{{ role }}</option>
+                }
+              </select>
+            </tui-textfield>
+          </div>
+        </div>
+
+        <!-- 2-column grid row 4: Password & Confirm Password -->
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="reg-password">
+              Mật khẩu <span class="required-star">*</span>
+            </label>
+            <tui-textfield class="reg-input-field">
+              <input
+                tuiTextfield
+                id="reg-password"
+                name="password"
+                type="password"
+                formControlName="password"
+                placeholder="Tối thiểu 6 ký tự"
+                autocomplete="new-password"
+              />
+              <tui-icon tuiPassword />
+            </tui-textfield>
+            @if (registerForm.controls.password.touched && registerForm.controls.password.invalid) {
+              <span class="field-error">Mật khẩu tối thiểu 6 ký tự</span>
+            }
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="reg-confirm-password">
+              Xác nhận mật khẩu <span class="required-star">*</span>
+            </label>
+            <tui-textfield class="reg-input-field">
+              <input
+                tuiTextfield
+                id="reg-confirm-password"
+                name="confirmPassword"
+                type="password"
+                formControlName="confirmPassword"
+                placeholder="Nhập lại mật khẩu"
+                autocomplete="new-password"
+              />
+              <tui-icon tuiPassword />
+            </tui-textfield>
+            @if (registerForm.controls.confirmPassword.touched && registerForm.controls.confirmPassword.hasError('passwordMismatch')) {
+              <span class="field-error">Mật khẩu xác nhận không khớp</span>
+            }
+          </div>
+        </div>
+
+        <!-- Terms and conditions checkbox -->
+        <div class="terms-row">
+          <label class="terms-checkbox-label">
+            <input
+              type="checkbox"
+              tuiCheckbox
+              size="s"
+              formControlName="acceptTerms"
+              id="accept-terms-checkbox"
+            />
+            <span class="terms-text">
+              Tôi đồng ý với <a href="javascript:void(0)" class="terms-link">Quy chế an toàn thông tin</a> và cam kết bảo mật tài khoản hệ thống.
+            </span>
+          </label>
+          @if (registerForm.controls.acceptTerms.touched && registerForm.controls.acceptTerms.invalid) {
+            <span class="field-error">Bạn cần đồng ý với quy chế trước khi tiếp tục</span>
+          }
+        </div>
+
+        <!-- Submit Button with Taiga UI tuiButton -->
+        <button
+          tuiButton
+          type="submit"
+          size="m"
+          class="register-submit-btn"
+          [disabled]="authService.isLoading()"
+          id="btn-submit-register"
+        >
+          @if (authService.isLoading()) {
+            <span class="btn-spinner"></span>
+            <span>Đang xử lý đăng ký...</span>
+          } @else {
+            <span>Đăng ký tài khoản</span>
+            <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          }
+        </button>
+      </form>
+
+      <!-- Back to login link -->
+      <div class="switch-to-login">
+        <span class="switch-text">Đã có tài khoản hệ thống?</span>
+        <button
+          type="button"
+          class="switch-login-btn"
+          (click)="onGoToLogin()"
+          id="btn-switch-to-login"
+        >
+          Đăng nhập ngay
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer Notice -->
+    <div class="register-footer">
+      <p>© 2025 Payment Hub. Bản quyền thuộc về Ngân hàng / Tổ chức Thanh toán.</p>
+      <div class="register-footer__links">
+        <span>Hỗ trợ kỹ thuật: 1900 6868</span>
+        <span class="dot">•</span>
+        <span>Phiên bản v2.4.0 (Taiga UI)</span>
+      </div>
+    </div>
+  </div>
+</div>

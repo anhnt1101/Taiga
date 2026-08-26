@@ -76,7 +76,30 @@ import {
   tuiNumberToStringWithoutExp,
   tuiPercentageToKeyStepValue,
   tuiRadioOptionsProvider
-} from "./chunk-PFIDYFH5.js";
+} from "./chunk-UCTLODEA.js";
+import {
+  AbstractTuiCalendar,
+  TUI_CALENDAR_DEFAULT_OPTIONS,
+  TUI_CALENDAR_OPTIONS,
+  TUI_CALENDAR_SHEET_DEFAULT_OPTIONS,
+  TUI_CALENDAR_SHEET_OPTIONS,
+  TUI_LINK_OPTIONS,
+  TuiCalendar,
+  TuiCalendarSheet,
+  TuiCalendarSheetPipe,
+  TuiCalendarSpin,
+  TuiCalendarYear,
+  TuiLink,
+  TuiOrderWeekDaysPipe,
+  TuiSpinButton,
+  tuiCalendarOptionsProvider,
+  tuiCalendarSheetOptionsProvider,
+  tuiLinkOptionsProvider
+} from "./chunk-NDJGF3XG.js";
+import {
+  TuiId
+} from "./chunk-QVZUFZJT.js";
+import "./chunk-HPWEB7HQ.js";
 import {
   TUI_BUTTON_X_OPTIONS,
   TUI_FILTER_BY_INPUT_DEFAULT_OPTIONS,
@@ -101,7 +124,22 @@ import {
   tuiFilterByInputOptionsProvider,
   tuiInjectAuxiliary,
   tuiTextfieldOptionsProvider
-} from "./chunk-WUV6VXJZ.js";
+} from "./chunk-PUP66PTB.js";
+import {
+  TUI_DEFAULT_ITEMS_HANDLERS,
+  TUI_ITEMS_HANDLERS,
+  TuiItemsHandlersDirective,
+  TuiItemsHandlersValidator,
+  TuiWithItemsHandlers,
+  tuiItemsHandlersProvider
+} from "./chunk-5S7PSX6H.js";
+import {
+  TuiValidationError
+} from "./chunk-6VPGTAQ5.js";
+import "./chunk-6HYS3RTL.js";
+import {
+  TuiItem
+} from "./chunk-UBR7MOSE.js";
 import {
   TUI_CELL_OPTIONS,
   TUI_DATA_LIST_HOST,
@@ -122,7 +160,26 @@ import {
   tuiAsOptionContent,
   tuiCellOptionsProvider,
   tuiInjectDataListSize
-} from "./chunk-AWBPCIIW.js";
+} from "./chunk-BHMVI56K.js";
+import {
+  TUI_APPEARANCE_DEFAULT_OPTIONS,
+  TUI_APPEARANCE_OPTIONS,
+  TUI_BUTTON_DEFAULT_OPTIONS,
+  TUI_BUTTON_OPTIONS,
+  TuiAppearance,
+  TuiButton,
+  TuiIcons,
+  TuiWithAppearance,
+  TuiWithIcons,
+  tuiAppearance,
+  tuiAppearanceFocus,
+  tuiAppearanceMode,
+  tuiAppearanceOptionsProvider,
+  tuiAppearanceState,
+  tuiButtonOptionsProvider,
+  tuiIconEnd,
+  tuiIconStart
+} from "./chunk-HS3QXMX2.js";
 import {
   TUI_ANIMATIONS_DEFAULT_DURATION,
   TUI_CDR,
@@ -190,67 +247,7 @@ import {
   tuiProvideAccessor,
   tuiRectAccessorFor,
   tuiSizeBigger
-} from "./chunk-BGIQAKTU.js";
-import {
-  TuiId
-} from "./chunk-QVZUFZJT.js";
-import {
-  TuiValidationError
-} from "./chunk-6VPGTAQ5.js";
-import {
-  TuiItem
-} from "./chunk-UBR7MOSE.js";
-import {
-  PolymorpheusComponent,
-  PolymorpheusOutlet,
-  PolymorpheusTemplate
-} from "./chunk-RYNVTAQW.js";
-import {
-  AbstractTuiCalendar,
-  TUI_CALENDAR_DEFAULT_OPTIONS,
-  TUI_CALENDAR_OPTIONS,
-  TUI_CALENDAR_SHEET_DEFAULT_OPTIONS,
-  TUI_CALENDAR_SHEET_OPTIONS,
-  TUI_LINK_OPTIONS,
-  TuiCalendar,
-  TuiCalendarSheet,
-  TuiCalendarSheetPipe,
-  TuiCalendarSpin,
-  TuiCalendarYear,
-  TuiLink,
-  TuiOrderWeekDaysPipe,
-  TuiSpinButton,
-  tuiCalendarOptionsProvider,
-  tuiCalendarSheetOptionsProvider,
-  tuiLinkOptionsProvider
-} from "./chunk-MLJJV6FJ.js";
-import {
-  TUI_DEFAULT_ITEMS_HANDLERS,
-  TUI_ITEMS_HANDLERS,
-  TuiItemsHandlersDirective,
-  TuiItemsHandlersValidator,
-  TuiWithItemsHandlers,
-  tuiItemsHandlersProvider
-} from "./chunk-5S7PSX6H.js";
-import {
-  TUI_APPEARANCE_DEFAULT_OPTIONS,
-  TUI_APPEARANCE_OPTIONS,
-  TUI_BUTTON_DEFAULT_OPTIONS,
-  TUI_BUTTON_OPTIONS,
-  TuiAppearance,
-  TuiButton,
-  TuiIcons,
-  TuiWithAppearance,
-  TuiWithIcons,
-  tuiAppearance,
-  tuiAppearanceFocus,
-  tuiAppearanceMode,
-  tuiAppearanceOptionsProvider,
-  tuiAppearanceState,
-  tuiButtonOptionsProvider,
-  tuiIconEnd,
-  tuiIconStart
-} from "./chunk-HS3QXMX2.js";
+} from "./chunk-ZZFJWFYX.js";
 import {
   SCROLL_REF_SELECTOR,
   TUI_ANIMATIONS_SPEED,
@@ -310,9 +307,15 @@ import {
   tuiScrollbarOptionsProvider,
   tuiValidationErrorsProvider
 } from "./chunk-EGF74S7Z.js";
-import "./chunk-HPWEB7HQ.js";
-import "./chunk-6HYS3RTL.js";
+import "./chunk-46UQNXDB.js";
+import "./chunk-6D3FKYJ5.js";
+import "./chunk-EJQBUMGU.js";
 import "./chunk-BGNSHWBD.js";
+import {
+  PolymorpheusComponent,
+  PolymorpheusOutlet,
+  PolymorpheusTemplate
+} from "./chunk-RYNVTAQW.js";
 import {
   TUI_FALSE_HANDLER,
   TUI_TRUE_HANDLER,
@@ -335,9 +338,6 @@ import {
   NG_VALUE_ACCESSOR,
   NgControl
 } from "./chunk-SVYNCHRR.js";
-import "./chunk-EYFUUXEU.js";
-import "./chunk-EJQBUMGU.js";
-import "./chunk-6D3FKYJ5.js";
 import {
   NgTemplateOutlet
 } from "./chunk-KWB6JEQH.js";

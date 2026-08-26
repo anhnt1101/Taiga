@@ -1,4 +1,20 @@
 import {
+  DAYS_IN_WEEK,
+  MAX_YEAR,
+  MIN_YEAR,
+  TUI_FIRST_DAY,
+  TUI_LAST_DAY,
+  TUI_LAST_DISPLAYED_DAY,
+  TuiDay,
+  TuiDayOfWeek,
+  TuiDayRange,
+  TuiHovered,
+  TuiMapperPipe,
+  TuiMonth,
+  TuiMonthRange,
+  TuiYear
+} from "./chunk-HPWEB7HQ.js";
+import {
   TUI_ITEMS_HANDLERS
 } from "./chunk-5S7PSX6H.js";
 import {
@@ -16,22 +32,6 @@ import {
   TuiScrollbar,
   tuiAsAuxiliary
 } from "./chunk-EGF74S7Z.js";
-import {
-  DAYS_IN_WEEK,
-  MAX_YEAR,
-  MIN_YEAR,
-  TUI_FIRST_DAY,
-  TUI_LAST_DAY,
-  TUI_LAST_DISPLAYED_DAY,
-  TuiDay,
-  TuiDayOfWeek,
-  TuiDayRange,
-  TuiHovered,
-  TuiMapperPipe,
-  TuiMonth,
-  TuiMonthRange,
-  TuiYear
-} from "./chunk-HPWEB7HQ.js";
 import {
   TUI_FALSE_HANDLER,
   TUI_VERSION,
@@ -1324,4 +1324,4 @@ export {
   TuiCalendarYear,
   TuiCalendar
 };
-//# sourceMappingURL=chunk-MLJJV6FJ.js.map
+//# sourceMappingURL=chunk-NDJGF3XG.js.map

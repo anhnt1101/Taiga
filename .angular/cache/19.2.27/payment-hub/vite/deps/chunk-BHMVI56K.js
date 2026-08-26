@@ -1,21 +1,21 @@
 import {
+  TuiWithIcons,
+  tuiButtonOptionsProvider
+} from "./chunk-HS3QXMX2.js";
+import {
   TUI_FONT_OFFSET,
   TuiDropdownDirective
-} from "./chunk-BGIQAKTU.js";
+} from "./chunk-ZZFJWFYX.js";
+import {
+  TUI_NOTHING_FOUND_MESSAGE,
+  tuiAsAuxiliary
+} from "./chunk-EGF74S7Z.js";
 import {
   PolymorpheusOutlet,
   tuiIsFocused,
   tuiIsFocusedIn,
   tuiMoveFocus
 } from "./chunk-RYNVTAQW.js";
-import {
-  TuiWithIcons,
-  tuiButtonOptionsProvider
-} from "./chunk-HS3QXMX2.js";
-import {
-  TUI_NOTHING_FOUND_MESSAGE,
-  tuiAsAuxiliary
-} from "./chunk-EGF74S7Z.js";
 import {
   TUI_VERSION,
   WA_IS_MOBILE,
@@ -789,4 +789,4 @@ export {
   TuiDataList,
   TuiLabel
 };
-//# sourceMappingURL=chunk-AWBPCIIW.js.map
+//# sourceMappingURL=chunk-BHMVI56K.js.map

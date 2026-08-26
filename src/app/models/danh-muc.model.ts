@@ -9,6 +9,7 @@ export interface StatusValue {
 export interface ComponentCodeOption {
   id: number;
   componentCode: string;
+  componentName: string;
 }
 
 export interface DanhMucRow {

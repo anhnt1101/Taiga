@@ -28,45 +28,6 @@ import {
   tuiAutoFocusOptionsProvider
 } from "./chunk-QVZUFZJT.js";
 import {
-  TUI_IDENTITY_VALUE_TRANSFORMER,
-  TuiControl,
-  TuiNonNullableValueTransformer,
-  TuiValidationError,
-  TuiValueTransformer,
-  tuiAsControl,
-  tuiValueTransformerFrom
-} from "./chunk-6VPGTAQ5.js";
-import {
-  TuiItem
-} from "./chunk-UBR7MOSE.js";
-import {
-  TUI_ACTIVE_ELEMENT,
-  TUI_FALLBACK_VALUE,
-  TUI_FONT_SIZE_HANDLER,
-  TUI_PLATFORM,
-  TUI_REMOVED_ELEMENT,
-  TUI_WINDOW_SIZE,
-  TuiActiveZone,
-  TuiFontSize,
-  TuiNoHostException,
-  TuiObscured,
-  TuiObscuredService,
-  TuiPortal,
-  TuiPortalDirective,
-  TuiPortalService,
-  TuiPortals,
-  TuiVCR,
-  tuiAsPortal,
-  tuiFallbackValueProvider,
-  tuiFocusedIn,
-  tuiGetClosestFocusable,
-  tuiGetFocused,
-  tuiIsFocusable,
-  tuiIsFocused,
-  tuiIsFocusedIn,
-  tuiMoveFocus
-} from "./chunk-RYNVTAQW.js";
-import {
   DATE_FILLER_LENGTH,
   DATE_RANGE_FILLER_LENGTH,
   DAYS_IN_LEAP_YEAR,
@@ -106,11 +67,50 @@ import {
   tuiHovered
 } from "./chunk-HPWEB7HQ.js";
 import {
+  TUI_IDENTITY_VALUE_TRANSFORMER,
+  TuiControl,
+  TuiNonNullableValueTransformer,
+  TuiValidationError,
+  TuiValueTransformer,
+  tuiAsControl,
+  tuiValueTransformerFrom
+} from "./chunk-6VPGTAQ5.js";
+import {
   TuiValidator
 } from "./chunk-6HYS3RTL.js";
 import {
+  TuiItem
+} from "./chunk-UBR7MOSE.js";
+import {
   TuiTransitioned
 } from "./chunk-BGNSHWBD.js";
+import {
+  TUI_ACTIVE_ELEMENT,
+  TUI_FALLBACK_VALUE,
+  TUI_FONT_SIZE_HANDLER,
+  TUI_PLATFORM,
+  TUI_REMOVED_ELEMENT,
+  TUI_WINDOW_SIZE,
+  TuiActiveZone,
+  TuiFontSize,
+  TuiNoHostException,
+  TuiObscured,
+  TuiObscuredService,
+  TuiPortal,
+  TuiPortalDirective,
+  TuiPortalService,
+  TuiPortals,
+  TuiVCR,
+  tuiAsPortal,
+  tuiFallbackValueProvider,
+  tuiFocusedIn,
+  tuiGetClosestFocusable,
+  tuiGetFocused,
+  tuiIsFocusable,
+  tuiIsFocused,
+  tuiIsFocusedIn,
+  tuiMoveFocus
+} from "./chunk-RYNVTAQW.js";
 import {
   CHAR_BULLET,
   CHAR_CURRENCY_SIGN,

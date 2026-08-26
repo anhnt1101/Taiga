@@ -12,12 +12,12 @@ import {
   TuiOrderWeekDaysPipe,
   tuiCalendarOptionsProvider,
   tuiCalendarSheetOptionsProvider
-} from "./chunk-MLJJV6FJ.js";
+} from "./chunk-NDJGF3XG.js";
+import "./chunk-HPWEB7HQ.js";
 import "./chunk-5S7PSX6H.js";
+import "./chunk-6HYS3RTL.js";
 import "./chunk-HS3QXMX2.js";
 import "./chunk-EGF74S7Z.js";
-import "./chunk-HPWEB7HQ.js";
-import "./chunk-6HYS3RTL.js";
 import "./chunk-BGNSHWBD.js";
 import "./chunk-QU4OCGII.js";
 import "./chunk-SVYNCHRR.js";
