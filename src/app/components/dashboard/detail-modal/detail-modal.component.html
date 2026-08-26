@@ -1,0 +1,286 @@
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <div class="modal-header__left">
+        <h2 class="modal-title">Xem chi tiết</h2>
+        <span class="status-pill" [class]="'status-pill--' + statusTone">
+          <span class="status-pill__icon">
+            @if (statusTone === 'success') {
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M8.5 12.5l2.5 2.5 4.5-5" stroke="#fff" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round" fill="none" />
+            </svg>
+            } @else if (statusTone === 'new') {
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="12" r="10" />
+              <circle cx="12" cy="12" r="3.5" fill="#fff" />
+            </svg>
+            } @else if (statusTone === 'pending') {
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 7v5l3 2" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                fill="none" />
+            </svg>
+            } @else if (statusTone === 'rejected') {
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M15 9l-6 6M9 9l6 6" stroke="#fff" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round" fill="none" />
+            </svg>
+            } @else {
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M8 12h8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" fill="none" />
+            </svg>
+            }
+          </span>
+          <span class="status-pill__text">{{ statusCode }} - {{ statusText }}</span>
+        </span>
+      </div>
+      <button class="btn-close" tuiButton appearance="flat" size="s" type="button" (click)="onClose()" title="Đóng">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Rejection reason banner if status 5 (Từ chối) -->
+    @if (statusCode === 5 && row.lyDoTuChoi) {
+    <div class="rejection-banner">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <circle cx="12" cy="12" r="10" fill="#f87171" />
+        <path d="M12 8v4M12 16h.01" stroke="#fff" stroke-width="2" stroke-linecap="round" />
+      </svg>
+      <span class="rejection-banner__text">
+        <strong>Lý do từ chối:</strong> {{ row.lyDoTuChoi }}
+      </span>
+    </div>
+    }
+
+    <!-- Modal Content -->
+    <div class="modal-body">
+      <div class="cards-grid">
+        <!-- Old Data Card -->
+        <div class="data-card">
+          <div class="data-card__header data-card__header--old">
+            <span class="icon-info icon-info--old">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="12" r="10" fill="#f59e0b" />
+                <path d="M12 8v.01M12 11v5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" fill="none" />
+              </svg>
+            </span>
+            <h3>Dữ liệu cũ</h3>
+          </div>
+          <div class="data-card__body">
+            <div class="data-item">
+              <span class="data-label">Tên thành phần</span>
+              <span class="data-val" [class.data-val--empty]="getOldValue('paramName') === '-'">{{
+                getOldValue('paramName') }}</span>
+            </div>
+            <div class="data-item">
+              <span class="data-label">Giá trị thành phần</span>
+              <span class="data-val" [class.data-val--empty]="getOldValue('paramValue') === '-'">{{
+                getOldValue('paramValue') }}</span>
+            </div>
+            <div class="data-item">
+              <span class="data-label">Danh mục theo nhóm</span>
+              <span class="data-val" [class.data-val--empty]="getOldValue('paramType') === '-'">{{
+                getOldValue('paramType') }}</span>
+            </div>
+            <div class="data-item">
+              <span class="data-label">Cấu phần xử lý</span>
+              <span class="data-val" [class.data-val--empty]="getOldValue('componentCode') === '-'">{{
+                getOldValue('componentCode') }}</span>
+            </div>
+            <div class="data-item">
+              <span class="data-label">Ngày hiệu lực</span>
+              <span class="data-val" [class.data-val--empty]="getOldValue('effectiveDate') === '-'">{{
+                getOldValue('effectiveDate') }}</span>
+            </div>
+            <div class="data-item">
+              <span class="data-label">Ngày hết hiệu lực</span>
+              <span class="data-val" [class.data-val--empty]="getOldValue('endEffectiveDate') === '-'">{{
+                getOldValue('endEffectiveDate') }}</span>
+            </div>
+            <div class="data-item">
+              <span class="data-label">Mô tả</span>
+              <span class="data-val" [class.data-val--empty]="getOldValue('description') === '-'">{{
+                getOldValue('description') }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- New Data Card -->
+        <div class="data-card">
+          <div class="data-card__header data-card__header--new">
+            <span class="icon-info icon-info--new">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="12" r="10" fill="#0d9488" />
+                <path d="M12 8v.01M12 11v5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" fill="none" />
+              </svg>
+            </span>
+            <h3>Dữ liệu mới</h3>
+          </div>
+          <div class="data-card__body">
+            <div class="data-item">
+              <span class="data-label">Tên thành phần</span>
+              <span class="data-val" [class.data-val--changed]="isFieldChanged('paramName')">{{ getNewValue('paramName')
+                }}</span>
+            </div>
+            <div class="data-item">
+              <span class="data-label">Giá trị thành phần</span>
+              <span class="data-val" [class.data-val--changed]="isFieldChanged('paramValue')">{{
+                getNewValue('paramValue') }}</span>
+            </div>
+            <div class="data-item">
+              <span class="data-label">Danh mục theo nhóm</span>
+              <span class="data-val" [class.data-val--changed]="isFieldChanged('paramType')">{{ getNewValue('paramType')
+                }}</span>
+            </div>
+            <div class="data-item">
+              <span class="data-label">Cấu phần xử lý</span>
+              <span class="data-val" [class.data-val--changed]="isFieldChanged('componentCode')">{{
+                getNewValue('componentCode') }}</span>
+            </div>
+            <div class="data-item">
+              <span class="data-label">Ngày hiệu lực</span>
+              <span class="data-val" [class.data-val--changed]="isFieldChanged('effectiveDate')">{{
+                getNewValue('effectiveDate') }}</span>
+            </div>
+            <div class="data-item">
+              <span class="data-label">Ngày hết hiệu lực</span>
+              <span class="data-val" [class.data-val--changed]="isFieldChanged('endEffectiveDate')">{{
+                getNewValue('endEffectiveDate') }}</span>
+            </div>
+            <div class="data-item">
+              <span class="data-label">Mô tả</span>
+              <span class="data-val" [class.data-val--changed]="isFieldChanged('description')">{{
+                getNewValue('description') }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer based on statusCode -->
+    <div class="modal-footer">
+      <!-- 1: Tạo mới -> nút Xóa, Gửi duyệt -->
+      @if (statusCode === 1) {
+      <button class="btn btn--outline-danger" tuiButton appearance="secondary-destructive" type="button"
+        (click)="openConfirm('delete')">Xóa</button>
+      <button class="btn btn--submit" tuiButton appearance="primary" type="button"
+        (click)="openConfirm('submit_approval')">Gửi duyệt</button>
+      }
+
+      <!-- 3: Chờ phê duyệt -> nút Từ chối, Phê duyệt -->
+      @else if (statusCode === 3) {
+      <button class="btn btn--outline-danger" tuiButton appearance="secondary-destructive" type="button"
+        (click)="openConfirm('reject')">Từ chối</button>
+      <button class="btn btn--submit" tuiButton appearance="primary" type="button" (click)="openConfirm('approve')">Phê
+        duyệt</button>
+      }
+
+      <!-- 4: Đã phê duyệt -> nút Hủy phê duyệt -->
+      @else if (statusCode === 4) {
+      <button class="btn btn--submit" tuiButton appearance="primary" type="button"
+        (click)="openConfirm('cancel_approve')">Hủy phê duyệt</button>
+      }
+
+      <!-- 7: Hủy phê duyệt -> nút Gửi duyệt -->
+      @else if (statusCode === 7) {
+      <button class="btn btn--submit" tuiButton appearance="primary" type="button"
+        (click)="openConfirm('submit_approval')">Gửi duyệt</button>
+      }
+
+      <!-- 5: Từ chối -> nút Xóa, Gửi duyệt -->
+      @else if (statusCode === 5) {
+      @if (isDisplay === 1) {
+      <button class="btn btn--outline-danger" tuiButton appearance="secondary-destructive" type="button"
+        (click)="openConfirm('delete')">
+        Xóa
+      </button>
+      } <button class="btn btn--submit" tuiButton appearance="primary" type="button"
+        (click)="openConfirm('submit_approval')">Gửi duyệt</button>
+      }
+    </div>
+  </div>
+</div>
+
+<!-- Confirmation Dialog Overlay -->
+@if (activeConfirmModal && activeConfirmModal !== 'reject') {
+<div class="confirm-overlay" (click)="closeConfirmModal()">
+  <div class="confirm-card" (click)="$event.stopPropagation()">
+    <div class="confirm-body">
+      <div class="confirm-icon-wrap">
+        <div class="confirm-icon-circle">
+          <span class="confirm-icon-exclamation">!</span>
+        </div>
+      </div>
+      <div class="confirm-text-wrap">
+        <h3 class="confirm-title">
+          @switch (activeConfirmModal) {
+          @case ('approve') { Phê duyệt }
+          @case ('cancel_approve') { Hủy phê duyệt }
+          @case ('submit_approval') { Gửi duyệt }
+          @case ('delete') { Xóa bản ghi }
+          }
+        </h3>
+        <p class="confirm-message">
+          @switch (activeConfirmModal) {
+          @case ('approve') { Bạn có chắc chắn phê duyệt bản ghi này? }
+          @case ('cancel_approve') { Bạn có chắc chắn hủy phê duyệt bản ghi này? }
+          @case ('submit_approval') { Bạn có chắc chắn gửi duyệt bản ghi này? }
+          @case ('delete') { Bạn có chắc chắn muốn xóa bản ghi này? }
+          }
+        </p>
+      </div>
+    </div>
+    <div class="confirm-footer">
+      <button class="btn-dialog btn-dialog--cancel" tuiButton appearance="secondary" type="button"
+        (click)="closeConfirmModal()">Hủy</button>
+      <button class="btn-dialog btn-dialog--confirm" tuiButton appearance="primary" type="button"
+        (click)="onConfirmAction()">Xác nhận</button>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Rejection Reason Dialog Overlay -->
+@if (activeConfirmModal === 'reject') {
+<div class="confirm-overlay" (click)="closeConfirmModal()">
+  <div class="reject-card" (click)="$event.stopPropagation()">
+    <div class="reject-header">
+      <h3 class="reject-title">Lý do từ chối</h3>
+      <button class="btn-reject-close" tuiButton appearance="flat" size="s" type="button" (click)="closeConfirmModal()"
+        title="Đóng">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="reject-body">
+      <div class="textarea-wrap">
+        <tui-textfield>
+
+          <textarea tuiTextarea class="reject-textarea" placeholder="Nhập lý do từ chối" 
+          [(ngModel)]="rejectReason" [max]="4" [min]="3"></textarea>
+
+        </tui-textfield>
+        <span class="char-count">{{ rejectReason.length }}/500</span>
+      </div>
+    </div>
+    <div class="reject-footer">
+      <button class="btn-dialog btn-dialog--cancel" tuiButton appearance="secondary" type="button"
+        (click)="closeConfirmModal()">Hủy</button>
+      <button class="btn-dialog btn-dialog--confirm" tuiButton appearance="primary" [disabled]="!rejectReason.trim()"
+        type="button" (click)="onConfirmAction()">
+        Xác nhận
+      </button>
+    </div>
+  </div>
+</div>
+}

@@ -1,0 +1,56 @@
+<section class="card filters">
+  <div class="filters__grid">
+    <div class="field">
+      <label>Danh mục theo nhóm</label>
+      <tui-textfield>
+        <input tuiInput type="text" placeholder="Nhập nội dung" [(ngModel)]="filters.paramType" />
+      </tui-textfield>
+    </div>
+    <div class="field">
+      <label>Giá trị thành phần</label>
+      <tui-textfield>
+        <input tuiInput type="text" placeholder="Nhập nội dung" [(ngModel)]="filters.paramValue" />
+      </tui-textfield>
+    </div>
+    <div class="field">
+      <label>Tên thành phần</label>
+      <tui-textfield>
+        <input tuiInput type="text" placeholder="Nhập nội dung" [(ngModel)]="filters.paramName" />
+      </tui-textfield>
+    </div>
+    <div class="field">
+      <label>Trạng thái tham số</label>
+      <tui-textfield tuiChevron [stringify]="stringifyStatus">
+        <input tuiSelect [(ngModel)]="filters.status" placeholder="Chọn trạng thái tham số" />
+        <tui-data-list-wrapper *tuiDropdown [items]="statusItems" />
+      </tui-textfield>
+    </div>
+
+    <div class="field">
+      <label>Trạng thái hoạt động</label>
+      <tui-textfield tuiChevron [stringify]="stringifyIsActive">
+        <input tuiSelect [(ngModel)]="filters.isActive" placeholder="Chọn trạng thái hoạt động" />
+        <tui-data-list-wrapper *tuiDropdown [items]="isActiveItems" />
+      </tui-textfield>
+    </div>
+
+    <div class="filters__actions">
+      <button class="btn btn--ghost" tuiButton appearance="secondary" type="button" [disabled]="loading"
+        (click)="onClear()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M4 6h16M8 6V4h8v2M6 6l1 14h10l1-14" />
+        </svg>
+        Xóa bộ lọc
+      </button>
+      <button class="btn btn--primary" tuiButton appearance="primary" type="button" [disabled]="loading"
+        (click)="onSearch()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7" />
+          <path d="M21 21l-4.3-4.3" />
+        </svg>
+        Tìm kiếm
+      </button>
+    </div>
+  </div>
+
+</section>

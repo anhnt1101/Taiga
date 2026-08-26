@@ -1,0 +1,229 @@
+:root {
+  --ph-sidebar-rail-bg: #0c3b2e;
+  --ph-sidebar-rail-active-bg: #ffffff1a;
+  --ph-sidebar-panel-bg: #ffffff;
+  --ph-sidebar-panel-active-bg: #e5f4ee;
+  --ph-sidebar-panel-active-text: #0c3b2e;
+  --ph-primary: #0e6e5a;
+  --ph-primary-hover: #0a5847;
+  --ph-text-main: #1c2b28;
+  --ph-text-muted: #6b7680;
+  --ph-text-faint: #98a1a8;
+  --ph-border: #e7eaee;
+  --ph-page-bg: #f6f7f9;
+  --ph-card-bg: #ffffff;
+  --ph-success: #17a35d;
+  --ph-warning: #f0983c;
+  --ph-info: #0c3b2e;
+  --ph-radius-sm: 6px;
+  --ph-radius-md: 10px;
+  --ph-radius-lg: 14px;
+  --ph-shadow-card: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
+  --ph-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--ph-font);
+  background: var(--ph-page-bg);
+  color: var(--ph-text-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+/* Taiga UI tui-textfield global base resets */
+tui-textfield {
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  border-radius: inherit;
+  box-sizing: border-box !important;
+
+  input[tuiTextfield],
+  select[tuiTextfield],
+  textarea[tuiTextfield] {
+    width: 100% !important;
+    font-family: inherit !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* AG Grid theme overrides to match the reference table */
+.ph-grid {
+  --ag-font-family: var(--ph-font);
+  --ag-font-size: 13.5px;
+  --ag-header-background-color: #fbfbfc;
+  --ag-header-foreground-color: #6b7680;
+  --ag-header-height: 44px;
+  --ag-header-column-separator-display: none;
+  --ag-row-height: 52px;
+  --ag-border-color: var(--ph-border);
+  --ag-row-border-color: var(--ph-border);
+  --ag-cell-horizontal-padding: 16px;
+  --ag-foreground-color: var(--ph-text-main);
+  --ag-background-color: #ffffff;
+  --ag-odd-row-background-color: #ffffff;
+  --ag-row-hover-color: #f6f8f9;
+  --ag-selected-row-background-color: #eef7f3;
+  --ag-checkbox-checked-color: var(--ph-primary);
+  --ag-range-selection-border-color: transparent;
+  --ag-wrapper-border-radius: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.ph-grid .ag-header-cell-text {
+  font-weight: 600;
+  font-size: 12.5px;
+  letter-spacing: 0.01em;
+}
+
+.ph-grid .ag-cell {
+  display: flex;
+  align-items: center;
+}
+
+/* ===============================
+   Taiga UI Multi Select Custom
+================================ */
+
+/* Ô input khi mở */
+.component-code-select.tui-dropdown-open {
+  border-color: #506ee5 !important;
+  box-shadow: 0 0 0 2px rgba(80, 110, 229, 0.15);
+}
+
+
+/* Dropdown */
+body tui-dropdown {
+  border-radius: 12px !important;
+  overflow: hidden;
+  background: #ffffff !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .12) !important;
+}
+
+
+/* Khung danh sách */
+body tui-dropdown tui-data-list {
+  padding: 8px;
+}
+
+
+/* Header group */
+body tui-dropdown tui-opt-group>span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+
+  .t-label {
+    font-size: 18px;
+    font-weight: 700;
+    color: #20253a;
+  }
+}
+
+
+/* Select all */
+body tui-dropdown tui-opt-group button[tuiLink] {
+  color: #506ee5 !important;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+
+/* Item */
+body tui-dropdown button[tuioption] {
+  height: 48px;
+  border-radius: 10px;
+  padding: 0 12px;
+  font-size: 16px;
+  color: #20253a;
+  transition: .2s ease;
+}
+
+
+/* Hover */
+body tui-dropdown button[tuioption]:hover {
+  background: #f5f7ff !important;
+}
+
+
+/* Item đang chọn */
+body tui-dropdown button[tuioption][aria-selected="true"] {
+  background: #f5f7ff !important;
+}
+
+
+/* Checkbox */
+body tui-dropdown input[tuiCheckbox] {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+}
+
+/* Text item */
+body tui-dropdown button[tuioption] {
+  gap: 12px;
+}
+
+/* Checkbox của tuiMultiSelect */
+body tui-dropdown input[tuiCheckbox] {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 8px !important;
+}
+
+/* Ô chưa chọn */
+body tui-dropdown input[tuiCheckbox][data-appearance="outline-grayscale"] {
+  --tui-border-normal: #d9dce5;
+  background: #ffffff;
+}
+
+
+/* Ô đã chọn */
+body tui-dropdown input[tuiCheckbox][data-appearance="primary"] {
+  background: #506ee5 !important;
+  border-color: #506ee5 !important;
+  border-radius: 8px !important;
+    &::before {
+      filter: brightness(0) invert(1);
+    }
+}
+
+
+/* Khoảng cách checkbox - text */
+body tui-dropdown button[tuioption] {
+  gap: 14px !important;
+}
+
+/* Ô checkbox */
+::ng-deep tui-checkbox {
+  .t-checkbox {
+    background: #0e6e5a; // màu nền khi được chọn
+    border-color: #0e6e5a;
+
+    &::after {
+      border-color: #fff; // màu dấu tích trắng
+    }
+  }
+}

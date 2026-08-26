@@ -1,0 +1,189 @@
+@if (viewMode() === 'list') {
+<nav class="breadcrumb">
+  <span>Trang chủ</span>
+  <span class="breadcrumb__sep">›</span>
+  <span class="breadcrumb__current">Tham số danh mục theo nhóm</span>
+</nav>
+
+<div class="page-header">
+  <h1 class="page-header__title">Tham số danh mục theo nhóm</h1>
+  <button class="btn btn--primary" tuiButton appearance="primary" type="button" (click)="addNew()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+    Thêm mới
+  </button>
+</div>
+
+<!-- Filter Component -->
+<ph-filter [filters]="filters" [loading]="loading()" (search)="search()" (clearFilters)="clearFilters()" />
+
+<!-- Table Component -->
+<ph-table [rowData]="rowData()" [loading]="loading()" (viewRecordEvent)="viewRecord($event)" [currentPage]="currentPage"
+  [totalPages]="totalPages" [totalElements]="totalElements" (pageChange)="onPageChange($event)" [pageSize]="pageSize"
+  (pageSizeChange)="onPageSizeChange($event)" (copyRecordEvent)="copyRecord($event)"
+  (editRecordEvent)="editRecord($event)" (deleteRecordEvent)="deleteRecord($event)" (exportExcelEvent)="exportExcel()"
+  (batchApproveEvent)="handleBatchApprove($event)" (cancelApproveEvent)="onCancelAll($event)" />
+
+<!-- Detail Modal Component -->
+@if (detailModalRow()) {
+<ph-detail-modal [row]="detailModalRow()!" (close)="closeDetailModal()"
+  (submitApproval)="submitApprovalFromDetail($event)" (approveRow)="approveFromDetail($event)"
+  (cancelApproveRow)="cancelApproveFromDetail($event)" (rejectRow)="rejectFromDetail($event)"
+  (deleteRow)="deleteFromDetail($event)" />
+}
+
+<!-- Batch Approval Modal -->
+@if (batchModal()?.show) {
+<div class="modal-backdrop" (click)="closeBatchModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3 class="modal-title">{{ batchModal()!.title }}</h3>
+      <button class="btn-close" type="button" (click)="closeBatchModal()" title="Đóng">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>{{ batchModal()!.message }}</p>
+    </div>
+    <div class="modal-footer">
+      @if (batchModal()!.type === 'approve' || batchModal()!.type === 'cancel') {
+      <button class="btn btn--outline" type="button" (click)="closeBatchModal()">
+        Hủy
+      </button>
+      <button class="btn btn--primary" type="button" (click)="confirmBatchApprove()">
+        Đồng ý
+      </button>
+      } @else {
+      <button class="btn btn--primary" type="button" (click)="closeBatchModal()">
+        Đóng
+      </button>
+      }
+    </div>
+  </div>
+</div>
+}
+
+<!-- Toast Notification (Bottom Left) -->
+@if (toastNotification()?.show) {
+<div class="toast-notification">
+  <div class="toast-notification__header">
+    <div class="toast-notification__icon">
+      @if(toastNotification()?.action === 'error'){
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10" fill="#ef4444" />
+        <path d="M9 9l6 6M15 9l-6 6" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+      </svg>
+      }@else{
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10" fill="#10b981" />
+        <path d="M8.5 12.5l2.5 2.5 4.5-5" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+      }
+    </div>
+    <div class="toast-notification__titles">
+      <div class="toast-notification__title">
+        @switch (toastNotification()?.action) {
+
+        @case ('add') {
+        Thêm mới thành công
+        }
+
+        @case ('edit') {
+        Cập nhật thành công
+        }
+
+        @case ('export') {
+        Xuất Excel thành công
+        }
+
+        @case ('delete') {
+        Xóa thành công
+        }
+
+        @case ('approve') {
+        Duyệt thành công
+        }
+
+        @case ('cancelApprove') {
+        Hủy duyệt thành công
+        }
+
+        @case ('reject') {
+        Từ chối thành công
+        }
+
+        @case ('submitApproval') {
+        Gửi duyệt thành công
+        }
+
+        @case ('error') {
+        Có lỗi xảy ra!!!
+        }
+
+        }
+      </div>
+      <!-- <div class="toast-notification__subtitle">Thành công!</div> -->
+    </div>
+    <button class="toast-notification__close" type="button" (click)="closeToast()" title="Đóng">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 6L6 18M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+  <div class="toast-notification__actions">
+    @if (toastNotification()?.action === 'add' || toastNotification()?.action === 'edit') {
+    <button type="button" class="toast-action toast-action--primary" (click)="viewDetailFromToast()">
+      Xem chi tiết
+    </button>
+    <button type="button" class="toast-action toast-action--secondary" (click)="closeToast()">
+      Đóng
+    </button>
+    }
+  </div>
+</div>
+}
+
+<!-- ĐẶT NGOÀI LIST -->
+@if (showDeleteConfirm()) {
+<div class="confirm-overlay" (click)="closeDeleteConfirm()">
+  <div class="confirm-card" (click)="$event.stopPropagation()">
+    <div class="confirm-body">
+      <div class="confirm-icon-wrap">
+        <div class="confirm-icon-circle">
+          <span class="confirm-icon-exclamation">!</span>
+        </div>
+      </div>
+      <div class="confirm-text-wrap">
+        <h3 class="confirm-title">
+          Xóa bản ghi
+        </h3>
+        <p class="confirm-message">
+          Bạn có chắc chắn muốn xóa bản ghi này?
+        </p>
+      </div>
+    </div>
+    <div class="confirm-footer">
+      <button class="btn-dialog btn-dialog--cancel" tuiButton appearance="secondary" type="button"
+        (click)="closeDeleteConfirm()">
+        Hủy
+      </button>
+      <button class="btn-dialog btn-dialog--confirm" tuiButton appearance="primary" type="button"
+        (click)="confirmDelete()">
+        Xác nhận
+      </button>
+    </div>
+  </div>
+</div>
+}
+
+
+
+} @else {
+<!-- Form Component -->
+<ph-form [mode]="viewMode() === 'add' ? 'add' : 'edit'" [initialData]="selectedRow()" (close)="onFormClose()"
+  (save)="onFormSave($event)" [duplicateFields]="duplicateFields()" />
+}

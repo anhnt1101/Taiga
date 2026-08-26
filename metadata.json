@@ -1,0 +1,6 @@
+{
+  "name": "Payment Hub",
+  "description": "Payment Hub — Tham số danh mục theo nhóm",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

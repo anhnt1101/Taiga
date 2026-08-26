@@ -1,0 +1,195 @@
+<div class="form-container">
+  <!-- Breadcrumbs -->
+  <nav class="breadcrumb">
+    <span class="breadcrumb__link" (click)="onCancel()">Trang chủ</span>
+    <span class="breadcrumb__sep">›</span>
+    <span class="breadcrumb__link" (click)="onCancel()">Tham số danh mục theo nhóm</span>
+    <span class="breadcrumb__sep">›</span>
+    <span class="breadcrumb__current">{{ mode === 'add' ? 'Thêm mới' : 'Chỉnh sửa' }}</span>
+  </nav>
+
+  <!-- Header section -->
+  <div class="page-header">
+    <div class="page-header__left">
+      <button class="btn-back" tuiButton appearance="flat" size="s" type="button" (click)="onCancel()" title="Quay lại">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M15 18l-6-6 6-6" />
+        </svg>
+      </button>
+      <h1 class="page-header__title">
+        {{ mode === 'add' ? 'Thêm mới tham số danh mục theo nhóm' : 'Chỉnh sửa tham số danh mục theo nhóm' }}
+      </h1>
+    </div>
+
+    <div class="page-header__actions">
+      <!-- Close icon button -->
+      <button class="btn-close" tuiButton appearance="flat" size="s" type="button" (click)="onCancel()" title="Đóng">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Save button -->
+      <button class="btn-action btn-action--save" tuiButton appearance="secondary" type="button"
+        (click)="onSave(false)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+          <polyline points="17 21 17 13 7 13 7 21" />
+          <polyline points="7 3 7 8 15 8" />
+        </svg>
+        Lưu
+      </button>
+
+      <!-- Save and submit for approval button -->
+      <button class="btn-action btn-action--submit" tuiButton appearance="primary" type="button" (click)="onSave(true)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13" />
+          <polygon points="22 2 15 22 11 13 2 9 22 2" />
+        </svg>
+        Lưu và gửi duyệt
+      </button>
+    </div>
+  </div>
+
+  <!-- Main form card -->
+  <section class="card form-card">
+    <div class="form-grid">
+      <!-- Row 1: 4 columns -->
+      <div class="field" [class.field--invalid]="isFieldInvalid('paramType') || duplicateFields.paramType">
+        <label>Danh mục theo nhóm <span class="required">*</span></label>
+        <tui-textfield>
+          <input tuiInput type="text" placeholder="Nhập nội dung" [(ngModel)]="form.paramType"
+            [disabled]="mode === 'edit'" maxlength="255" (ngModelChange)="clearDuplicate('paramType')" />
+        </tui-textfield>
+        @if (isFieldInvalid('paramType')) {
+
+        <span class="error-msg">
+          Danh mục theo nhóm không được để trống
+        </span>
+
+        } @else if (duplicateFields.paramType) {
+
+        <span class="error-msg">
+          Danh mục theo nhóm đã tồn tại
+        </span>
+
+        }
+      </div>
+
+      <div class="field" [class.field--invalid]="isFieldInvalid('paramValue') || duplicateFields.paramValue">
+        <label>Giá trị thành phần <span class="required">*</span></label>
+        <tui-textfield>
+          <input tuiInput type="text" placeholder="Nhập nội dung" [(ngModel)]="form.paramValue" maxlength="255"
+            (ngModelChange)="clearDuplicate('paramValue')" />
+        </tui-textfield>
+        @if (isFieldInvalid('paramValue')) {
+        <span class="error-msg">Giá trị thành phần không được để trống</span>
+        } @else if (duplicateFields.paramValue) {
+        <span class="error-msg">Giá trị thành phần đã tồn tại</span>
+        }
+      </div>
+
+      <div class="field" [class.field--invalid]="isFieldInvalid('paramName')">
+        <label>Tên thành phần <span class="required">*</span></label>
+        <tui-textfield>
+          <input tuiInput type="text" placeholder="Nhập nội dung" [(ngModel)]="form.paramName" maxlength="255" />
+        </tui-textfield>
+        @if (isFieldInvalid('paramName')) {
+        <span class="error-msg">Tên thành phần không được để trống</span>
+        }
+      </div>
+
+      <div class="field" [class.field--invalid]="isFieldInvalid('componentCode')">
+        <label>Cấu phần xử lý <span class="required">*</span></label>
+        <tui-textfield multi tuiChevron class="component-code-select">
+          <select tuiMultiSelect [items]="[componentCodeItems]"
+            [placeholder]="selectedComponentCodes.length ? '' : 'Chọn cấu phần xử lý'"
+            [(ngModel)]="selectedComponentCodes">
+          </select>
+        </tui-textfield>
+        @if (isFieldInvalid('componentCode')) {
+        <span class="error-msg">Vui lòng chọn cấu phần xử lý</span>
+        }
+      </div>
+
+      <!-- Row 2: 2 columns (each spans 2 of 4 grid columns) -->
+      <!-- Ngày hiệu lực -->
+      <div class="field field--span-2"
+        [class.field--invalid]="submitted && (isFieldInvalid('effectiveDate') || effectiveDateError) || duplicateFields.exitsDate">
+        <label>Ngày hiệu lực <span class="required">*</span></label>
+        <div class="date-input-wrap">
+          <tui-textfield [tuiTextfieldCleaner]="true">
+            <input tuiInputDateTime [timeMode]="'HH:MM'" [(ngModel)]="effectiveDateTime"
+              (ngModelChange)="validateEffectiveDate()" name="effectiveDateTime" placeholder="dd/mm/yyyy, hh:mm" />
+          </tui-textfield>
+          <button type="button" class="calendar-btn-wrap" [tuiDropdown]="calendarTplEffective"
+            [(tuiDropdownOpen)]="isEffectiveCalendarOpen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+          </button>
+        </div>
+        @if (effectiveDateError) {
+        <div class="error-msg">
+          {{ effectiveDateError }}
+        </div>
+        }@else if (duplicateFields.exitsDate) {
+        <span class="error-msg">Ngày hiệu lực đã tồn tại</span>
+        }
+        <ng-template #calendarTplEffective>
+          <tui-calendar [value]="effectiveDateTime?.[0] ?? null" (dayClick)="onEffectiveDayClick($event)">
+          </tui-calendar>
+        </ng-template>
+      </div>
+
+      <!-- Ngày hết hiệu lực -->
+      <div class="field field--span-2" [class.field--invalid]="!!endEffectiveDateError || duplicateFields.exitsDate">
+        <label>Ngày hết hiệu lực </label>
+        <div class="date-input-wrap">
+          <tui-textfield [tuiTextfieldCleaner]="true">
+            <input tuiInputDateTime [timeMode]="'HH:MM'" [(ngModel)]="endEffectiveDateTime" name="endEffectiveDateTime"
+              (ngModelChange)="validateEndEffectiveDate()" placeholder="dd/mm/yyyy, hh:mm" />
+          </tui-textfield>
+
+          <button type="button" class="calendar-btn-wrap" [tuiDropdown]="calendarTplEndEffective"
+            [(tuiDropdownOpen)]="isEndEffectiveCalendarOpen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+              stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+          </button>
+        </div>
+        @if (endEffectiveDateError) {
+        <div class="error-msg">
+          {{ endEffectiveDateError }}
+        </div>
+        }@else if (duplicateFields.exitsDate) {
+        <span class="error-msg">Ngày hết hiệu lực đã tồn tại</span>
+        }
+        <ng-template #calendarTplEndEffective>
+          <tui-calendar [value]="endEffectiveDateTime?.[0] ?? null" (dayClick)="onEndEffectiveDayClick($event)">
+          </tui-calendar>
+        </ng-template>
+      </div>
+
+      <!-- Row 3: 1 full width column -->
+      <div class="field field--full">
+        <label>Mô tả</label>
+        <tui-textfield>
+          <input tuiInput type="text" placeholder="Nhập nội dung" [(ngModel)]="form.description" maxlength="4000" />
+        </tui-textfield>
+      </div>
+    </div>
+  </section>
+</div>

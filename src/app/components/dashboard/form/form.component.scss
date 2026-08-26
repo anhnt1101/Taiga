@@ -1,0 +1,457 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #64748b;
+
+  &__link {
+    cursor: pointer;
+
+    &:hover {
+      color: #0e6e5a;
+      text-decoration: underline;
+    }
+  }
+
+  &__sep {
+    color: #94a3b8;
+  }
+
+  &__current {
+    color: #1e293b;
+    font-weight: 500;
+  }
+}
+
+/* Page Header */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: #334155;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: #f1f5f9;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.btn-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background-color: #f8fafc;
+    border-color: #94a3b8;
+    color: #0f172a;
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &--save {
+    background: #ffffff;
+    border: 1px solid #0e6e5a;
+    color: #0e6e5a;
+
+    &:hover {
+      background: #f0f7f5;
+    }
+  }
+
+  &--submit {
+    background: #0e6e5a;
+    border: 1px solid #0e6e5a;
+    color: #ffffff;
+
+    &:hover {
+      background: #0b5848;
+    }
+  }
+}
+
+/* Form Card */
+.form-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px 20px;
+}
+
+.date-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  outline: none;
+  border: none;
+  box-shadow: none;
+
+  tui-textfield {
+    flex: 1;
+  }
+}
+
+tui-calendar {
+  display: block;
+  background: var(--tui-background-base, #fff);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  padding: 8px;
+
+  button:hover {
+    background: var(--tui-background-neutral-1, #ffffff);
+    border-radius: 8px;
+  }
+
+  button[aria-selected="true"],
+  button[aria-current="date"],
+  button[data-state="active"],
+  button[data-active="true"],
+  .t-cell_active,
+  .t-item_active {
+    background: var(--tui-background-accent-1, #4b78e6) !important;
+    color: #fff !important;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+}
+
+:host ::ng-deep tui-textfield {
+  --tui-padding-l: 14px;
+}
+
+:host ::ng-deep .t-wrapper {
+  padding-left: 14px !important;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  &--span-2 {
+    grid-column: span 2;
+  }
+
+  &--full {
+    grid-column: 1 / -1;
+  }
+
+  label {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #334155;
+
+    .required {
+      color: #e11d48;
+      margin-left: 2px;
+    }
+  }
+
+  tui-textfield {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 42px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background-color: #ffffff;
+    transition: all 0.15s ease;
+    box-shadow: none;
+
+    &:focus-within {
+      border-color: #0e6e5a;
+      box-shadow: 0 0 0 3px rgba(14, 110, 90, 0.12);
+    }
+
+    input[tuiTextfield],
+    select[tuiTextfield] {
+      width: 100%;
+      height: 100%;
+      padding: 0 14px !important;
+      border: none !important;
+      outline: none !important;
+      background: transparent !important;
+      // font-size: 14px;
+      color: #1e293b;
+      box-shadow: none !important;
+
+      &::placeholder {
+        color: #94a3b8;
+      }
+
+      &:disabled,
+      &[disabled] {
+        color: #64748b !important;
+        cursor: not-allowed !important;
+      }
+    }
+
+    select[tuiTextfield] {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E") !important;
+      background-repeat: no-repeat !important;
+      background-position: right 12px center !important;
+      background-size: 16px !important;
+      padding-right: 36px !important;
+      cursor: pointer;
+    }
+
+    &:has(input:disabled),
+    &:has(select:disabled) {
+      background-color: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      cursor: not-allowed !important;
+    }
+  }
+
+  input[type='text']:not([tuiTextfield]),
+  select:not([tuiTextfield]) {
+    height: 42px;
+    padding: 0 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1e293b;
+    background-color: #ffffff;
+    outline: none;
+    transition: all 0.15s ease;
+
+    &::placeholder {
+      color: #94a3b8;
+    }
+
+    &:focus {
+      border-color: #0e6e5a;
+      box-shadow: 0 0 0 3px rgba(14, 110, 90, 0.12);
+    }
+
+    &:disabled,
+    &[disabled] {
+      background-color: #f1f5f9 !important;
+      color: #64748b !important;
+      cursor: not-allowed !important;
+      border-color: #cbd5e1 !important;
+      user-select: none;
+    }
+  }
+
+  &--invalid {
+
+    tui-textfield,
+    input[type='text']:not([tuiTextfield]),
+    select:not([tuiTextfield]) {
+      border-color: #e11d48 !important;
+      background-color: #fff1f2 !important;
+
+      &:focus,
+      &:focus-within {
+        box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.15) !important;
+      }
+    }
+  }
+
+  select:not([tuiTextfield]) {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2064748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+}
+
+::ng-deep tui-textfield {
+  button[tuiIconButton] {
+    right: 8px !important;
+  }
+}
+
+.error-msg {
+  font-size: 12px;
+  color: #e11d48;
+  font-weight: 500;
+}
+
+.date-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  tui-textfield {
+    width: 100%;
+
+    input[tuiTextfield],
+    input[tuiInputDateTime] {
+      padding-right: 42px !important;
+    }
+  }
+
+  input[type='text']:not([tuiTextfield]) {
+    width: 100%;
+
+    padding-right: 42px !important;
+  }
+
+  .calendar-btn-wrap {
+    position: absolute;
+    right: 7px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    border: none;
+    box-shadow: none;
+    color: #040404;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+    z-index: 2;
+    background: #ffffff;
+
+    &:hover {
+      background: #f1f5f9;
+      color: #0e6e5a;
+    }
+
+    svg {
+      width: 18px;
+      height: 18px;
+      pointer-events: none;
+    }
+
+    .native-date-overlay {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      border: none;
+      z-index: 3;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .field--span-2 {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .field--span-2,
+  .field--full {
+    grid-column: span 1;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+
+    &__actions {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }
+}
+  :host ::ng-deep {
+  .field--invalid .component-code-select {
+    filter: drop-shadow(0 0 0.5px #ef4444);
+
+    outline: 1px solid #ef4444;
+    border-radius: 8px;
+  }
+}
