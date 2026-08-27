@@ -3,13 +3,15 @@ import { DanhMucTheoNhomComponent } from './components/dashboard/danh-muc-theo-n
 import { DanhMucFormComponent } from './components/dashboard/form/form.component';
 
 export const routes: Routes = [
+   { path: '', redirectTo: '', pathMatch: 'full' },
   {
-    path: 'danh-muc-theo-nhom',
+    
+    path: '',
     children: [
       { path: '', component: DanhMucTheoNhomComponent },
-      { path: 'them-moi', component: DanhMucFormComponent, data: { mode: 'add' } },
-      { path: 'sao-chep/:id', component: DanhMucFormComponent, data: { mode: 'add' } },
-      { path: 'sua/:id', component: DanhMucFormComponent, data: { mode: 'edit' } },
+      { path: 'new', component: DanhMucFormComponent, data: { mode: 'add' } },
+      { path: 'new', component: DanhMucFormComponent, data: { mode: 'add' } },
+      { path: 'update/:id', component: DanhMucFormComponent, data: { mode: 'edit' } },
     ],
   },
   // ... các route khác của bạn giữ nguyên

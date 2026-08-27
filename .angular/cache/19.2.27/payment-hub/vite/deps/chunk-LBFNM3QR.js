@@ -6,7 +6,7 @@ import {
   tuiIsPresent,
   tuiPreventDefault,
   tuiTypedFromEvent
-} from "./chunk-QU4OCGII.js";
+} from "./chunk-OB6TXSB6.js";
 import {
   DOCUMENT
 } from "./chunk-43U6UUQ6.js";
@@ -515,4 +515,4 @@ export {
   TuiZoomService,
   TuiZoom
 };
-//# sourceMappingURL=chunk-FKHJ3CZK.js.map
+//# sourceMappingURL=chunk-LBFNM3QR.js.map

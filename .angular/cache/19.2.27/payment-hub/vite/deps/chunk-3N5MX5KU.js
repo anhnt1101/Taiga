@@ -1,11 +1,11 @@
 import {
   TUI_FALLBACK_VALUE
-} from "./chunk-RYNVTAQW.js";
+} from "./chunk-EZVGK6YE.js";
 import {
   EMPTY_FUNCTION,
   takeUntilDestroyed,
   tuiProvide
-} from "./chunk-QU4OCGII.js";
+} from "./chunk-OB6TXSB6.js";
 import {
   NgControl,
   NgModel
@@ -164,4 +164,4 @@ export {
   tuiAsControl,
   TuiValidationError
 };
-//# sourceMappingURL=chunk-6VPGTAQ5.js.map
+//# sourceMappingURL=chunk-3N5MX5KU.js.map

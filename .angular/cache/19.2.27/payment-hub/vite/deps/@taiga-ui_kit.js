@@ -1,16 +1,4 @@
 import {
-  TuiPan,
-  TuiSwipe,
-  TuiZoom,
-  WA_MUTATION_OBSERVER_INIT,
-  WaMutationObserver,
-  WaMutationObserverService,
-  WaResizeObserverService
-} from "./chunk-FKHJ3CZK.js";
-import {
-  ActivatedRoute,
-  Router,
-  RouterLinkActive,
   TUI_FLOATING_PRECISION,
   TUI_HINT_COMPONENT,
   TUI_HINT_OPTIONS,
@@ -54,7 +42,66 @@ import {
   tuiKeyStepValueToPercentage,
   tuiLoaderOptionsProvider,
   tuiPercentageToKeyStepValue
-} from "./chunk-UCTLODEA.js";
+} from "./chunk-TAPANAMW.js";
+import {
+  ActivatedRoute,
+  Router,
+  RouterLinkActive
+} from "./chunk-JQ56UOWQ.js";
+import {
+  TUI_TEXTFIELD_OPTIONS,
+  TuiButtonX,
+  TuiSelectLike,
+  TuiTextfield,
+  TuiTextfieldComponent,
+  TuiTextfieldContent,
+  TuiTextfieldMultiComponent,
+  TuiTextfieldOptionsDirective,
+  TuiWithNativePicker,
+  tuiAsTextfieldAccessor,
+  tuiAsTextfieldContent,
+  tuiButtonXOptionsProvider,
+  tuiInjectAuxiliary
+} from "./chunk-JFLPWJYA.js";
+import {
+  TuiPan,
+  TuiSwipe,
+  TuiZoom,
+  WA_MUTATION_OBSERVER_INIT,
+  WaMutationObserver,
+  WaMutationObserverService,
+  WaResizeObserverService
+} from "./chunk-LBFNM3QR.js";
+import {
+  TuiAutoFocus,
+  TuiId,
+  TuiNativeValidator,
+  tuiAutoFocusOptionsProvider
+} from "./chunk-J2BOA4UM.js";
+import {
+  TUI_IDENTITY_VALUE_TRANSFORMER,
+  TuiControl,
+  TuiNonNullableValueTransformer,
+  TuiValidationError,
+  TuiValueTransformer,
+  tuiAsControl,
+  tuiValueTransformerFrom
+} from "./chunk-3N5MX5KU.js";
+import {
+  TuiItem
+} from "./chunk-UBR7MOSE.js";
+import {
+  TuiCell,
+  TuiDataList,
+  TuiDataListComponent,
+  TuiLabel,
+  TuiOptGroup,
+  TuiOption,
+  TuiOptionWithValue,
+  tuiAsDataListHost,
+  tuiAsOptionContent,
+  tuiInjectDataListSize
+} from "./chunk-XKBWSPXY.js";
 import {
   AbstractTuiCalendar,
   TuiCalendar,
@@ -63,13 +110,13 @@ import {
   TuiSpinButton,
   tuiCalendarSheetOptionsProvider,
   tuiLinkOptionsProvider
-} from "./chunk-NDJGF3XG.js";
+} from "./chunk-37AZGZQM.js";
 import {
-  TuiAutoFocus,
-  TuiId,
-  TuiNativeValidator,
-  tuiAutoFocusOptionsProvider
-} from "./chunk-QVZUFZJT.js";
+  TUI_ITEMS_HANDLERS,
+  TuiItemsHandlersDirective,
+  TuiItemsHandlersValidator,
+  TuiWithItemsHandlers
+} from "./chunk-PGWYCRMT.js";
 import {
   DATE_FILLER_LENGTH,
   DATE_RANGE_FILLER_LENGTH,
@@ -86,55 +133,10 @@ import {
   TuiMonthRange,
   TuiTime,
   TuiYear
-} from "./chunk-HPWEB7HQ.js";
-import {
-  TUI_TEXTFIELD_OPTIONS,
-  TuiButtonX,
-  TuiSelectLike,
-  TuiTextfield,
-  TuiTextfieldComponent,
-  TuiTextfieldContent,
-  TuiTextfieldMultiComponent,
-  TuiTextfieldOptionsDirective,
-  TuiWithNativePicker,
-  tuiAsTextfieldAccessor,
-  tuiAsTextfieldContent,
-  tuiButtonXOptionsProvider,
-  tuiInjectAuxiliary
-} from "./chunk-PUP66PTB.js";
-import {
-  TUI_ITEMS_HANDLERS,
-  TuiItemsHandlersDirective,
-  TuiItemsHandlersValidator,
-  TuiWithItemsHandlers
-} from "./chunk-5S7PSX6H.js";
-import {
-  TUI_IDENTITY_VALUE_TRANSFORMER,
-  TuiControl,
-  TuiNonNullableValueTransformer,
-  TuiValidationError,
-  TuiValueTransformer,
-  tuiAsControl,
-  tuiValueTransformerFrom
-} from "./chunk-6VPGTAQ5.js";
+} from "./chunk-CG44YWTS.js";
 import {
   TuiValidator
-} from "./chunk-6HYS3RTL.js";
-import {
-  TuiItem
-} from "./chunk-UBR7MOSE.js";
-import {
-  TuiCell,
-  TuiDataList,
-  TuiDataListComponent,
-  TuiLabel,
-  TuiOptGroup,
-  TuiOption,
-  TuiOptionWithValue,
-  tuiAsDataListHost,
-  tuiAsOptionContent,
-  tuiInjectDataListSize
-} from "./chunk-BHMVI56K.js";
+} from "./chunk-HD22JS3S.js";
 import {
   TUI_APPEARANCE_OPTIONS,
   TUI_BUTTON_OPTIONS,
@@ -151,7 +153,10 @@ import {
   tuiButtonOptionsProvider,
   tuiIconEnd,
   tuiIconStart
-} from "./chunk-HS3QXMX2.js";
+} from "./chunk-6DII723A.js";
+import {
+  TuiTransitioned
+} from "./chunk-CSM553D7.js";
 import {
   TUI_FONT_OFFSET,
   TuiDropdown,
@@ -169,7 +174,25 @@ import {
   tuiDropdownOptionsProvider,
   tuiGetDuration,
   tuiSizeBigger
-} from "./chunk-ZZFJWFYX.js";
+} from "./chunk-3P3E5RW6.js";
+import "./chunk-EYFUUXEU.js";
+import "./chunk-EJQBUMGU.js";
+import "./chunk-6D3FKYJ5.js";
+import {
+  PolymorpheusComponent,
+  PolymorpheusOutlet,
+  TUI_PLATFORM,
+  TuiActiveZone,
+  TuiPortalDirective,
+  injectContext,
+  tuiAsPortal,
+  tuiFallbackValueProvider,
+  tuiFocusedIn,
+  tuiGetClosestFocusable,
+  tuiIsFocused,
+  tuiIsFocusedIn,
+  tuiMoveFocus
+} from "./chunk-EZVGK6YE.js";
 import {
   TUI_ANIMATIONS_SPEED,
   TUI_ASSETS_PATH,
@@ -191,28 +214,7 @@ import {
   TuiScrollbar,
   tuiAsAuxiliary,
   tuiExtractI18n
-} from "./chunk-EGF74S7Z.js";
-import "./chunk-46UQNXDB.js";
-import "./chunk-6D3FKYJ5.js";
-import "./chunk-EJQBUMGU.js";
-import {
-  TuiTransitioned
-} from "./chunk-BGNSHWBD.js";
-import {
-  PolymorpheusComponent,
-  PolymorpheusOutlet,
-  TUI_PLATFORM,
-  TuiActiveZone,
-  TuiPortalDirective,
-  injectContext,
-  tuiAsPortal,
-  tuiFallbackValueProvider,
-  tuiFocusedIn,
-  tuiGetClosestFocusable,
-  tuiIsFocused,
-  tuiIsFocusedIn,
-  tuiMoveFocus
-} from "./chunk-RYNVTAQW.js";
+} from "./chunk-443BZON3.js";
 import {
   CHAR_EN_DASH,
   CHAR_MINUS,
@@ -278,7 +280,7 @@ import {
   tuiZonefree,
   tuiZonefreeScheduler,
   tuiZonefull
-} from "./chunk-QU4OCGII.js";
+} from "./chunk-OB6TXSB6.js";
 import {
   CheckboxControlValueAccessor,
   DefaultValueAccessor,
@@ -414,13 +416,13 @@ import {
   ɵɵtwoWayProperty,
   ɵɵviewQuerySignal
 } from "./chunk-J6YSA62T.js";
+import "./chunk-XVJVK3DV.js";
 import {
   defer,
   fromEvent,
   isObservable,
   merge
 } from "./chunk-PV7DW26G.js";
-import "./chunk-XVJVK3DV.js";
 import {
   BehaviorSubject,
   EMPTY,

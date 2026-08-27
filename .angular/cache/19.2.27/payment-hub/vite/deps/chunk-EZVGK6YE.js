@@ -25,7 +25,7 @@ import {
   tuiWindowSize,
   tuiZoneOptimized,
   tuiZonefreeScheduler
-} from "./chunk-QU4OCGII.js";
+} from "./chunk-OB6TXSB6.js";
 import {
   DOCUMENT,
   isPlatformBrowser
@@ -172,171 +172,6 @@ function tuiMoveFocus(currentIndex, elements, step) {
   }
 }
 
-// node_modules/@taiga-ui/cdk/fesm2022/taiga-ui-cdk-tokens.mjs
-var TUI_REMOVED_ELEMENT = new InjectionToken(ngDevMode ? "TUI_REMOVED_ELEMENT" : "", {
-  factory: () => {
-    const element$ = new Subject();
-    const renderer = inject(RendererFactory2).createRenderer(null, null);
-    const proto = Object.getPrototypeOf(renderer.delegate ?? renderer);
-    const {
-      removeChild
-    } = proto;
-    proto.removeChild = function(...args) {
-      element$.next(args[1]);
-      removeChild.apply(this, args);
-    };
-    return element$.pipe(startWith(null), switchMap((element) => timer(0).pipe(map(() => null), startWith(element))), share());
-  }
-});
-function isValidFocusout(target, removedElement = null) {
-  return (
-    // Not due to switching tabs/going to DevTools
-    tuiGetDocumentOrShadowRoot(target).activeElement !== target && // Not due to button/input becoming disabled or under disabled fieldset
-    !target.matches(":disabled") && // Not due to element being removed from DOM
-    !removedElement?.contains(target) && // Not due to scrollable element became non-scrollable
-    (target.getAttribute("tabIndex") === "-1" || tuiIsFocusable(target))
-  );
-}
-function shadowRootActiveElement(root) {
-  return merge(tuiTypedFromEvent(root, "focusin").pipe(map(({
-    target
-  }) => target)), tuiTypedFromEvent(root, "focusout").pipe(filter(({
-    target,
-    relatedTarget
-  }) => !!relatedTarget && isValidFocusout(target)), map(({
-    relatedTarget
-  }) => relatedTarget)));
-}
-var TUI_ACTIVE_ELEMENT = new InjectionToken(ngDevMode ? "TUI_ACTIVE_ELEMENT" : "", {
-  factory: () => {
-    const removedElement$ = inject(TUI_REMOVED_ELEMENT);
-    const win = inject(WA_WINDOW);
-    const doc = inject(DOCUMENT);
-    const zone = inject(NgZone);
-    const focusout$ = tuiTypedFromEvent(win, "focusout", {
-      capture: true
-    });
-    const focusin$ = tuiTypedFromEvent(win, "focusin", {
-      capture: true
-    });
-    const blur$ = tuiTypedFromEvent(win, "blur");
-    const mousedown$ = tuiTypedFromEvent(win, "mousedown");
-    const mouseup$ = tuiTypedFromEvent(win, "mouseup");
-    const pointerdown$ = tuiTypedFromEvent(win, "pointerdown");
-    const pointercancel$ = tuiTypedFromEvent(win, "pointercancel");
-    return merge(focusout$.pipe(takeUntil(pointerdown$.pipe(filter((e) => !e.defaultPrevented))), repeat({
-      delay: () => merge(mouseup$, pointercancel$)
-    }), withLatestFrom(removedElement$), filter(([event, removedElement]) => isValidFocusout(tuiGetActualTarget(event), removedElement)), map(([{
-      relatedTarget
-    }]) => relatedTarget)), blur$.pipe(map(() => doc.activeElement), filter((element) => !!element?.matches("iframe"))), focusin$.pipe(switchMap((event) => {
-      const target = tuiGetActualTarget(event);
-      const root = tuiGetDocumentOrShadowRoot(target) || doc;
-      return root === doc ? of(target) : shadowRootActiveElement(root).pipe(startWith(target));
-    })), mousedown$.pipe(map(tuiGetActualTarget), switchMap((target) => !doc.activeElement || doc.activeElement === doc.body ? of(target) : focusout$.pipe(take(1), map(() => target), takeUntil(timer(0, tuiZonefreeScheduler(zone))))))).pipe(distinctUntilChanged(), share());
-  }
-});
-var TUI_FALLBACK_VALUE = new InjectionToken(ngDevMode ? "TUI_FALLBACK_VALUE" : "", {
-  factory: () => null
-});
-function tuiFallbackValueProvider(useValue) {
-  return {
-    provide: TUI_FALLBACK_VALUE,
-    useValue
-  };
-}
-var TUI_PLATFORM = new InjectionToken(ngDevMode ? "TUI_PLATFORM" : "", {
-  factory: () => {
-    if (inject(WA_IS_IOS)) {
-      return "ios";
-    }
-    return inject(WA_IS_ANDROID) ? "android" : "web";
-  }
-});
-var TUI_WINDOW_SIZE = new InjectionToken(ngDevMode ? "TUI_WINDOW_SIZE" : "", {
-  factory: () => toObservable(tuiWindowSize(inject(WA_WINDOW)))
-});
-
-// node_modules/@taiga-ui/cdk/fesm2022/taiga-ui-cdk-directives-active-zone.mjs
-var TuiActiveZone = class _TuiActiveZone {
-  constructor() {
-    this.active$ = inject(TUI_ACTIVE_ELEMENT);
-    this.tuiActiveZoneParent = null;
-    this.parent = inject(_TuiActiveZone, {
-      skipSelf: true,
-      optional: true
-    });
-    this.el = inject(ElementRef, {
-      optional: true
-    })?.nativeElement ?? inject(DOCUMENT).documentElement;
-    this.tuiActiveZoneChange = this.active$.pipe(map((element) => tuiIsElement(element) && this.contains(element)), startWith(false), distinctUntilChanged(), skip(1), tuiZoneOptimized(), share());
-    this.children = [];
-    this.parent?.addSubActiveZone(this);
-  }
-  set tuiActiveZoneParentSetter(zone) {
-    this.tuiActiveZoneParent?.removeSubActiveZone(this);
-    zone?.addSubActiveZone(this);
-    this.tuiActiveZoneParent = zone;
-  }
-  ngOnDestroy() {
-    this.parent?.removeSubActiveZone(this);
-    this.tuiActiveZoneParent?.removeSubActiveZone(this);
-  }
-  contains(node) {
-    return this.el.contains(node) || this.children.some((item) => item.contains(node));
-  }
-  // issue: https://github.com/typescript-eslint/typescript-eslint/issues/11770
-  // eslint-disable-next-line @typescript-eslint/no-unused-private-class-members
-  addSubActiveZone(activeZone) {
-    this.children = [...this.children, activeZone];
-  }
-  // issue: https://github.com/typescript-eslint/typescript-eslint/issues/11770
-  // eslint-disable-next-line @typescript-eslint/no-unused-private-class-members
-  removeSubActiveZone(activeZone) {
-    this.children = tuiArrayRemove(this.children, this.children.indexOf(activeZone));
-  }
-  static {
-    this.ɵfac = function TuiActiveZone_Factory(__ngFactoryType__) {
-      return new (__ngFactoryType__ || _TuiActiveZone)();
-    };
-  }
-  static {
-    this.ɵdir = ɵɵdefineDirective({
-      type: _TuiActiveZone,
-      selectors: [["", "tuiActiveZone", "", 5, "ng-container"], ["", "tuiActiveZoneChange", "", 5, "ng-container"], ["", "tuiActiveZoneParent", "", 5, "ng-container"]],
-      inputs: {
-        tuiActiveZoneParentSetter: [0, "tuiActiveZoneParent", "tuiActiveZoneParentSetter"]
-      },
-      outputs: {
-        tuiActiveZoneChange: "tuiActiveZoneChange"
-      },
-      exportAs: ["tuiActiveZone"]
-    });
-  }
-  static {
-    this.ɵprov = ɵɵdefineInjectable({
-      token: _TuiActiveZone,
-      factory: _TuiActiveZone.ɵfac,
-      providedIn: "root"
-    });
-  }
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(TuiActiveZone, [{
-    type: Injectable,
-    args: [{
-      providedIn: "root"
-    }]
-  }, {
-    type: Directive,
-    args: [{
-      selector: "[tuiActiveZone]:not(ng-container), [tuiActiveZoneChange]:not(ng-container), [tuiActiveZoneParent]:not(ng-container)",
-      inputs: ["tuiActiveZoneParentSetter: tuiActiveZoneParent"],
-      outputs: ["tuiActiveZoneChange"],
-      exportAs: "tuiActiveZone"
-    }]
-  }], () => [], null);
-})();
-
 // node_modules/@taiga-ui/font-watcher/index.esm.js
 var IFRAME = {
   position: "fixed",
@@ -402,97 +237,6 @@ var TuiFontSize = class _TuiFontSize {
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(TuiFontSize, [{
     type: Directive
-  }], null, null);
-})();
-
-// node_modules/@taiga-ui/cdk/fesm2022/taiga-ui-cdk-directives-obscured.mjs
-var TuiObscuredService = class _TuiObscuredService extends Observable {
-  constructor() {
-    super((subscriber) => this.obscured$.subscribe(subscriber));
-    this.el = tuiInjectElement();
-    this.obscured$ = inject(WA_ANIMATION_FRAME).pipe(throttleTime(100, tuiZonefreeScheduler()), map(() => tuiGetElementObscures(this.el)), startWith(null), distinctUntilChanged(), tuiZoneOptimized());
-  }
-  static {
-    this.ɵfac = function TuiObscuredService_Factory(__ngFactoryType__) {
-      return new (__ngFactoryType__ || _TuiObscuredService)();
-    };
-  }
-  static {
-    this.ɵprov = ɵɵdefineInjectable({
-      token: _TuiObscuredService,
-      factory: _TuiObscuredService.ɵfac
-    });
-  }
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(TuiObscuredService, [{
-    type: Injectable
-  }], () => [], null);
-})();
-var TuiObscured = class _TuiObscured {
-  constructor() {
-    this.activeZone = inject(TuiActiveZone, {
-      optional: true
-    });
-    this.obscured$ = inject(TuiObscuredService, {
-      self: true
-    }).pipe(map((by) => !!by?.every((el) => !this.activeZone?.contains(el))));
-    this.tuiObscuredEnabled = input();
-    this.tuiObscured$ = toObservable(this.tuiObscuredEnabled).pipe(tuiIfMap(() => this.obscured$));
-    this.tuiObscured = outputFromObservable(this.tuiObscured$);
-  }
-  static {
-    this.ɵfac = function TuiObscured_Factory(__ngFactoryType__) {
-      return new (__ngFactoryType__ || _TuiObscured)();
-    };
-  }
-  static {
-    this.ɵdir = ɵɵdefineDirective({
-      type: _TuiObscured,
-      selectors: [["", "tuiObscured", ""]],
-      inputs: {
-        tuiObscuredEnabled: [1, "tuiObscuredEnabled"]
-      },
-      outputs: {
-        tuiObscured: "tuiObscured"
-      },
-      features: [ɵɵProvidersFeature([TuiObscuredService])]
-    });
-  }
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(TuiObscured, [{
-    type: Directive,
-    args: [{
-      selector: "[tuiObscured]",
-      providers: [TuiObscuredService]
-    }]
-  }], null, null);
-})();
-
-// node_modules/@taiga-ui/cdk/fesm2022/taiga-ui-cdk-directives-vcr.mjs
-var TuiVCR = class _TuiVCR {
-  constructor() {
-    this.vcr = inject(ViewContainerRef);
-  }
-  static {
-    this.ɵfac = function TuiVCR_Factory(__ngFactoryType__) {
-      return new (__ngFactoryType__ || _TuiVCR)();
-    };
-  }
-  static {
-    this.ɵdir = ɵɵdefineDirective({
-      type: _TuiVCR,
-      selectors: [["", "tuiVCR", ""]]
-    });
-  }
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(TuiVCR, [{
-    type: Directive,
-    args: [{
-      selector: "[tuiVCR]"
-    }]
   }], null, null);
 })();
 
@@ -680,6 +424,32 @@ function ensureContext(context) {
   return isPrimitive(context) ? new PolymorpheusContext(context) : context;
 }
 
+// node_modules/@taiga-ui/cdk/fesm2022/taiga-ui-cdk-directives-vcr.mjs
+var TuiVCR = class _TuiVCR {
+  constructor() {
+    this.vcr = inject(ViewContainerRef);
+  }
+  static {
+    this.ɵfac = function TuiVCR_Factory(__ngFactoryType__) {
+      return new (__ngFactoryType__ || _TuiVCR)();
+    };
+  }
+  static {
+    this.ɵdir = ɵɵdefineDirective({
+      type: _TuiVCR,
+      selectors: [["", "tuiVCR", ""]]
+    });
+  }
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(TuiVCR, [{
+    type: Directive,
+    args: [{
+      selector: "[tuiVCR]"
+    }]
+  }], null, null);
+})();
+
 // node_modules/@taiga-ui/cdk/fesm2022/taiga-ui-cdk-portals.mjs
 var TuiPortal = class _TuiPortal {
   // eslint-disable-next-line @angular-eslint/prefer-inject
@@ -840,6 +610,236 @@ var TuiPortals = class _TuiPortals {
   }], () => [], null);
 })();
 
+// node_modules/@taiga-ui/cdk/fesm2022/taiga-ui-cdk-tokens.mjs
+var TUI_REMOVED_ELEMENT = new InjectionToken(ngDevMode ? "TUI_REMOVED_ELEMENT" : "", {
+  factory: () => {
+    const element$ = new Subject();
+    const renderer = inject(RendererFactory2).createRenderer(null, null);
+    const proto = Object.getPrototypeOf(renderer.delegate ?? renderer);
+    const {
+      removeChild
+    } = proto;
+    proto.removeChild = function(...args) {
+      element$.next(args[1]);
+      removeChild.apply(this, args);
+    };
+    return element$.pipe(startWith(null), switchMap((element) => timer(0).pipe(map(() => null), startWith(element))), share());
+  }
+});
+function isValidFocusout(target, removedElement = null) {
+  return (
+    // Not due to switching tabs/going to DevTools
+    tuiGetDocumentOrShadowRoot(target).activeElement !== target && // Not due to button/input becoming disabled or under disabled fieldset
+    !target.matches(":disabled") && // Not due to element being removed from DOM
+    !removedElement?.contains(target) && // Not due to scrollable element became non-scrollable
+    (target.getAttribute("tabIndex") === "-1" || tuiIsFocusable(target))
+  );
+}
+function shadowRootActiveElement(root) {
+  return merge(tuiTypedFromEvent(root, "focusin").pipe(map(({
+    target
+  }) => target)), tuiTypedFromEvent(root, "focusout").pipe(filter(({
+    target,
+    relatedTarget
+  }) => !!relatedTarget && isValidFocusout(target)), map(({
+    relatedTarget
+  }) => relatedTarget)));
+}
+var TUI_ACTIVE_ELEMENT = new InjectionToken(ngDevMode ? "TUI_ACTIVE_ELEMENT" : "", {
+  factory: () => {
+    const removedElement$ = inject(TUI_REMOVED_ELEMENT);
+    const win = inject(WA_WINDOW);
+    const doc = inject(DOCUMENT);
+    const zone = inject(NgZone);
+    const focusout$ = tuiTypedFromEvent(win, "focusout", {
+      capture: true
+    });
+    const focusin$ = tuiTypedFromEvent(win, "focusin", {
+      capture: true
+    });
+    const blur$ = tuiTypedFromEvent(win, "blur");
+    const mousedown$ = tuiTypedFromEvent(win, "mousedown");
+    const mouseup$ = tuiTypedFromEvent(win, "mouseup");
+    const pointerdown$ = tuiTypedFromEvent(win, "pointerdown");
+    const pointercancel$ = tuiTypedFromEvent(win, "pointercancel");
+    return merge(focusout$.pipe(takeUntil(pointerdown$.pipe(filter((e) => !e.defaultPrevented))), repeat({
+      delay: () => merge(mouseup$, pointercancel$)
+    }), withLatestFrom(removedElement$), filter(([event, removedElement]) => isValidFocusout(tuiGetActualTarget(event), removedElement)), map(([{
+      relatedTarget
+    }]) => relatedTarget)), blur$.pipe(map(() => doc.activeElement), filter((element) => !!element?.matches("iframe"))), focusin$.pipe(switchMap((event) => {
+      const target = tuiGetActualTarget(event);
+      const root = tuiGetDocumentOrShadowRoot(target) || doc;
+      return root === doc ? of(target) : shadowRootActiveElement(root).pipe(startWith(target));
+    })), mousedown$.pipe(map(tuiGetActualTarget), switchMap((target) => !doc.activeElement || doc.activeElement === doc.body ? of(target) : focusout$.pipe(take(1), map(() => target), takeUntil(timer(0, tuiZonefreeScheduler(zone))))))).pipe(distinctUntilChanged(), share());
+  }
+});
+var TUI_FALLBACK_VALUE = new InjectionToken(ngDevMode ? "TUI_FALLBACK_VALUE" : "", {
+  factory: () => null
+});
+function tuiFallbackValueProvider(useValue) {
+  return {
+    provide: TUI_FALLBACK_VALUE,
+    useValue
+  };
+}
+var TUI_PLATFORM = new InjectionToken(ngDevMode ? "TUI_PLATFORM" : "", {
+  factory: () => {
+    if (inject(WA_IS_IOS)) {
+      return "ios";
+    }
+    return inject(WA_IS_ANDROID) ? "android" : "web";
+  }
+});
+var TUI_WINDOW_SIZE = new InjectionToken(ngDevMode ? "TUI_WINDOW_SIZE" : "", {
+  factory: () => toObservable(tuiWindowSize(inject(WA_WINDOW)))
+});
+
+// node_modules/@taiga-ui/cdk/fesm2022/taiga-ui-cdk-directives-active-zone.mjs
+var TuiActiveZone = class _TuiActiveZone {
+  constructor() {
+    this.active$ = inject(TUI_ACTIVE_ELEMENT);
+    this.tuiActiveZoneParent = null;
+    this.parent = inject(_TuiActiveZone, {
+      skipSelf: true,
+      optional: true
+    });
+    this.el = inject(ElementRef, {
+      optional: true
+    })?.nativeElement ?? inject(DOCUMENT).documentElement;
+    this.tuiActiveZoneChange = this.active$.pipe(map((element) => tuiIsElement(element) && this.contains(element)), startWith(false), distinctUntilChanged(), skip(1), tuiZoneOptimized(), share());
+    this.children = [];
+    this.parent?.addSubActiveZone(this);
+  }
+  set tuiActiveZoneParentSetter(zone) {
+    this.tuiActiveZoneParent?.removeSubActiveZone(this);
+    zone?.addSubActiveZone(this);
+    this.tuiActiveZoneParent = zone;
+  }
+  ngOnDestroy() {
+    this.parent?.removeSubActiveZone(this);
+    this.tuiActiveZoneParent?.removeSubActiveZone(this);
+  }
+  contains(node) {
+    return this.el.contains(node) || this.children.some((item) => item.contains(node));
+  }
+  // issue: https://github.com/typescript-eslint/typescript-eslint/issues/11770
+  // eslint-disable-next-line @typescript-eslint/no-unused-private-class-members
+  addSubActiveZone(activeZone) {
+    this.children = [...this.children, activeZone];
+  }
+  // issue: https://github.com/typescript-eslint/typescript-eslint/issues/11770
+  // eslint-disable-next-line @typescript-eslint/no-unused-private-class-members
+  removeSubActiveZone(activeZone) {
+    this.children = tuiArrayRemove(this.children, this.children.indexOf(activeZone));
+  }
+  static {
+    this.ɵfac = function TuiActiveZone_Factory(__ngFactoryType__) {
+      return new (__ngFactoryType__ || _TuiActiveZone)();
+    };
+  }
+  static {
+    this.ɵdir = ɵɵdefineDirective({
+      type: _TuiActiveZone,
+      selectors: [["", "tuiActiveZone", "", 5, "ng-container"], ["", "tuiActiveZoneChange", "", 5, "ng-container"], ["", "tuiActiveZoneParent", "", 5, "ng-container"]],
+      inputs: {
+        tuiActiveZoneParentSetter: [0, "tuiActiveZoneParent", "tuiActiveZoneParentSetter"]
+      },
+      outputs: {
+        tuiActiveZoneChange: "tuiActiveZoneChange"
+      },
+      exportAs: ["tuiActiveZone"]
+    });
+  }
+  static {
+    this.ɵprov = ɵɵdefineInjectable({
+      token: _TuiActiveZone,
+      factory: _TuiActiveZone.ɵfac,
+      providedIn: "root"
+    });
+  }
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(TuiActiveZone, [{
+    type: Injectable,
+    args: [{
+      providedIn: "root"
+    }]
+  }, {
+    type: Directive,
+    args: [{
+      selector: "[tuiActiveZone]:not(ng-container), [tuiActiveZoneChange]:not(ng-container), [tuiActiveZoneParent]:not(ng-container)",
+      inputs: ["tuiActiveZoneParentSetter: tuiActiveZoneParent"],
+      outputs: ["tuiActiveZoneChange"],
+      exportAs: "tuiActiveZone"
+    }]
+  }], () => [], null);
+})();
+
+// node_modules/@taiga-ui/cdk/fesm2022/taiga-ui-cdk-directives-obscured.mjs
+var TuiObscuredService = class _TuiObscuredService extends Observable {
+  constructor() {
+    super((subscriber) => this.obscured$.subscribe(subscriber));
+    this.el = tuiInjectElement();
+    this.obscured$ = inject(WA_ANIMATION_FRAME).pipe(throttleTime(100, tuiZonefreeScheduler()), map(() => tuiGetElementObscures(this.el)), startWith(null), distinctUntilChanged(), tuiZoneOptimized());
+  }
+  static {
+    this.ɵfac = function TuiObscuredService_Factory(__ngFactoryType__) {
+      return new (__ngFactoryType__ || _TuiObscuredService)();
+    };
+  }
+  static {
+    this.ɵprov = ɵɵdefineInjectable({
+      token: _TuiObscuredService,
+      factory: _TuiObscuredService.ɵfac
+    });
+  }
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(TuiObscuredService, [{
+    type: Injectable
+  }], () => [], null);
+})();
+var TuiObscured = class _TuiObscured {
+  constructor() {
+    this.activeZone = inject(TuiActiveZone, {
+      optional: true
+    });
+    this.obscured$ = inject(TuiObscuredService, {
+      self: true
+    }).pipe(map((by) => !!by?.every((el) => !this.activeZone?.contains(el))));
+    this.tuiObscuredEnabled = input();
+    this.tuiObscured$ = toObservable(this.tuiObscuredEnabled).pipe(tuiIfMap(() => this.obscured$));
+    this.tuiObscured = outputFromObservable(this.tuiObscured$);
+  }
+  static {
+    this.ɵfac = function TuiObscured_Factory(__ngFactoryType__) {
+      return new (__ngFactoryType__ || _TuiObscured)();
+    };
+  }
+  static {
+    this.ɵdir = ɵɵdefineDirective({
+      type: _TuiObscured,
+      selectors: [["", "tuiObscured", ""]],
+      inputs: {
+        tuiObscuredEnabled: [1, "tuiObscuredEnabled"]
+      },
+      outputs: {
+        tuiObscured: "tuiObscured"
+      },
+      features: [ɵɵProvidersFeature([TuiObscuredService])]
+    });
+  }
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(TuiObscured, [{
+    type: Directive,
+    args: [{
+      selector: "[tuiObscured]",
+      providers: [TuiObscuredService]
+    }]
+  }], null, null);
+})();
+
 export {
   tuiFocusedIn,
   tuiIsFocusable,
@@ -848,6 +848,19 @@ export {
   tuiIsFocused,
   tuiIsFocusedIn,
   tuiMoveFocus,
+  TUI_FONT_SIZE_HANDLER,
+  TuiFontSize,
+  injectContext,
+  PolymorpheusComponent,
+  PolymorpheusTemplate,
+  PolymorpheusOutlet,
+  TuiVCR,
+  TuiPortal,
+  tuiAsPortal,
+  TuiPortalDirective,
+  TuiPortalService,
+  TuiNoHostException,
+  TuiPortals,
   TUI_REMOVED_ELEMENT,
   TUI_ACTIVE_ELEMENT,
   TUI_FALLBACK_VALUE,
@@ -855,20 +868,7 @@ export {
   TUI_PLATFORM,
   TUI_WINDOW_SIZE,
   TuiActiveZone,
-  TUI_FONT_SIZE_HANDLER,
-  TuiFontSize,
   TuiObscuredService,
-  TuiObscured,
-  TuiVCR,
-  injectContext,
-  PolymorpheusComponent,
-  PolymorpheusTemplate,
-  PolymorpheusOutlet,
-  TuiPortal,
-  tuiAsPortal,
-  TuiPortalDirective,
-  TuiPortalService,
-  TuiNoHostException,
-  TuiPortals
+  TuiObscured
 };
-//# sourceMappingURL=chunk-RYNVTAQW.js.map
+//# sourceMappingURL=chunk-EZVGK6YE.js.map

@@ -1,5 +1,16 @@
 export type StatusTone = 'success' | 'new' | 'pending' | 'rejected' | 'canceled';
 
+export type ToastAction =
+  | 'add'
+  | 'edit'
+  | 'export'
+  | 'delete'
+  | 'approve'
+  | 'cancelApprove'
+  | 'reject'
+  | 'submitApproval'
+  | 'error';
+
 export interface StatusValue {
   code: number;
   text: string;
@@ -9,7 +20,6 @@ export interface StatusValue {
 export interface ComponentCodeOption {
   id: number;
   componentCode: string;
-  componentName: string;
 }
 
 export interface DanhMucRow {

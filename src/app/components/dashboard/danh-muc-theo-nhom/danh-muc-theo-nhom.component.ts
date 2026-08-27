@@ -1,19 +1,18 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TuiButton } from '@taiga-ui/core';
 import { finalize } from 'rxjs';
-import { DanhMucRow, DanhMucFilterParams } from '../../../models/danh-muc.model';
+import { DanhMucRow, DanhMucFilterParams, ToastAction } from '../../../models/danh-muc.model';
 import { DanhMucService } from '../../../services/danh-muc.service';
 import { FilterComponent } from '../filter/filter.component';
 import { TableComponent } from '../table/table.component';
-import { FormComponent } from '../form/form.component';
 import { DetailModalComponent } from '../detail-modal/detail-modal.component';
 //test
 import { Observable } from 'rxjs';
 
 export { DanhMucRow };
-type ToastAction = 'add' | 'edit' | 'export' | 'delete' | 'approve' | 'cancelApprove' | 'reject' | 'submitApproval' | 'error';
 @Component({
   selector: 'ph-danh-muc-theo-nhom',
   standalone: true,
@@ -23,7 +22,6 @@ type ToastAction = 'add' | 'edit' | 'export' | 'delete' | 'approve' | 'cancelApp
     TuiButton,
     FilterComponent,
     TableComponent,
-    FormComponent,
     DetailModalComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,8 +31,8 @@ type ToastAction = 'add' | 'edit' | 'export' | 'delete' | 'approve' | 'cancelApp
 
 export class DanhMucTheoNhomComponent implements OnInit {
   private readonly danhMucService = inject(DanhMucService);
-  readonly viewMode = signal<'list' | 'add' | 'edit'>('list');
-  readonly selectedRow = signal<DanhMucRow | null>(null);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   readonly detailModalRow = signal<DanhMucRow | null>(null);
   selectedDeleteRow: DanhMucRow | null = null;
   readonly showDeleteConfirm = signal(false);
@@ -43,13 +41,6 @@ export class DanhMucTheoNhomComponent implements OnInit {
     row: DanhMucRow | null;
     action: ToastAction
   } | null>(null);
-
-  readonly duplicateFields = signal({
-  paramValue: false,
-  paramType: false,
-  effectiveDate: false,
-  endEffectiveDate: false
-});
 
   readonly batchModal = signal<{
     show: boolean;
@@ -79,6 +70,11 @@ export class DanhMucTheoNhomComponent implements OnInit {
   readonly loading = signal<boolean>(false);
 
   ngOnInit(): void {
+    const pendingToast = this.danhMucService.consumePendingToast();
+    if (pendingToast) {
+      this.showAddSuccessToast(pendingToast.row, pendingToast.action);
+    }
+
     this.search();
 
     this.danhMucService.connectChangeEvent().subscribe({
@@ -199,14 +195,7 @@ export class DanhMucTheoNhomComponent implements OnInit {
   }
 
   addNew(): void {
-    this.selectedRow.set(null);
-    this.viewMode.set('add');
-    this.duplicateFields.set({
-      paramValue: false,
-      paramType: false,
-      effectiveDate: false,
-      endEffectiveDate: false
-    });
+    this.router.navigate(['new'], { relativeTo: this.route.parent });
   }
 
   viewRecord(row: DanhMucRow): void {
@@ -214,19 +203,13 @@ export class DanhMucTheoNhomComponent implements OnInit {
   }
 
   copyRecord(row: DanhMucRow): void {
-    this.selectedRow.set(row);
-    this.viewMode.set('add');
-    this.duplicateFields.set({
-      paramValue: false,
-      paramType: false,
-      effectiveDate: false,
-      endEffectiveDate: false
-    });
+    this.danhMucService.setEditingRow(row);
+    this.router.navigate(['new'], { relativeTo: this.route.parent });
   }
 
   editRecord(row: DanhMucRow): void {
-    this.selectedRow.set(row);
-    this.viewMode.set('edit');
+    this.danhMucService.setEditingRow(row);
+    this.router.navigate(['update', row.id], { relativeTo: this.route.parent });
   }
 
   closeDetailModal(): void {
@@ -392,54 +375,6 @@ export class DanhMucTheoNhomComponent implements OnInit {
 
   closeBatchModal(): void {
     this.batchModal.set(null);
-  }
-
-  onFormClose(): void {
-    this.viewMode.set('list');
-    this.selectedRow.set(null);
-  }
-
-  handleDuplicateError(err: any): void {
-    if (err.status !== 409) {
-      return;
-    }
-
-    this.duplicateFields.set({
-      paramValue: true,
-      paramType: true,
-      effectiveDate: true,
-      endEffectiveDate: true
-    });
-  }
-
-  onFormSave(event: { row: Partial<DanhMucRow>; submitForApproval: boolean }): void {
-    if (this.viewMode() === 'add') {
-      this.danhMucService.create(
-        event.row,
-        event.submitForApproval
-      ).subscribe({
-        next: (newRow) => {
-          this.callSearchApi();
-          this.onFormClose();
-          this.showAddSuccessToast(newRow, 'add');
-        },
-        error: (err) => {
-          this.handleDuplicateError(err);
-        }
-      });
-    } else if (this.viewMode() === 'edit' && this.selectedRow()) {
-      const selected = this.selectedRow()!;
-      this.danhMucService
-        .update(selected, event.row, event.submitForApproval)
-        .subscribe({
-          next: (newRow) => {
-            this.callSearchApi();
-            this.onFormClose();
-            this.showAddSuccessToast(newRow, 'edit');
-          },
-          error: (err) => this.handleDuplicateError(err)
-        });
-    }
   }
 
 }

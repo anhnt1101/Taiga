@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TuiButton, TuiDropdown, TuiCalendar, TuiInput, TuiTextfield } from '@taiga-ui/core';
 import { TuiInputDateTime, TuiChevron, TuiMultiSelect } from '@taiga-ui/kit';
 import { TuiDay, TuiTime } from '@taiga-ui/cdk';
@@ -28,17 +29,19 @@ import { DanhMucService } from '../../../services/danh-muc.service';
 export class FormComponent implements OnInit {
   private readonly danhMucService = inject(DanhMucService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
-  @Input({ required: true }) mode: 'add' | 'edit' = 'add';
-  @Input() initialData: DanhMucRow | null = null;
-  @Input() duplicateFields = {
+  // Trước đây là @Input, nay đọc từ `data` khai báo trên route (xem app.routes.ts)
+  mode: 'add' | 'edit' = 'add';
+  // Bản ghi gốc (chưa chỉnh sửa) — cần cho DanhMucService.update(); null khi ở chế độ Thêm mới
+  private originalRow: DanhMucRow | null = null;
+  duplicateFields = {
     paramValue: false,
     paramType: false,
     effectiveDate: false,
     endEffectiveDate: false
   };
-  @Output() close = new EventEmitter<void>();
-  @Output() save = new EventEmitter<{ row: Partial<DanhMucRow>; submitForApproval: boolean }>();
 
   submitted = false;
   componentCodeItems: string[] = [];
@@ -68,95 +71,117 @@ export class FormComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    if (this.initialData) {
-      const dataToLoad = { ...this.initialData };
-      const newData = this.initialData.newData;
-      if (newData && typeof newData === 'object') {
-        Object.assign(dataToLoad, newData);
-      } else if (typeof newData === 'string') {
-        try {
-          const parsed = JSON.parse(newData);
-          if (parsed && typeof parsed === 'object') {
-            Object.assign(dataToLoad, parsed);
-          }
-        } catch (e) { }
+    this.mode = (this.route.snapshot.data['mode'] as 'add' | 'edit') || 'add';
+
+    // Ưu tiên dữ liệu được truyền qua router khi bấm Sửa/Sao chép ở trang danh sách;
+    // nếu vào thẳng URL (F5, mở link) thì tự tải lại theo :id.
+    const passedRow = this.danhMucService.consumeEditingRow();
+    if (passedRow) {
+      this.applyInitialData(passedRow);
+    } else {
+      const id = this.route.snapshot.paramMap.get('id');
+      if (id) {
+        this.danhMucService.getById(Number(id)).subscribe({
+          next: (row) => {
+            this.applyInitialData(row);
+            this.cdr.markForCheck();
+          },
+          error: (err) => console.error('Không tải được dữ liệu bản ghi:', err),
+        });
       }
-
-      const pType = dataToLoad.paramType || '';
-      const pVal = dataToLoad.paramValue || '';
-      const pName = dataToLoad.paramName || '';
-      const pDesc = dataToLoad.description || '';
-
-      let compCodeStr = '';
-      let compCodesArr: string[] = [];
-      const rawComp = dataToLoad.componentCode || (dataToLoad as any).cauPhanXuLy;
-      if (Array.isArray(rawComp)) {
-        compCodesArr = rawComp
-          .map((item) => (typeof item === 'string' ? item : (item as ComponentCodeOption)?.componentCode || ''))
-          .filter((v) => !!v);
-        compCodeStr = compCodesArr.join(',');
-      } else if (typeof rawComp === 'string') {
-        compCodeStr = rawComp;
-        compCodesArr = rawComp.split(',').map((v) => v.trim()).filter((v) => !!v);
-      } else if (rawComp && typeof rawComp === 'object') {
-        compCodeStr = (rawComp as ComponentCodeOption).componentCode || '';
-        compCodesArr = compCodeStr ? [compCodeStr] : [];
-      }
-
-      const effDate = dataToLoad.effectiveDate || '';
-      const endEffDate = dataToLoad.endEffectiveDate || '';
-
-      const rawActive = (dataToLoad.isActive ?? (dataToLoad as any).trangThaiHoatDong) as any;
-      const activeVal =
-        rawActive === 'inactive' ||
-          rawActive === 0 ||
-          rawActive === '0' ||
-          rawActive === false ||
-          rawActive === 'Không hoạt động' ||
-          rawActive === 'NGUNG_HOAT_DONG'
-          ? 0
-          : 1;
-
-      this.form = {
-        ...dataToLoad,
-        paramType: pType,
-        paramValue: pVal,
-        paramName: pName,
-        description: pDesc,
-        componentCode: compCodeStr,
-        effectiveDate: effDate,
-        endEffectiveDate: endEffDate,
-        isActive: activeVal,
-      };
-
-      this.selectedComponentCodes = compCodesArr;
-
-      // Đồng bộ string từ BE vào 2 biến picker
-      this.effectiveDateTime = this.parseToTuiDateTime(effDate);
-      this.endEffectiveDateTime = this.parseToTuiDateTime(endEffDate);
-
-      if (this.mode === 'add') {
-        delete this.form.id;
-        delete this.form.stt;
-        this.form.status = 1;
-        this.form.isActive = 1;
-      }
-
-      compCodesArr.forEach((code) => {
-        if (code && !this.componentCodeItems.includes(code)) {
-          this.componentCodeItems.push(code);
-        }
-      });
     }
+
     this.danhMucService.getComponentCodes().subscribe((options) => {
       if (options && options.length > 0) {
         for (const opt of options) {
-          if (!this.componentCodeItems.includes(opt.componentCode + " - " + opt.componentName)) {
-            this.componentCodeItems.push(opt.componentCode + " - " + opt.componentName);
+          if (!this.componentCodeItems.includes(opt.componentCode)) {
+            this.componentCodeItems.push(opt.componentCode);
           }
         }
       }
       this.cdr.markForCheck();
+    });
+  }
+
+  private applyInitialData(initialData: DanhMucRow): void {
+    this.originalRow = initialData;
+    const dataToLoad = { ...initialData };
+    const newData = initialData.newData;
+    if (newData && typeof newData === 'object') {
+      Object.assign(dataToLoad, newData);
+    } else if (typeof newData === 'string') {
+      try {
+        const parsed = JSON.parse(newData);
+        if (parsed && typeof parsed === 'object') {
+          Object.assign(dataToLoad, parsed);
+        }
+      } catch (e) { }
+    }
+
+    const pType = dataToLoad.paramType || '';
+    const pVal = dataToLoad.paramValue || '';
+    const pName = dataToLoad.paramName || '';
+    const pDesc = dataToLoad.description || '';
+
+    let compCodeStr = '';
+    let compCodesArr: string[] = [];
+    const rawComp = dataToLoad.componentCode || (dataToLoad as any).cauPhanXuLy;
+    if (Array.isArray(rawComp)) {
+      compCodesArr = rawComp
+        .map((item) => (typeof item === 'string' ? item : (item as ComponentCodeOption)?.componentCode || ''))
+        .filter((v) => !!v);
+      compCodeStr = compCodesArr.join(',');
+    } else if (typeof rawComp === 'string') {
+      compCodeStr = rawComp;
+      compCodesArr = rawComp.split(',').map((v) => v.trim()).filter((v) => !!v);
+    } else if (rawComp && typeof rawComp === 'object') {
+      compCodeStr = (rawComp as ComponentCodeOption).componentCode || '';
+      compCodesArr = compCodeStr ? [compCodeStr] : [];
+    }
+
+    const effDate = dataToLoad.effectiveDate || '';
+    const endEffDate = dataToLoad.endEffectiveDate || '';
+
+    const rawActive = (dataToLoad.isActive ?? (dataToLoad as any).trangThaiHoatDong) as any;
+    const activeVal =
+      rawActive === 'inactive' ||
+        rawActive === 0 ||
+        rawActive === '0' ||
+        rawActive === false ||
+        rawActive === 'Không hoạt động' ||
+        rawActive === 'NGUNG_HOAT_DONG'
+        ? 0
+        : 1;
+
+    this.form = {
+      ...dataToLoad,
+      paramType: pType,
+      paramValue: pVal,
+      paramName: pName,
+      description: pDesc,
+      componentCode: compCodeStr,
+      effectiveDate: effDate,
+      endEffectiveDate: endEffDate,
+      isActive: activeVal,
+    };
+
+    this.selectedComponentCodes = compCodesArr;
+
+    // Đồng bộ string từ BE vào 2 biến picker
+    this.effectiveDateTime = this.parseToTuiDateTime(effDate);
+    this.endEffectiveDateTime = this.parseToTuiDateTime(endEffDate);
+
+    if (this.mode === 'add') {
+      delete this.form.id;
+      delete this.form.stt;
+      this.form.status = 1;
+      this.form.isActive = 1;
+    }
+
+    compCodesArr.forEach((code) => {
+      if (code && !this.componentCodeItems.includes(code)) {
+        this.componentCodeItems.push(code);
+      }
     });
   }
 
@@ -210,7 +235,7 @@ export class FormComponent implements OnInit {
   }
 
   onCancel(): void {
-    this.close.emit();
+    this.router.navigate([''], { relativeTo: this.route });
   }
 
   isFieldInvalid(fieldName: keyof DanhMucRow): boolean {
@@ -224,6 +249,7 @@ export class FormComponent implements OnInit {
 
   clearDuplicate(field: keyof typeof this.duplicateFields): void {
     this.duplicateFields[field] = false;
+    this.cdr.markForCheck();
   }
 
   // [TuiDay, TuiTime] -> Date (null nếu thiếu ngày hoặc giờ).
@@ -309,10 +335,38 @@ export class FormComponent implements OnInit {
       newData: this.mode === 'add' ? null : (this.form.newData ?? null),
     };
 
-    this.save.emit({
-      row: payload,
-      submitForApproval,
-    });
+    if (this.mode === 'add') {
+      this.danhMucService.create(payload, submitForApproval).subscribe({
+        next: (newRow) => {
+          this.danhMucService.notify(newRow, 'add');
+          this.router.navigate([''], { relativeTo: this.route });
+        },
+        error: (err) => this.handleDuplicateError(err),
+      });
+    } else if (this.mode === 'edit' && this.originalRow) {
+      this.danhMucService.update(this.originalRow, payload, submitForApproval).subscribe({
+        next: (newRow) => {
+          this.danhMucService.notify(newRow, 'edit');
+          this.router.navigate([''], { relativeTo: this.route });
+        },
+        error: (err) => this.handleDuplicateError(err),
+      });
+    }
+  }
+
+  private handleDuplicateError(err: any): void {
+    if (err.status !== 409) {
+      return;
+    }
+    
+    this.duplicateFields = {
+      paramValue: true,
+      paramType: true,
+      effectiveDate: true,
+      endEffectiveDate: true,
+    };
+
+    this.cdr.markForCheck();
   }
 }
 

@@ -1,12 +1,6 @@
 import {
-  TUI_DARK_MODE,
-  TUI_SELECTION_STREAM,
-  TUI_VIEWPORT,
-  TuiScrollbar
-} from "./chunk-EGF74S7Z.js";
-import {
   Meta
-} from "./chunk-46UQNXDB.js";
+} from "./chunk-EYFUUXEU.js";
 import {
   EVENT_MANAGER_PLUGINS,
   EventManagerPlugin,
@@ -26,7 +20,13 @@ import {
   tuiGetFocused,
   tuiIsFocusable,
   tuiIsFocusedIn
-} from "./chunk-RYNVTAQW.js";
+} from "./chunk-EZVGK6YE.js";
+import {
+  TUI_DARK_MODE,
+  TUI_SELECTION_STREAM,
+  TUI_VIEWPORT,
+  TuiScrollbar
+} from "./chunk-443BZON3.js";
 import {
   CHAR_NO_BREAK_SPACE,
   CHAR_ZERO_WIDTH_SPACE,
@@ -67,7 +67,7 @@ import {
   tuiZoneOptimized,
   tuiZonefree,
   tuiZonefreeScheduler
-} from "./chunk-QU4OCGII.js";
+} from "./chunk-OB6TXSB6.js";
 import {
   DOCUMENT,
   isPlatformBrowser
@@ -2324,6 +2324,17 @@ var TuiWithDropdownOpen = class _TuiWithDropdownOpen {
 var TuiDropdown = [TuiDropdownOptionsDirective, TuiDropdownDriverDirective, TuiDropdownDirective, TuiDropdownComponent, TuiDropdownA11y, TuiDropdownOpen, TuiDropdownManual, TuiDropdownHover, TuiDropdownContent, TuiDropdownContext, TuiDropdownPosition, TuiDropdownPositionSided, TuiDropdownSelection];
 
 export {
+  TUI_FONT_OFFSET,
+  tuiEnableFontScaling,
+  TUI_ANIMATIONS_DEFAULT_DURATION,
+  tuiGetDuration,
+  tuiIsEditingKey,
+  tuiIsObscured,
+  TUI_OPTIONS,
+  provideTaiga,
+  TUI_LIQUID_GLASS,
+  tuiOverrideOptions,
+  tuiSizeBigger,
   TuiAccessor,
   TuiPositionAccessor,
   TuiRectAccessor,
@@ -2338,17 +2349,6 @@ export {
   TuiDriver,
   tuiAsDriver,
   TuiDriverDirective,
-  TUI_FONT_OFFSET,
-  tuiEnableFontScaling,
-  TUI_ANIMATIONS_DEFAULT_DURATION,
-  tuiGetDuration,
-  tuiIsEditingKey,
-  tuiIsObscured,
-  TUI_OPTIONS,
-  provideTaiga,
-  TUI_LIQUID_GLASS,
-  tuiOverrideOptions,
-  tuiSizeBigger,
   TuiPopupService,
   TUI_CDR,
   TuiPopups,
@@ -2391,4 +2391,4 @@ export {
   TuiWithDropdownOpen,
   TuiDropdown
 };
-//# sourceMappingURL=chunk-ZZFJWFYX.js.map
+//# sourceMappingURL=chunk-3P3E5RW6.js.map

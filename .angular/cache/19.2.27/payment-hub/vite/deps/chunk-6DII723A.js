@@ -1,12 +1,12 @@
 import {
+  TuiTransitioned
+} from "./chunk-CSM553D7.js";
+import {
   TUI_ICON_END,
   TUI_ICON_START,
   tuiGetIconMode,
   tuiInjectIconResolver
-} from "./chunk-EGF74S7Z.js";
-import {
-  TuiTransitioned
-} from "./chunk-BGNSHWBD.js";
+} from "./chunk-443BZON3.js";
 import {
   TUI_VERSION,
   tuiCreateOptions,
@@ -14,7 +14,7 @@ import {
   tuiIsString,
   tuiProvide,
   tuiWithStyles
-} from "./chunk-QU4OCGII.js";
+} from "./chunk-OB6TXSB6.js";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -394,4 +394,4 @@ export {
   tuiButtonOptionsProvider,
   TuiButton
 };
-//# sourceMappingURL=chunk-HS3QXMX2.js.map
+//# sourceMappingURL=chunk-6DII723A.js.map

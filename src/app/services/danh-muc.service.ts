@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -7,6 +7,7 @@ import {
   DanhMucFilterParams,
   ComponentCodeOption,
   PageResponse,
+  ToastAction,
 } from '../models/danh-muc.model';
 
 @Injectable({
@@ -19,6 +20,35 @@ export class DanhMucService {
   // API Endpoints
   private readonly apiUrl = 'http://localhost:8080/api/group-category';
   private readonly apiUrlComponent = 'http://localhost:8080/api/component-code';
+
+  // Giữ tạm bản ghi đang sửa/sao chép để trang Form đọc khi vừa điều hướng tới (thay cho @Input trước đây)
+  private readonly _editingRow = signal<DanhMucRow | null>(null);
+  // Giữ tạm thông báo (toast) cần hiển thị khi quay lại trang danh sách sau khi Thêm/Sửa thành công
+  private readonly _pendingToast = signal<{ row: DanhMucRow | null; action: ToastAction } | null>(null);
+
+  /** Gọi trước khi điều hướng sang trang Sửa/Sao chép để mang theo dữ liệu bản ghi. */
+  setEditingRow(row: DanhMucRow | null): void {
+    this._editingRow.set(row);
+  }
+
+  /** Trang Form gọi 1 lần khi khởi tạo để lấy (và xoá) bản ghi vừa được truyền sang. */
+  consumeEditingRow(): DanhMucRow | null {
+    const row = this._editingRow();
+    this._editingRow.set(null);
+    return row;
+  }
+
+  /** Gọi trước khi điều hướng về trang danh sách để yêu cầu hiển thị toast kết quả. */
+  notify(row: DanhMucRow | null, action: ToastAction): void {
+    this._pendingToast.set({ row, action });
+  }
+
+  /** Trang danh sách gọi 1 lần trong ngOnInit để lấy (và xoá) toast đang chờ hiển thị. */
+  consumePendingToast(): { row: DanhMucRow | null; action: ToastAction } | null {
+    const pending = this._pendingToast();
+    this._pendingToast.set(null);
+    return pending;
+  }
 
   private formatDateString(val: any): string {
     if (val === undefined || val === null) return '';
@@ -170,6 +200,13 @@ export class DanhMucService {
           }))
         }))
       );
+  }
+
+  //Lấy chi tiết theo id — dùng khi trang Form được mở trực tiếp qua URL (F5, mở link) mà
+  //không có sẵn dữ liệu truyền qua setEditingRow().
+  //⚠️ Giả định endpoint theo cùng quy ước REST với delete() bên dưới — kiểm tra lại với BE nếu khác.
+  getById(id: number): Observable<DanhMucRow> {
+    return this.http.get<DanhMucRow>(`${this.apiUrl}/${id}`).pipe(map((res) => this.normalizeRow(res)));
   }
 
   //Thêm mới

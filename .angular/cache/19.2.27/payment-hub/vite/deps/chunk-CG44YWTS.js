@@ -13,7 +13,7 @@ import {
   tuiTypedFromEvent,
   tuiWatch,
   tuiZoneOptimized
-} from "./chunk-QU4OCGII.js";
+} from "./chunk-OB6TXSB6.js";
 import {
   Directive,
   Injectable,
@@ -1025,4 +1025,4 @@ export {
   TuiHovered,
   TuiMapperPipe
 };
-//# sourceMappingURL=chunk-HPWEB7HQ.js.map
+//# sourceMappingURL=chunk-CG44YWTS.js.map

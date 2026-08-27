@@ -10,7 +10,7 @@ import {
   WA_MUTATION_OBSERVER_INIT,
   WaMutationObserverService,
   WaResizeObserverService
-} from "./chunk-FKHJ3CZK.js";
+} from "./chunk-LBFNM3QR.js";
 import {
   AbstractTuiAutofocusHandler,
   TUI_AUTOFOCUS_HANDLER,
@@ -26,7 +26,19 @@ import {
   TuiSynchronousAutofocusHandler,
   TuiVisualViewport,
   tuiAutoFocusOptionsProvider
-} from "./chunk-QVZUFZJT.js";
+} from "./chunk-J2BOA4UM.js";
+import {
+  TUI_IDENTITY_VALUE_TRANSFORMER,
+  TuiControl,
+  TuiNonNullableValueTransformer,
+  TuiValidationError,
+  TuiValueTransformer,
+  tuiAsControl,
+  tuiValueTransformerFrom
+} from "./chunk-3N5MX5KU.js";
+import {
+  TuiItem
+} from "./chunk-UBR7MOSE.js";
 import {
   DATE_FILLER_LENGTH,
   DATE_RANGE_FILLER_LENGTH,
@@ -65,25 +77,13 @@ import {
   TuiYear,
   tuiDateClamp,
   tuiHovered
-} from "./chunk-HPWEB7HQ.js";
-import {
-  TUI_IDENTITY_VALUE_TRANSFORMER,
-  TuiControl,
-  TuiNonNullableValueTransformer,
-  TuiValidationError,
-  TuiValueTransformer,
-  tuiAsControl,
-  tuiValueTransformerFrom
-} from "./chunk-6VPGTAQ5.js";
+} from "./chunk-CG44YWTS.js";
 import {
   TuiValidator
-} from "./chunk-6HYS3RTL.js";
-import {
-  TuiItem
-} from "./chunk-UBR7MOSE.js";
+} from "./chunk-HD22JS3S.js";
 import {
   TuiTransitioned
-} from "./chunk-BGNSHWBD.js";
+} from "./chunk-CSM553D7.js";
 import {
   TUI_ACTIVE_ELEMENT,
   TUI_FALLBACK_VALUE,
@@ -110,7 +110,7 @@ import {
   tuiIsFocused,
   tuiIsFocusedIn,
   tuiMoveFocus
-} from "./chunk-RYNVTAQW.js";
+} from "./chunk-EZVGK6YE.js";
 import {
   CHAR_BULLET,
   CHAR_CURRENCY_SIGN,
@@ -218,7 +218,7 @@ import {
   tuiZonefreeScheduler,
   tuiZonefull,
   tuiZonefullScheduler
-} from "./chunk-QU4OCGII.js";
+} from "./chunk-OB6TXSB6.js";
 import {
   ControlContainer,
   NgControl
@@ -263,8 +263,8 @@ import {
   ɵɵresolveDocument,
   ɵɵstyleProp
 } from "./chunk-J6YSA62T.js";
-import "./chunk-PV7DW26G.js";
 import "./chunk-XVJVK3DV.js";
+import "./chunk-PV7DW26G.js";
 import {
   Subject,
   distinctUntilChanged,

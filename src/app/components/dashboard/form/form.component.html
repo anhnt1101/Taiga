@@ -151,7 +151,7 @@
       </div>
 
       <!-- Ngày hết hiệu lực -->
-      <div class="field field--span-2" [class.field--invalid]="!!endEffectiveDateError || duplicateFields.effectiveDate">
+      <div class="field field--span-2" [class.field--invalid]="!!endEffectiveDateError || duplicateFields.endEffectiveDate">
         <label>Ngày hết hiệu lực </label>
         <div class="date-input-wrap">
           <tui-textfield [tuiTextfieldCleaner]="true">
@@ -174,7 +174,7 @@
         <div class="error-msg">
           {{ endEffectiveDateError }}
         </div>
-        }@else if (duplicateFields.effectiveDate) {
+        }@else if (duplicateFields.endEffectiveDate) {
         <span class="error-msg">Ngày hết hiệu lực đã tồn tại</span>
         }
         <ng-template #calendarTplEndEffective>

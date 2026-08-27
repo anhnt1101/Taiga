@@ -1,4 +1,3 @@
-@if (viewMode() === 'list') {
 <nav class="breadcrumb">
   <span>Trang chủ</span>
   <span class="breadcrumb__sep">›</span>
@@ -180,10 +179,3 @@
 </div>
 }
 
-
-
-} @else {
-<!-- Form Component -->
-<ph-form [mode]="viewMode() === 'add' ? 'add' : 'edit'" [initialData]="selectedRow()" (close)="onFormClose()"
-  (save)="onFormSave($event)" [duplicateFields]="duplicateFields()" />
-}

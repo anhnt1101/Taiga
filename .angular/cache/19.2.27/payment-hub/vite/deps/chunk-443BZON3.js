@@ -19,7 +19,7 @@ import {
   tuiZoneOptimized,
   tuiZonefree,
   tuiZonefreeScheduler
-} from "./chunk-QU4OCGII.js";
+} from "./chunk-OB6TXSB6.js";
 import {
   AsyncPipe
 } from "./chunk-KWB6JEQH.js";
@@ -3332,4 +3332,4 @@ export {
   TuiScrollIntoView,
   TuiScrollable
 };
-//# sourceMappingURL=chunk-EGF74S7Z.js.map
+//# sourceMappingURL=chunk-443BZON3.js.map

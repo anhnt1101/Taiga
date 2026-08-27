@@ -1,6 +1,6 @@
 import {
   tuiInjectElement
-} from "./chunk-QU4OCGII.js";
+} from "./chunk-OB6TXSB6.js";
 import {
   Directive,
   afterNextRender,
@@ -42,4 +42,4 @@ var TuiTransitioned = class _TuiTransitioned {
 export {
   TuiTransitioned
 };
-//# sourceMappingURL=chunk-BGNSHWBD.js.map
+//# sourceMappingURL=chunk-CSM553D7.js.map

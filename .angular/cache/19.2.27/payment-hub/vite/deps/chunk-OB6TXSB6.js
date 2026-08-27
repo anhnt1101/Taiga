@@ -65,6 +65,99 @@ import {
   tap
 } from "./chunk-IVSRFTZX.js";
 
+// node_modules/@ng-web-apis/common/fesm2022/ng-web-apis-common.mjs
+var WA_WINDOW = new InjectionToken(ngDevMode ? "[WA_WINDOW]" : "", {
+  factory: () => {
+    const {
+      defaultView
+    } = inject(DOCUMENT);
+    if (!defaultView) {
+      throw new Error("Window is not available");
+    }
+    return defaultView;
+  }
+});
+var WA_ANIMATION_FRAME = new InjectionToken(ngDevMode ? "[WA_ANIMATION_FRAME]" : "", {
+  factory: () => {
+    const {
+      requestAnimationFrame,
+      cancelAnimationFrame
+    } = inject(WA_WINDOW);
+    const animationFrame$ = new Observable((subscriber) => {
+      let id = Number.NaN;
+      const callback = (timestamp) => {
+        subscriber.next(timestamp);
+        id = requestAnimationFrame(callback);
+      };
+      id = requestAnimationFrame(callback);
+      return () => {
+        cancelAnimationFrame(id);
+      };
+    });
+    return animationFrame$.pipe(share());
+  }
+});
+var WA_CACHES = new InjectionToken(ngDevMode ? "[WA_CACHES]" : "", {
+  factory: () => inject(WA_WINDOW).caches
+});
+var WA_CRYPTO = new InjectionToken(ngDevMode ? "[WA_CRYPTO]" : "", {
+  factory: () => inject(WA_WINDOW).crypto
+});
+var WA_CSS = new InjectionToken(ngDevMode ? "[WA_CSS]" : "", {
+  factory: () => inject(WA_WINDOW).CSS ?? {
+    escape: (v) => v,
+    supports: () => false
+  }
+});
+var WA_HISTORY = new InjectionToken(ngDevMode ? "[WA_HISTORY]" : "", {
+  factory: () => inject(WA_WINDOW).history
+});
+var WA_LOCAL_STORAGE = new InjectionToken(ngDevMode ? "[WA_LOCAL_STORAGE]" : "", {
+  factory: () => inject(WA_WINDOW).localStorage
+});
+var WA_LOCATION = new InjectionToken(ngDevMode ? "[WA_LOCATION]" : "", {
+  factory: () => inject(WA_WINDOW).location
+});
+var WA_NAVIGATOR = new InjectionToken(ngDevMode ? "[WA_NAVIGATOR]" : "", {
+  factory: () => inject(WA_WINDOW).navigator
+});
+var WA_MEDIA_DEVICES = new InjectionToken(ngDevMode ? "[WA_MEDIA_DEVICES]" : "", {
+  factory: () => inject(WA_NAVIGATOR).mediaDevices
+});
+var WA_NETWORK_INFORMATION = new InjectionToken(ngDevMode ? "[WA_NETWORK_INFORMATION]" : "", {
+  factory: () => inject(WA_NAVIGATOR).connection || null
+});
+var WA_PAGE_VISIBILITY = new InjectionToken(ngDevMode ? "[WA_PAGE_VISIBILITY]" : "", {
+  factory: () => {
+    const documentRef = inject(DOCUMENT);
+    return fromEvent(documentRef, "visibilitychange").pipe(startWith(0), map(() => documentRef.visibilityState !== "hidden"), distinctUntilChanged(), shareReplay({
+      refCount: false,
+      bufferSize: 1
+    }));
+  }
+});
+var WA_PERFORMANCE = new InjectionToken(ngDevMode ? "[WA_PERFORMANCE]" : "", {
+  factory: () => inject(WA_WINDOW).performance
+});
+var WA_SCREEN = new InjectionToken(ngDevMode ? "[WA_SCREEN]" : "", {
+  factory: () => inject(WA_WINDOW).screen
+});
+var WA_SESSION_STORAGE = new InjectionToken(ngDevMode ? "[WA_SESSION_STORAGE]" : "", {
+  factory: () => inject(WA_WINDOW).sessionStorage
+});
+var WA_SPEECH_RECOGNITION = new InjectionToken(ngDevMode ? "[WA_SPEECH_RECOGNITION]" : "", {
+  factory: () => {
+    const windowRef = inject(WA_WINDOW);
+    return windowRef.speechRecognition || windowRef.webkitSpeechRecognition || null;
+  }
+});
+var WA_SPEECH_SYNTHESIS = new InjectionToken(ngDevMode ? "[WA_SPEECH_SYNTHESIS]" : "", {
+  factory: () => inject(WA_WINDOW).speechSynthesis
+});
+var WA_USER_AGENT = new InjectionToken(ngDevMode ? "[WA_USER_AGENT]" : "", {
+  factory: () => inject(WA_NAVIGATOR).userAgent
+});
+
 // node_modules/@angular/core/fesm2022/rxjs-interop.mjs
 function takeUntilDestroyed(destroyRef) {
   if (!destroyRef) {
@@ -193,148 +286,55 @@ function makeToSignalEqual(userEquality = Object.is) {
   return (a, b) => a.kind === 1 && b.kind === 1 && userEquality(a.value, b.value);
 }
 
-// node_modules/@taiga-ui/cdk/fesm2022/taiga-ui-cdk-constants.mjs
-var rect = {
-  bottom: 0,
-  height: 0,
-  left: 0,
-  right: 0,
-  top: 0,
-  width: 0,
-  x: 0,
-  y: 0
-};
-var EMPTY_FUNCTION = () => {
-};
-var EMPTY_CLIENT_RECT = __spreadProps(__spreadValues({}, rect), {
-  toJSON: () => rect
-});
-var TUI_FALSE_HANDLER = () => false;
-var TUI_TRUE_HANDLER = () => true;
-var TUI_STRINGIFY = ({
-  $implicit
-}) => String($implicit);
-function bothEmpty(item1, item2) {
-  return Array.isArray(item1) && Array.isArray(item2) && !item1.length && !item2.length;
+// node_modules/@ng-web-apis/platform/fesm2022/ng-web-apis-platform.mjs
+var WA_MOBILE_REGEXP = /(?:android|bb\d|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series([46])0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|^(?:1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br([ev])w|bumb|bw-([nu])|c55\/|capi|ccwa|cdm-|cell|chtm|cldc|cmd-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc-s|devi|dica|dmob|do([cp])o|ds(12|-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly([-_])|g1 u|g560|gene|gf-5|g-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd-([mpt])|hei-|hi(pt|ta)|hp( i|ip)|hs-c|ht(c([- _agpst])|tp)|hu(aw|tc)|i-(20|go|ma)|i230|iac([ \-/])|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja([tv])a|jbro|jemu|jigs|kddi|keji|kgt([ /])|klon|kpt |kwc-|kyo([ck])|le(no|xi)|lg( g|\/([klu])|50|54|-[a-w])|libw|lynx|m1-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t([- ov])|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[23]|n30([02])|n50([025])|n7(0([01])|10)|ne(([cm])-|on|tf|wf|wg|wt)|nok([6i])|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan([adt])|pdxg|pg(13|-([1-8c]))|phil|pire|pl(ay|uc)|pn-2|po(ck|rt|se)|prox|psio|pt-g|qa-a|qc(07|12|21|32|60|-[2-7]|i-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h-|oo|p-)|sdk\/|se(c([-01])|47|mc|nd|ri)|sgh-|shar|sie([-m])|sk-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h-|v-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl-|tdg-|tel([im])|tim-|t-mo|to(pl|sh)|ts(70|m-|m3|m5)|tx-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c([- ])|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas-|your|zeto|zte-)/i;
+var WA_SAFARI_REG_EXP = /^((?!chrome|android).)*safari/i;
+var WA_IOS_REG_EXP = /ipad|iphone|ipod/i;
+function isIos({
+  userAgent,
+  maxTouchPoints
+}) {
+  return WA_IOS_REG_EXP.test(userAgent) || WA_SAFARI_REG_EXP.test(userAgent) && maxTouchPoints > 1;
 }
-var TUI_DEFAULT_MATCHER = (item, search, stringify = String) => stringify(item).toLowerCase().includes(search.toLowerCase());
-var TUI_STRICT_MATCHER = (item, search, stringify = String) => stringify(item).toLowerCase() === search.toLowerCase();
-var TUI_DEFAULT_IDENTITY_MATCHER = (item1, item2) => item1 === item2 || bothEmpty(item1, item2);
-var TUI_DIGIT_REGEXP = /\d/;
-var TUI_NON_DIGIT_REGEXP = /\D/;
-var TUI_NON_DIGITS_REGEXP = /\D+/g;
-var svgNodeFilter = {
-  acceptNode(node) {
-    return "ownerSVGElement" in node ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
-  }
-};
-var CHAR_NO_BREAK_SPACE = " ";
-var CHAR_EN_DASH = "–";
-var CHAR_EM_DASH = "—";
-var CHAR_LAQUO = "«";
-var CHAR_RAQUO = "»";
-var CHAR_HYPHEN = "-";
-var CHAR_MINUS = "−";
-var CHAR_PLUS = "+";
-var CHAR_BULLET = "•";
-var CHAR_ELLIPSIS = "…";
-var CHAR_CURRENCY_SIGN = "¤";
-var CHAR_ZERO_WIDTH_SPACE = "​";
-var TUI_USED_ICONS = ["@img.amex", "@img.diners-club", "@img.discover", "@img.humo", "@img.jcb", "@img.maestro", "@img.mastercard", "@img.ru-pay", "@img.union-pay", "@img.uzcard", "@img.verve", "@tui.arrow-left", "@tui.arrow-right", "@tui.calendar", "@tui.check", "@tui.chevron-down", "@tui.chevron-left", "@tui.chevron-right", "@tui.chevron-up", "@tui.chevrons-up-down", "@tui.circle-alert", "@tui.circle-check", "@tui.circle-help", "@tui.circle-x", "@tui.clock", "@tui.code", "@tui.copy", "@tui.electron", "@tui.ellipsis", "@tui.expand", "@tui.eye", "@tui.eye-off", "@tui.file", "@tui.filter", "@tui.grip-vertical", "@tui.heart", "@tui.heart-filled", "@tui.info", "@tui.layout-grid", "@tui.link", "@tui.menu", "@tui.minimize", "@tui.minus", "@tui.mir", "@tui.plus", "@tui.rotate-ccw-square", "@tui.search", "@tui.shrink", "@tui.star", "@tui.trash", "@tui.visa", "@tui.x"];
-var TUI_VERSION = "5.18.0";
-
-// node_modules/@ng-web-apis/common/fesm2022/ng-web-apis-common.mjs
-var WA_WINDOW = new InjectionToken(ngDevMode ? "[WA_WINDOW]" : "", {
-  factory: () => {
-    const {
-      defaultView
-    } = inject(DOCUMENT);
-    if (!defaultView) {
-      throw new Error("Window is not available");
-    }
-    return defaultView;
-  }
+var WA_IS_IOS = new InjectionToken(ngDevMode ? "[WA_IS_IOS]" : "", {
+  factory: () => isIos(inject(WA_NAVIGATOR))
 });
-var WA_ANIMATION_FRAME = new InjectionToken(ngDevMode ? "[WA_ANIMATION_FRAME]" : "", {
+var WA_IS_MOBILE = new InjectionToken(ngDevMode ? "[WA_IS_MOBILE]" : "", {
+  factory: () => WA_MOBILE_REGEXP.test(inject(WA_USER_AGENT))
+});
+var WA_IS_ANDROID = new InjectionToken(ngDevMode ? "[WA_IS_ANDROID]" : "", {
+  factory: () => inject(WA_IS_MOBILE) && !inject(WA_IS_IOS)
+});
+var WA_IS_E2E = new InjectionToken(ngDevMode ? "[WA_IS_E2E]" : "", {
+  factory: () => !!inject(WA_WINDOW).Cypress || inject(WA_NAVIGATOR).webdriver
+});
+var WA_IS_TOUCH = new InjectionToken(ngDevMode ? "[WA_IS_TOUCH]" : "", {
   factory: () => {
-    const {
-      requestAnimationFrame,
-      cancelAnimationFrame
-    } = inject(WA_WINDOW);
-    const animationFrame$ = new Observable((subscriber) => {
-      let id = Number.NaN;
-      const callback = (timestamp) => {
-        subscriber.next(timestamp);
-        id = requestAnimationFrame(callback);
-      };
-      id = requestAnimationFrame(callback);
-      return () => {
-        cancelAnimationFrame(id);
-      };
+    const media = inject(WA_WINDOW).matchMedia("(pointer: coarse)");
+    return toSignal(fromEvent(media, "change").pipe(map(() => media.matches)), {
+      initialValue: media.matches
     });
-    return animationFrame$.pipe(share());
   }
 });
-var WA_CACHES = new InjectionToken(ngDevMode ? "[WA_CACHES]" : "", {
-  factory: () => inject(WA_WINDOW).caches
+var WA_IS_WEBKIT = new InjectionToken(ngDevMode ? "[WA_IS_WEBKIT]" : "", {
+  factory: () => !!inject(WA_WINDOW)?.webkitConvertPointFromNodeToPage
 });
-var WA_CRYPTO = new InjectionToken(ngDevMode ? "[WA_CRYPTO]" : "", {
-  factory: () => inject(WA_WINDOW).crypto
-});
-var WA_CSS = new InjectionToken(ngDevMode ? "[WA_CSS]" : "", {
-  factory: () => inject(WA_WINDOW).CSS ?? {
-    escape: (v) => v,
-    supports: () => false
-  }
-});
-var WA_HISTORY = new InjectionToken(ngDevMode ? "[WA_HISTORY]" : "", {
-  factory: () => inject(WA_WINDOW).history
-});
-var WA_LOCAL_STORAGE = new InjectionToken(ngDevMode ? "[WA_LOCAL_STORAGE]" : "", {
-  factory: () => inject(WA_WINDOW).localStorage
-});
-var WA_LOCATION = new InjectionToken(ngDevMode ? "[WA_LOCATION]" : "", {
-  factory: () => inject(WA_WINDOW).location
-});
-var WA_NAVIGATOR = new InjectionToken(ngDevMode ? "[WA_NAVIGATOR]" : "", {
-  factory: () => inject(WA_WINDOW).navigator
-});
-var WA_MEDIA_DEVICES = new InjectionToken(ngDevMode ? "[WA_MEDIA_DEVICES]" : "", {
-  factory: () => inject(WA_NAVIGATOR).mediaDevices
-});
-var WA_NETWORK_INFORMATION = new InjectionToken(ngDevMode ? "[WA_NETWORK_INFORMATION]" : "", {
-  factory: () => inject(WA_NAVIGATOR).connection || null
-});
-var WA_PAGE_VISIBILITY = new InjectionToken(ngDevMode ? "[WA_PAGE_VISIBILITY]" : "", {
+var WA_REDUCED_MOTION = new InjectionToken(ngDevMode ? "[WA_REDUCED_MOTION]" : "", {
   factory: () => {
-    const documentRef = inject(DOCUMENT);
-    return fromEvent(documentRef, "visibilitychange").pipe(startWith(0), map(() => documentRef.visibilityState !== "hidden"), distinctUntilChanged(), shareReplay({
-      refCount: false,
-      bufferSize: 1
-    }));
+    const media = inject(WA_WINDOW).matchMedia("(prefers-reduced-motion: reduce)");
+    return toSignal(fromEvent(media, "change").pipe(map(() => media.matches)), {
+      initialValue: media.matches
+    });
   }
 });
-var WA_PERFORMANCE = new InjectionToken(ngDevMode ? "[WA_PERFORMANCE]" : "", {
-  factory: () => inject(WA_WINDOW).performance
-});
-var WA_SCREEN = new InjectionToken(ngDevMode ? "[WA_SCREEN]" : "", {
-  factory: () => inject(WA_WINDOW).screen
-});
-var WA_SESSION_STORAGE = new InjectionToken(ngDevMode ? "[WA_SESSION_STORAGE]" : "", {
-  factory: () => inject(WA_WINDOW).sessionStorage
-});
-var WA_SPEECH_RECOGNITION = new InjectionToken(ngDevMode ? "[WA_SPEECH_RECOGNITION]" : "", {
-  factory: () => {
-    const windowRef = inject(WA_WINDOW);
-    return windowRef.speechRecognition || windowRef.webkitSpeechRecognition || null;
-  }
-});
-var WA_SPEECH_SYNTHESIS = new InjectionToken(ngDevMode ? "[WA_SPEECH_SYNTHESIS]" : "", {
-  factory: () => inject(WA_WINDOW).speechSynthesis
-});
-var WA_USER_AGENT = new InjectionToken(ngDevMode ? "[WA_USER_AGENT]" : "", {
-  factory: () => inject(WA_NAVIGATOR).userAgent
-});
+function isSafari({
+  ownerDocument: doc
+}) {
+  const win = doc?.defaultView;
+  const isMacOsSafari = win.safari !== void 0 && win.safari?.pushNotification?.toString() === "[object SafariRemoteNotification]";
+  const isIosSafari = !!win.navigator?.vendor?.includes("Apple") && !win.navigator?.userAgent?.includes("CriOS") && !win.navigator?.userAgent?.includes("FxiOS");
+  return isMacOsSafari || isIosSafari;
+}
 
 // node_modules/@taiga-ui/cdk/fesm2022/taiga-ui-cdk-utils-math.mjs
 function tuiClamp(value, minimum, maximum) {
@@ -594,108 +594,6 @@ function tuiWithStyles(component) {
   return;
 }
 
-// node_modules/@taiga-ui/cdk/fesm2022/taiga-ui-cdk-observables.mjs
-function tuiCloseWatcher() {
-  return new Observable((subscriber) => {
-    let watcher;
-    const setup = () => {
-      watcher = getWatcher();
-      watcher.onclose = () => setup();
-      watcher.oncancel = (event) => {
-        event.preventDefault();
-        subscriber.next();
-      };
-    };
-    setup();
-    return () => watcher.destroy();
-  });
-}
-function getWatcher() {
-  try {
-    return new CloseWatcher();
-  } catch {
-    return {
-      destroy: () => {
-      }
-    };
-  }
-}
-function tuiControlValue(control) {
-  return new Observable((subscriber) => control?.valueChanges?.pipe(startWith(control.value)).subscribe(subscriber));
-}
-function tuiTypedFromEvent(target, event, options = {}) {
-  return fromEvent(target, event, options);
-}
-var TuiDragState = class {
-  constructor(stage, event) {
-    this.stage = stage;
-    this.event = event;
-  }
-};
-function tuiDragAndDropFrom(element) {
-  const {
-    ownerDocument
-  } = element;
-  return concat(tuiTypedFromEvent(element, "mousedown").pipe(take(1), map((event) => new TuiDragState("start", event))), merge(tuiTypedFromEvent(ownerDocument, "mousemove").pipe(map((event) => new TuiDragState("continues", event))), merge(tuiTypedFromEvent(ownerDocument, "mouseup"), tuiTypedFromEvent(ownerDocument, "dragend")).pipe(take(1), map((event) => new TuiDragState("end", event)), endWith(null))).pipe(takeWhile(tuiIsPresent))).pipe(repeat());
-}
-function tuiPreventDefault() {
-  return tap((event) => event.preventDefault());
-}
-function tuiStopPropagation() {
-  return tap((event) => event.stopPropagation());
-}
-function tuiIfMap(project, predicate = Boolean) {
-  return pipe(switchMap((value) => predicate(value) ? project(value) : EMPTY));
-}
-function tuiScrollFrom(element) {
-  return tuiTypedFromEvent(element === element.ownerDocument.documentElement ? element.ownerDocument : element, "scroll");
-}
-function tuiTakeUntilDestroyed(destroyRef) {
-  return pipe(takeUntil(NEVER.pipe(takeUntilDestroyed(destroyRef), catchError(() => EMPTY), defaultIfEmpty(null))));
-}
-var tuiUntrackedScheduler = {
-  now: queueScheduler.now.bind(queueScheduler),
-  schedule(work, delay, state) {
-    return queueScheduler.schedule(function(s) {
-      return untracked(() => work.call(this, s));
-    }, delay, state);
-  }
-};
-function tuiWatch(cdr = inject(ChangeDetectorRef)) {
-  return tap(() => cdr.markForCheck());
-}
-function tuiZonefull(zone = inject(NgZone)) {
-  return (source) => new Observable((subscriber) => source.subscribe({
-    next: (value) => zone.run(() => subscriber.next(value)),
-    error: (error) => zone.run(() => subscriber.error(error)),
-    complete: () => zone.run(() => subscriber.complete())
-  }));
-}
-function tuiZonefree(zone = inject(NgZone)) {
-  return (source) => new Observable((subscriber) => zone.runOutsideAngular(() => source.subscribe(subscriber)));
-}
-function tuiZoneOptimized(zone = inject(NgZone)) {
-  return pipe(tuiZonefree(zone), tuiZonefull(zone));
-}
-var TuiZoneScheduler = class {
-  constructor(zoneConditionFn, scheduler = asyncScheduler) {
-    this.zoneConditionFn = zoneConditionFn;
-    this.scheduler = scheduler;
-  }
-  now() {
-    return this.scheduler.now();
-  }
-  schedule(...args) {
-    return this.zoneConditionFn(() => this.scheduler.schedule(...args));
-  }
-};
-function tuiZonefreeScheduler(zone = inject(NgZone), scheduler = asyncScheduler) {
-  return new TuiZoneScheduler(zone.runOutsideAngular.bind(zone), scheduler);
-}
-function tuiZonefullScheduler(zone = inject(NgZone), scheduler = asyncScheduler) {
-  return new TuiZoneScheduler(zone.run.bind(zone), scheduler);
-}
-
 // node_modules/@angular/cdk/fesm2022/array-I1yfCXUO.mjs
 function coerceArray(value) {
   return Array.isArray(value) ? value : [value];
@@ -935,56 +833,6 @@ function tuiWindowSize(window) {
   });
 }
 
-// node_modules/@ng-web-apis/platform/fesm2022/ng-web-apis-platform.mjs
-var WA_MOBILE_REGEXP = /(?:android|bb\d|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series([46])0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|^(?:1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br([ev])w|bumb|bw-([nu])|c55\/|capi|ccwa|cdm-|cell|chtm|cldc|cmd-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc-s|devi|dica|dmob|do([cp])o|ds(12|-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly([-_])|g1 u|g560|gene|gf-5|g-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd-([mpt])|hei-|hi(pt|ta)|hp( i|ip)|hs-c|ht(c([- _agpst])|tp)|hu(aw|tc)|i-(20|go|ma)|i230|iac([ \-/])|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja([tv])a|jbro|jemu|jigs|kddi|keji|kgt([ /])|klon|kpt |kwc-|kyo([ck])|le(no|xi)|lg( g|\/([klu])|50|54|-[a-w])|libw|lynx|m1-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t([- ov])|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[23]|n30([02])|n50([025])|n7(0([01])|10)|ne(([cm])-|on|tf|wf|wg|wt)|nok([6i])|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan([adt])|pdxg|pg(13|-([1-8c]))|phil|pire|pl(ay|uc)|pn-2|po(ck|rt|se)|prox|psio|pt-g|qa-a|qc(07|12|21|32|60|-[2-7]|i-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h-|oo|p-)|sdk\/|se(c([-01])|47|mc|nd|ri)|sgh-|shar|sie([-m])|sk-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h-|v-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl-|tdg-|tel([im])|tim-|t-mo|to(pl|sh)|ts(70|m-|m3|m5)|tx-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c([- ])|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas-|your|zeto|zte-)/i;
-var WA_SAFARI_REG_EXP = /^((?!chrome|android).)*safari/i;
-var WA_IOS_REG_EXP = /ipad|iphone|ipod/i;
-function isIos({
-  userAgent,
-  maxTouchPoints
-}) {
-  return WA_IOS_REG_EXP.test(userAgent) || WA_SAFARI_REG_EXP.test(userAgent) && maxTouchPoints > 1;
-}
-var WA_IS_IOS = new InjectionToken(ngDevMode ? "[WA_IS_IOS]" : "", {
-  factory: () => isIos(inject(WA_NAVIGATOR))
-});
-var WA_IS_MOBILE = new InjectionToken(ngDevMode ? "[WA_IS_MOBILE]" : "", {
-  factory: () => WA_MOBILE_REGEXP.test(inject(WA_USER_AGENT))
-});
-var WA_IS_ANDROID = new InjectionToken(ngDevMode ? "[WA_IS_ANDROID]" : "", {
-  factory: () => inject(WA_IS_MOBILE) && !inject(WA_IS_IOS)
-});
-var WA_IS_E2E = new InjectionToken(ngDevMode ? "[WA_IS_E2E]" : "", {
-  factory: () => !!inject(WA_WINDOW).Cypress || inject(WA_NAVIGATOR).webdriver
-});
-var WA_IS_TOUCH = new InjectionToken(ngDevMode ? "[WA_IS_TOUCH]" : "", {
-  factory: () => {
-    const media = inject(WA_WINDOW).matchMedia("(pointer: coarse)");
-    return toSignal(fromEvent(media, "change").pipe(map(() => media.matches)), {
-      initialValue: media.matches
-    });
-  }
-});
-var WA_IS_WEBKIT = new InjectionToken(ngDevMode ? "[WA_IS_WEBKIT]" : "", {
-  factory: () => !!inject(WA_WINDOW)?.webkitConvertPointFromNodeToPage
-});
-var WA_REDUCED_MOTION = new InjectionToken(ngDevMode ? "[WA_REDUCED_MOTION]" : "", {
-  factory: () => {
-    const media = inject(WA_WINDOW).matchMedia("(prefers-reduced-motion: reduce)");
-    return toSignal(fromEvent(media, "change").pipe(map(() => media.matches)), {
-      initialValue: media.matches
-    });
-  }
-});
-function isSafari({
-  ownerDocument: doc
-}) {
-  const win = doc?.defaultView;
-  const isMacOsSafari = win.safari !== void 0 && win.safari?.pushNotification?.toString() === "[object SafariRemoteNotification]";
-  const isIosSafari = !!win.navigator?.vendor?.includes("Apple") && !win.navigator?.userAgent?.includes("CriOS") && !win.navigator?.userAgent?.includes("FxiOS");
-  return isMacOsSafari || isIosSafari;
-}
-
 // node_modules/@taiga-ui/cdk/fesm2022/taiga-ui-cdk-utils-di.mjs
 function tuiProvideOptions(provide, options, fallback) {
   return {
@@ -1035,6 +883,158 @@ function tuiProvide(provide, useExisting, multi = false) {
     useExisting,
     multi
   };
+}
+
+// node_modules/@taiga-ui/cdk/fesm2022/taiga-ui-cdk-constants.mjs
+var rect = {
+  bottom: 0,
+  height: 0,
+  left: 0,
+  right: 0,
+  top: 0,
+  width: 0,
+  x: 0,
+  y: 0
+};
+var EMPTY_FUNCTION = () => {
+};
+var EMPTY_CLIENT_RECT = __spreadProps(__spreadValues({}, rect), {
+  toJSON: () => rect
+});
+var TUI_FALSE_HANDLER = () => false;
+var TUI_TRUE_HANDLER = () => true;
+var TUI_STRINGIFY = ({
+  $implicit
+}) => String($implicit);
+function bothEmpty(item1, item2) {
+  return Array.isArray(item1) && Array.isArray(item2) && !item1.length && !item2.length;
+}
+var TUI_DEFAULT_MATCHER = (item, search, stringify = String) => stringify(item).toLowerCase().includes(search.toLowerCase());
+var TUI_STRICT_MATCHER = (item, search, stringify = String) => stringify(item).toLowerCase() === search.toLowerCase();
+var TUI_DEFAULT_IDENTITY_MATCHER = (item1, item2) => item1 === item2 || bothEmpty(item1, item2);
+var TUI_DIGIT_REGEXP = /\d/;
+var TUI_NON_DIGIT_REGEXP = /\D/;
+var TUI_NON_DIGITS_REGEXP = /\D+/g;
+var svgNodeFilter = {
+  acceptNode(node) {
+    return "ownerSVGElement" in node ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+  }
+};
+var CHAR_NO_BREAK_SPACE = " ";
+var CHAR_EN_DASH = "–";
+var CHAR_EM_DASH = "—";
+var CHAR_LAQUO = "«";
+var CHAR_RAQUO = "»";
+var CHAR_HYPHEN = "-";
+var CHAR_MINUS = "−";
+var CHAR_PLUS = "+";
+var CHAR_BULLET = "•";
+var CHAR_ELLIPSIS = "…";
+var CHAR_CURRENCY_SIGN = "¤";
+var CHAR_ZERO_WIDTH_SPACE = "​";
+var TUI_USED_ICONS = ["@img.amex", "@img.diners-club", "@img.discover", "@img.humo", "@img.jcb", "@img.maestro", "@img.mastercard", "@img.ru-pay", "@img.union-pay", "@img.uzcard", "@img.verve", "@tui.arrow-left", "@tui.arrow-right", "@tui.calendar", "@tui.check", "@tui.chevron-down", "@tui.chevron-left", "@tui.chevron-right", "@tui.chevron-up", "@tui.chevrons-up-down", "@tui.circle-alert", "@tui.circle-check", "@tui.circle-help", "@tui.circle-x", "@tui.clock", "@tui.code", "@tui.copy", "@tui.electron", "@tui.ellipsis", "@tui.expand", "@tui.eye", "@tui.eye-off", "@tui.file", "@tui.filter", "@tui.grip-vertical", "@tui.heart", "@tui.heart-filled", "@tui.info", "@tui.layout-grid", "@tui.link", "@tui.menu", "@tui.minimize", "@tui.minus", "@tui.mir", "@tui.plus", "@tui.rotate-ccw-square", "@tui.search", "@tui.shrink", "@tui.star", "@tui.trash", "@tui.visa", "@tui.x"];
+var TUI_VERSION = "5.18.0";
+
+// node_modules/@taiga-ui/cdk/fesm2022/taiga-ui-cdk-observables.mjs
+function tuiCloseWatcher() {
+  return new Observable((subscriber) => {
+    let watcher;
+    const setup = () => {
+      watcher = getWatcher();
+      watcher.onclose = () => setup();
+      watcher.oncancel = (event) => {
+        event.preventDefault();
+        subscriber.next();
+      };
+    };
+    setup();
+    return () => watcher.destroy();
+  });
+}
+function getWatcher() {
+  try {
+    return new CloseWatcher();
+  } catch {
+    return {
+      destroy: () => {
+      }
+    };
+  }
+}
+function tuiControlValue(control) {
+  return new Observable((subscriber) => control?.valueChanges?.pipe(startWith(control.value)).subscribe(subscriber));
+}
+function tuiTypedFromEvent(target, event, options = {}) {
+  return fromEvent(target, event, options);
+}
+var TuiDragState = class {
+  constructor(stage, event) {
+    this.stage = stage;
+    this.event = event;
+  }
+};
+function tuiDragAndDropFrom(element) {
+  const {
+    ownerDocument
+  } = element;
+  return concat(tuiTypedFromEvent(element, "mousedown").pipe(take(1), map((event) => new TuiDragState("start", event))), merge(tuiTypedFromEvent(ownerDocument, "mousemove").pipe(map((event) => new TuiDragState("continues", event))), merge(tuiTypedFromEvent(ownerDocument, "mouseup"), tuiTypedFromEvent(ownerDocument, "dragend")).pipe(take(1), map((event) => new TuiDragState("end", event)), endWith(null))).pipe(takeWhile(tuiIsPresent))).pipe(repeat());
+}
+function tuiPreventDefault() {
+  return tap((event) => event.preventDefault());
+}
+function tuiStopPropagation() {
+  return tap((event) => event.stopPropagation());
+}
+function tuiIfMap(project, predicate = Boolean) {
+  return pipe(switchMap((value) => predicate(value) ? project(value) : EMPTY));
+}
+function tuiScrollFrom(element) {
+  return tuiTypedFromEvent(element === element.ownerDocument.documentElement ? element.ownerDocument : element, "scroll");
+}
+function tuiTakeUntilDestroyed(destroyRef) {
+  return pipe(takeUntil(NEVER.pipe(takeUntilDestroyed(destroyRef), catchError(() => EMPTY), defaultIfEmpty(null))));
+}
+var tuiUntrackedScheduler = {
+  now: queueScheduler.now.bind(queueScheduler),
+  schedule(work, delay, state) {
+    return queueScheduler.schedule(function(s) {
+      return untracked(() => work.call(this, s));
+    }, delay, state);
+  }
+};
+function tuiWatch(cdr = inject(ChangeDetectorRef)) {
+  return tap(() => cdr.markForCheck());
+}
+function tuiZonefull(zone = inject(NgZone)) {
+  return (source) => new Observable((subscriber) => source.subscribe({
+    next: (value) => zone.run(() => subscriber.next(value)),
+    error: (error) => zone.run(() => subscriber.error(error)),
+    complete: () => zone.run(() => subscriber.complete())
+  }));
+}
+function tuiZonefree(zone = inject(NgZone)) {
+  return (source) => new Observable((subscriber) => zone.runOutsideAngular(() => source.subscribe(subscriber)));
+}
+function tuiZoneOptimized(zone = inject(NgZone)) {
+  return pipe(tuiZonefree(zone), tuiZonefull(zone));
+}
+var TuiZoneScheduler = class {
+  constructor(zoneConditionFn, scheduler = asyncScheduler) {
+    this.zoneConditionFn = zoneConditionFn;
+    this.scheduler = scheduler;
+  }
+  now() {
+    return this.scheduler.now();
+  }
+  schedule(...args) {
+    return this.zoneConditionFn(() => this.scheduler.schedule(...args));
+  }
+};
+function tuiZonefreeScheduler(zone = inject(NgZone), scheduler = asyncScheduler) {
+  return new TuiZoneScheduler(zone.runOutsideAngular.bind(zone), scheduler);
+}
+function tuiZonefullScheduler(zone = inject(NgZone), scheduler = asyncScheduler) {
+  return new TuiZoneScheduler(zone.run.bind(zone), scheduler);
 }
 
 // node_modules/@taiga-ui/cdk/fesm2022/taiga-ui-cdk-directives-animated.mjs
@@ -1126,41 +1126,21 @@ function wrap(renderer) {
 }
 
 export {
-  takeUntilDestroyed,
-  outputFromObservable,
-  toObservable,
-  toSignal,
-  EMPTY_FUNCTION,
-  EMPTY_CLIENT_RECT,
-  TUI_FALSE_HANDLER,
-  TUI_TRUE_HANDLER,
-  TUI_STRINGIFY,
-  TUI_DEFAULT_MATCHER,
-  TUI_STRICT_MATCHER,
-  TUI_DEFAULT_IDENTITY_MATCHER,
-  TUI_DIGIT_REGEXP,
-  TUI_NON_DIGIT_REGEXP,
-  TUI_NON_DIGITS_REGEXP,
-  svgNodeFilter,
-  CHAR_NO_BREAK_SPACE,
-  CHAR_EN_DASH,
-  CHAR_EM_DASH,
-  CHAR_LAQUO,
-  CHAR_RAQUO,
-  CHAR_HYPHEN,
-  CHAR_MINUS,
-  CHAR_PLUS,
-  CHAR_BULLET,
-  CHAR_ELLIPSIS,
-  CHAR_CURRENCY_SIGN,
-  CHAR_ZERO_WIDTH_SPACE,
-  TUI_USED_ICONS,
-  TUI_VERSION,
   WA_WINDOW,
   WA_ANIMATION_FRAME,
   WA_CSS,
   WA_LOCAL_STORAGE,
   WA_PAGE_VISIBILITY,
+  takeUntilDestroyed,
+  outputFromObservable,
+  toObservable,
+  toSignal,
+  WA_IS_IOS,
+  WA_IS_MOBILE,
+  WA_IS_ANDROID,
+  WA_IS_TOUCH,
+  WA_IS_WEBKIT,
+  isSafari,
   tuiClamp,
   tuiInRange,
   tuiNormalizeToIntNumber,
@@ -1194,23 +1174,6 @@ export {
   tuiSanitizeText,
   tuiSetSignal,
   tuiWithStyles,
-  tuiCloseWatcher,
-  tuiControlValue,
-  tuiTypedFromEvent,
-  TuiDragState,
-  tuiDragAndDropFrom,
-  tuiPreventDefault,
-  tuiStopPropagation,
-  tuiIfMap,
-  tuiScrollFrom,
-  tuiTakeUntilDestroyed,
-  tuiUntrackedScheduler,
-  tuiWatch,
-  tuiZonefull,
-  tuiZonefree,
-  tuiZoneOptimized,
-  tuiZonefreeScheduler,
-  tuiZonefullScheduler,
   coerceBooleanProperty,
   coerceNumberProperty,
   coerceElement,
@@ -1234,16 +1197,53 @@ export {
   tuiPointToClientRect,
   tuiValue,
   tuiWindowSize,
-  WA_IS_IOS,
-  WA_IS_MOBILE,
-  WA_IS_ANDROID,
-  WA_IS_TOUCH,
-  WA_IS_WEBKIT,
-  isSafari,
   tuiProvideOptions,
   tuiCreateOptions,
   tuiDirectiveBinding,
   tuiProvide,
+  EMPTY_FUNCTION,
+  EMPTY_CLIENT_RECT,
+  TUI_FALSE_HANDLER,
+  TUI_TRUE_HANDLER,
+  TUI_STRINGIFY,
+  TUI_DEFAULT_MATCHER,
+  TUI_STRICT_MATCHER,
+  TUI_DEFAULT_IDENTITY_MATCHER,
+  TUI_DIGIT_REGEXP,
+  TUI_NON_DIGIT_REGEXP,
+  TUI_NON_DIGITS_REGEXP,
+  svgNodeFilter,
+  CHAR_NO_BREAK_SPACE,
+  CHAR_EN_DASH,
+  CHAR_EM_DASH,
+  CHAR_LAQUO,
+  CHAR_RAQUO,
+  CHAR_HYPHEN,
+  CHAR_MINUS,
+  CHAR_PLUS,
+  CHAR_BULLET,
+  CHAR_ELLIPSIS,
+  CHAR_CURRENCY_SIGN,
+  CHAR_ZERO_WIDTH_SPACE,
+  TUI_USED_ICONS,
+  TUI_VERSION,
+  tuiCloseWatcher,
+  tuiControlValue,
+  tuiTypedFromEvent,
+  TuiDragState,
+  tuiDragAndDropFrom,
+  tuiPreventDefault,
+  tuiStopPropagation,
+  tuiIfMap,
+  tuiScrollFrom,
+  tuiTakeUntilDestroyed,
+  tuiUntrackedScheduler,
+  tuiWatch,
+  tuiZonefull,
+  tuiZonefree,
+  tuiZoneOptimized,
+  tuiZonefreeScheduler,
+  tuiZonefullScheduler,
   TUI_ENTER,
   TUI_LEAVE,
   TUI_ANIMATED,
@@ -1258,4 +1258,4 @@ export {
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-QU4OCGII.js.map
+//# sourceMappingURL=chunk-OB6TXSB6.js.map

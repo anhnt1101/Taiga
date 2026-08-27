@@ -1,7 +1,7 @@
 import {
   EMPTY_FUNCTION,
   tuiProvide
-} from "./chunk-QU4OCGII.js";
+} from "./chunk-OB6TXSB6.js";
 import {
   NG_VALIDATORS,
   Validators
@@ -56,4 +56,4 @@ var TuiValidator = class _TuiValidator {
 export {
   TuiValidator
 };
-//# sourceMappingURL=chunk-6HYS3RTL.js.map
+//# sourceMappingURL=chunk-HD22JS3S.js.map

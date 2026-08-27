@@ -1,4 +1,7 @@
 import {
+  TUI_ITEMS_HANDLERS
+} from "./chunk-PGWYCRMT.js";
+import {
   DAYS_IN_WEEK,
   MAX_YEAR,
   MIN_YEAR,
@@ -13,16 +16,13 @@ import {
   TuiMonth,
   TuiMonthRange,
   TuiYear
-} from "./chunk-HPWEB7HQ.js";
-import {
-  TUI_ITEMS_HANDLERS
-} from "./chunk-5S7PSX6H.js";
+} from "./chunk-CG44YWTS.js";
 import {
   TuiButton,
   TuiWithAppearance,
   TuiWithIcons,
   tuiAppearanceOptionsProvider
-} from "./chunk-HS3QXMX2.js";
+} from "./chunk-6DII723A.js";
 import {
   TUI_COMMON_ICONS,
   TUI_MONTHS,
@@ -31,7 +31,7 @@ import {
   TuiScrollIntoView,
   TuiScrollbar,
   tuiAsAuxiliary
-} from "./chunk-EGF74S7Z.js";
+} from "./chunk-443BZON3.js";
 import {
   TUI_FALSE_HANDLER,
   TUI_VERSION,
@@ -42,7 +42,7 @@ import {
   tuiNullableSame,
   tuiProvide,
   tuiWithStyles
-} from "./chunk-QU4OCGII.js";
+} from "./chunk-OB6TXSB6.js";
 import {
   AsyncPipe
 } from "./chunk-KWB6JEQH.js";
@@ -1324,4 +1324,4 @@ export {
   TuiCalendarYear,
   TuiCalendar
 };
-//# sourceMappingURL=chunk-NDJGF3XG.js.map
+//# sourceMappingURL=chunk-37AZGZQM.js.map

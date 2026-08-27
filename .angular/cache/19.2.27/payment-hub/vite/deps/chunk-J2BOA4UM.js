@@ -2,7 +2,7 @@ import {
   TUI_PLATFORM,
   tuiGetClosestFocusable,
   tuiGetFocused
-} from "./chunk-RYNVTAQW.js";
+} from "./chunk-EZVGK6YE.js";
 import {
   WA_ANIMATION_FRAME,
   WA_IS_IOS,
@@ -20,7 +20,7 @@ import {
   tuiTakeUntilDestroyed,
   tuiZonefree,
   tuiZonefreeScheduler
-} from "./chunk-QU4OCGII.js";
+} from "./chunk-OB6TXSB6.js";
 import {
   NG_VALIDATORS
 } from "./chunk-SVYNCHRR.js";
@@ -644,4 +644,4 @@ export {
   TuiPlatform,
   TuiVisualViewport
 };
-//# sourceMappingURL=chunk-QVZUFZJT.js.map
+//# sourceMappingURL=chunk-J2BOA4UM.js.map
