@@ -1,11 +1,13 @@
 <div class="login-page">
-  <!-- Background elements -->
+
+  <!-- Background -->
   <div class="login-backdrop">
     <div class="login-backdrop__pattern"></div>
   </div>
 
   <div class="login-container">
-    <!-- Brand Header -->
+
+    <!-- BRAND -->
     <div class="login-brand">
       <div class="login-logo-icon">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
@@ -14,170 +16,171 @@
           <line x1="7" y1="15" x2="11" y2="15" />
         </svg>
       </div>
+
       <div class="login-brand__text">
-        <h1 class="login-brand__title">PAYMENT HUB</h1>
-        <span class="login-brand__subtitle">Hệ thống Quản trị & Xử lý Giao dịch</span>
+        <h1 class="login-brand__title">
+          PAYMENT HUB
+        </h1>
+        <span class="login-brand__subtitle">
+          Hệ thống Quản trị & Xử lý Giao dịch
+        </span>
       </div>
+
     </div>
 
-    <!-- Login Card -->
+    <!-- LOGIN CARD -->
     <div class="login-card">
       <div class="login-card__header">
-        <h2 class="login-card__title">Đăng nhập tài khoản</h2>
-        <p class="login-card__desc">Nhập thông tin xác thực để truy cập hệ thống</p>
+        <h2 class="login-card__title">
+          Đăng nhập tài khoản
+        </h2>
+        <p class="login-card__desc">
+          Nhập thông tin xác thực để truy cập hệ thống
+        </p>
       </div>
 
-      <!-- Alert message if login failed -->
+      <!-- LOGIN ERROR -->
       @if (authService.loginError(); as errorMsg) {
-        <div class="login-alert" role="alert">
-          <svg class="login-alert__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="12" />
-            <line x1="12" y1="16" x2="12.01" y2="16" />
-          </svg>
-          <span>{{ errorMsg }}</span>
-        </div>
+
+      <div class="login-alert" role="alert">
+
+        <svg class="login-alert__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="12" />
+          <line x1="12" y1="16" x2="12.01" y2="16" />
+        </svg>
+        <span>
+          {{ errorMsg }}
+        </span>
+      </div>
       }
 
+      <!-- FORM -->
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" id="login-form">
-        <!-- Username field -->
+
+        <!-- USERNAME -->
         <div class="form-group">
           <label class="form-label" for="username-input">
-            Tên đăng nhập <span class="required-star">*</span>
+            Tên đăng nhập
+            <span class="required-star">
+              *
+            </span>
           </label>
-          <tui-textfield class="login-input-field">
-            <input
-              tuiTextfield
-              id="username-input"
-              name="username"
-              formControlName="username"
-              placeholder="Ví dụ: thuanhv"
-              autocomplete="username"
-            />
+
+          <tui-textfield class="login-input-field" [tuiTextfieldCleaner]="false">
+
+            <input tuiInput id="username-input" formControlName="username" placeholder="Nhập tên đăng nhập"
+              autocomplete="username" />
+            @if (
+            loginForm.controls.username.value
+            ) {
+            <button tuiButtonX type="button" tabindex="-1" aria-label="Xóa tên đăng nhập" (click)="clearUsername()">
+              Clear
+            </button>
+            }
           </tui-textfield>
-          @if (loginForm.controls.username.touched && loginForm.controls.username.invalid) {
-            <span class="field-error">Vui lòng nhập tên đăng nhập</span>
+
+          @if (
+          loginForm.controls.username.touched &&
+          loginForm.controls.username.hasError('required')
+          ) {
+          <span class="field-error">
+            Vui lòng nhập tên đăng nhập
+          </span>
+          }
+
+          @if (
+          loginForm.controls.username.touched &&
+          loginForm.controls.username.hasError('minlength')
+          ) {
+          <span class="field-error">
+            Tên đăng nhập tối thiểu 3 ký tự
+          </span>
           }
         </div>
 
-        <!-- Password field -->
+        <!-- PASSWORD -->
         <div class="form-group">
           <div class="label-row">
             <label class="form-label" for="password-input">
-              Mật khẩu <span class="required-star">*</span>
+              Mật khẩu
+              <span class="required-star">
+                *
+              </span>
             </label>
-            <a href="javascript:void(0)" class="forgot-link" (click)="onForgotPassword()">Quên mật khẩu?</a>
           </div>
-          <tui-textfield class="login-input-field">
-            <input
-              tuiTextfield
-              id="password-input"
-              name="password"
-              type="password"
-              formControlName="password"
-              placeholder="Nhập mật khẩu"
-              autocomplete="current-password"
-            />
+
+          <tui-textfield class="login-input-field" [tuiTextfieldCleaner]="false">
+            <input tuiInput id="password-input" type="password" formControlName="password" placeholder="Nhập mật khẩu"
+              autocomplete="current-password" />
+            @if (
+            loginForm.controls.password.value
+            ) {
+            <button tuiButtonX type="button" tabindex="-1" aria-label="Xóa mật khẩu" (click)="clearPassword()">
+              Clear
+            </button>
+            }
             <tui-icon tuiPassword />
           </tui-textfield>
-          @if (loginForm.controls.password.touched && loginForm.controls.password.invalid) {
-            <span class="field-error">Vui lòng nhập mật khẩu (tối thiểu 6 ký tự)</span>
+          @if (
+          loginForm.controls.password.touched &&
+          loginForm.controls.password.hasError('required')
+          ) {
+          <span class="field-error">
+            Vui lòng nhập mật khẩu
+          </span>
+          }
+          @if (
+          loginForm.controls.password.touched &&
+          loginForm.controls.password.hasError('minlength')
+          ) {
+          <span class="field-error">
+            Mật khẩu tối thiểu 6 ký tự
+          </span>
           }
         </div>
 
-        <!-- Options Row -->
+        <!-- REMEMBER ME -->
         <div class="form-options">
           <label class="remember-checkbox-label">
-            <input
-              type="checkbox"
-              tuiCheckbox
-              size="s"
-              formControlName="rememberMe"
-              id="remember-me-checkbox"
-            />
-            <span>Ghi nhớ đăng nhập</span>
+            <input tuiCheckbox type="checkbox" size="s" formControlName="rememberMe" id="remember-me-checkbox" />
+            <span>
+              Ghi nhớ đăng nhập
+            </span>
           </label>
-          <span class="security-badge">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            </svg>
-            Bảo mật 256-bit
-          </span>
         </div>
 
-        <!-- Submit Button with Taiga UI tuiButton -->
-        <button
-          tuiButton
-          type="submit"
-          size="m"
-          class="login-submit-btn"
-          [disabled]="authService.isLoading()"
-          id="btn-submit-login"
-        >
+        <!-- LOGIN BUTTON -->
+        <button tuiButton type="submit" size="m" class="login-submit-btn" [disabled]="authService.isLoading()"
+          id="btn-submit-login">
           @if (authService.isLoading()) {
-            <span class="btn-spinner"></span>
-            <span>Đang xác thực...</span>
+          <span class="btn-spinner"></span>
+          <span>
+            Đang xác thực...
+          </span>
           } @else {
-            <span>Đăng nhập hệ thống</span>
-            <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="5" y1="12" x2="19" y2="12" />
-              <polyline points="12 5 19 12 12 19" />
-            </svg>
+          <span>
+            Đăng nhập hệ thống
+          </span>
+
+          <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
           }
         </button>
       </form>
 
-      <!-- Quick Test / Demo Accounts helper -->
-      <div class="demo-accounts">
-        <div class="demo-accounts__title">Tài khoản demo sẵn có:</div>
-        <div class="demo-accounts__chips">
-          <button
-            type="button"
-            class="demo-chip"
-            (click)="fillDemoCredentials('thuanhv', 'HoangThuan@2025')"
-          >
-            <span class="demo-chip__avatar">HT</span>
-            <div class="demo-chip__text">
-              <span class="demo-chip__name">Hoàng Văn Thuận</span>
-              <span class="demo-chip__role">Chuyên viên</span>
-            </div>
-          </button>
-          <button
-            type="button"
-            class="demo-chip"
-            (click)="fillDemoCredentials('admin_payment', 'Admin@2025')"
-          >
-            <span class="demo-chip__avatar demo-chip__avatar--admin">AD</span>
-            <div class="demo-chip__text">
-              <span class="demo-chip__name">Quản trị viên</span>
-              <span class="demo-chip__role">Hệ thống</span>
-            </div>
-          </button>
-        </div>
-      </div>
-
-      <!-- Switch to Register -->
+      <!-- REGISTER -->
       <div class="switch-to-register">
-        <span class="switch-text">Chưa có tài khoản cán bộ?</span>
-        <button
-          type="button"
-          class="switch-register-btn"
-          (click)="onGoToRegister()"
-          id="btn-switch-to-register"
-        >
+        <span class="switch-text">
+          Chưa có tài khoản cán bộ?
+        </span>
+        <button type="button" class="switch-register-btn" id="btn-switch-to-register" (click)="onGoToRegister()">
           Đăng ký ngay
         </button>
       </div>
-    </div>
 
-    <!-- Footer Notice -->
-    <div class="login-footer">
-      <p>© 2025 Payment Hub. Bản quyền thuộc về Ngân hàng / Tổ chức Thanh toán.</p>
-      <div class="login-footer__links">
-        <span>Hỗ trợ kỹ thuật: 1900 6868</span>
-        <span class="dot">•</span>
-        <span>Phiên bản v2.4.0 (Taiga UI)</span>
-      </div>
     </div>
   </div>
 </div>

@@ -1,0 +1,80 @@
+<div class="user-menu-wrapper">
+  <button
+    type="button"
+    class="user-trigger"
+    [tuiDropdown]="userDropdownTemplate"
+    [tuiDropdownOpen]="isOpen()"
+    (tuiDropdownOpenChange)="isOpen.set($event)"
+    [attr.aria-expanded]="isOpen()"
+    aria-haspopup="true"
+    id="header-user-menu-btn"
+  >
+    <div class="user-trigger__avatar">
+      {{ user.avatarInitials }}
+    </div>
+    <div class="user-trigger__info">
+      <span class="user-trigger__name">{{ user.fullName }}</span>
+      <span class="user-trigger__role">{{ user.role }}</span>
+    </div>
+    <svg class="user-trigger__chevron" [class.user-trigger__chevron--open]="isOpen()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M6 9l6 6 6-6" />
+    </svg>
+  </button>
+
+  <ng-template #userDropdownTemplate>
+    <div class="user-popup" role="menu">
+      <!-- Header section of popup -->
+      <div class="user-popup__header">
+        <div class="user-popup__avatar">
+          {{ user.avatarInitials }}
+        </div>
+        <div class="user-popup__details">
+          <!-- <div class="user-popup__name-row">
+            <span class="user-popup__fullname">{{ user.fullName }}</span>
+            <span class="user-popup__status-badge">Đang hoạt động</span>
+          </div> -->
+          <span class="user-popup__email">{{ user.email }}</span>
+          <span class="user-popup__dept">{{ user.department }}</span>
+        </div>
+      </div>
+
+      <div class="user-popup__divider"></div>
+
+      <!-- Profile Info Items -->
+      <div class="user-popup__section">
+        <div class="user-popup__meta-item">
+          <span class="meta-label">Vai trò:</span>
+          <span class="meta-value">{{ user.role }}</span>
+        </div>
+        <div class="user-popup__meta-item">
+          <span class="meta-label">Tài khoản:</span>
+          <span class="meta-value">&#64;{{ user.username }}</span>
+        </div>
+      </div>
+
+      <div class="user-popup__divider"></div>
+
+      <!-- Actions -->
+      <tui-data-list class="user-popup__actions">
+
+        <div class="user-popup__divider user-popup__divider--inner"></div>
+
+        <!-- Logout visual item -->
+        <button
+          tuiOption
+          type="button"
+          class="user-popup__action-btn user-popup__action-btn--logout"
+          (click)="onLogout()"
+          id="btn-logout"
+        >
+          <svg class="action-icon action-icon--danger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span class="logout-text">Đăng xuất</span>
+        </button>
+      </tui-data-list>
+    </div>
+  </ng-template>
+</div>

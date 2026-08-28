@@ -1,16 +1,67 @@
 import {
-  TUI_CHECKBOX_OPTIONS,
+  WA_INTERSECTION_ROOT,
+  WaIntersectionObservee,
+  WaIntersectionObserver,
+  WaIntersectionObserverDirective
+} from "./chunk-TZHSTLVB.js";
+import {
   TUI_DIALOGS_CLOSE,
   TUI_DIALOG_OPTIONS,
   TUI_FLOATING_PRECISION,
   TUI_GROUP_DEFAULT_OPTIONS,
   TUI_GROUP_OPTIONS,
+  TUI_LOADER_DEFAULT_OPTIONS,
+  TUI_LOADER_OPTIONS,
+  TuiDialog,
+  TuiDialogCloseService,
+  TuiDialogComponent,
+  TuiDialogService,
+  TuiGroup,
+  TuiLoader,
+  TuiModalComponent,
+  TuiModalService,
+  TuiRoot,
+  TuiSlider,
+  TuiSliderComponent,
+  TuiSliderKeySteps,
+  TuiSliderKeyStepsBase,
+  TuiSliderReadonly,
+  TuiSliderThumbLabel,
+  tuiCreateKeyStepsTransformer,
+  tuiDialog,
+  tuiDialogOptionsProvider,
+  tuiFormatNumber,
+  tuiGetFractionPartPadded,
+  tuiGroupOptionsProvider,
+  tuiKeyStepValueToPercentage,
+  tuiLoaderOptionsProvider,
+  tuiNumberToStringWithoutExp,
+  tuiPercentageToKeyStepValue
+} from "./chunk-FKE5OZYI.js";
+import {
+  AbstractTuiCalendar,
+  TUI_CALENDAR_DEFAULT_OPTIONS,
+  TUI_CALENDAR_OPTIONS,
+  TUI_CALENDAR_SHEET_DEFAULT_OPTIONS,
+  TUI_CALENDAR_SHEET_OPTIONS,
+  TuiCalendar,
+  TuiCalendarSheet,
+  TuiCalendarSheetPipe,
+  TuiCalendarSpin,
+  TuiCalendarYear,
+  TuiOrderWeekDaysPipe,
+  TuiSpinButton,
+  tuiCalendarOptionsProvider,
+  tuiCalendarSheetOptionsProvider
+} from "./chunk-HCPOJMUH.js";
+import "./chunk-LDANRV5W.js";
+import "./chunk-ITNURD5B.js";
+import {
+  TUI_CHECKBOX_OPTIONS,
   TUI_HINT_COMPONENT,
   TUI_HINT_DEFAULT_OPTIONS,
   TUI_HINT_DIRECTIONS,
   TUI_HINT_OPTIONS,
-  TUI_LOADER_DEFAULT_OPTIONS,
-  TUI_LOADER_OPTIONS,
   TUI_NOTIFICATION_CONCURRENCY,
   TUI_NOTIFICATION_DEFAULT_OPTIONS,
   TUI_NOTIFICATION_OPTIONS,
@@ -18,12 +69,7 @@ import {
   TuiAlertDirective,
   TuiAlertService,
   TuiCheckbox,
-  TuiDialog,
-  TuiDialogCloseService,
-  TuiDialogComponent,
-  TuiDialogService,
   TuiExpand,
-  TuiGroup,
   TuiHint,
   TuiHintComponent,
   TuiHintDescribe,
@@ -41,9 +87,6 @@ import {
   TuiIconPipe,
   TuiInput,
   TuiInputDirective,
-  TuiLoader,
-  TuiModalComponent,
-  TuiModalService,
   TuiNotification,
   TuiNotificationComponent,
   TuiNotificationDirective,
@@ -52,32 +95,24 @@ import {
   TuiRadio,
   TuiRadioComponent,
   TuiRadioDirective,
-  TuiRoot,
-  TuiSlider,
-  TuiSliderComponent,
-  TuiSliderKeySteps,
-  TuiSliderKeyStepsBase,
-  TuiSliderReadonly,
-  TuiSliderThumbLabel,
   TuiTitle,
   TuiWithInput,
   tuiCheckboxOptionsProvider,
-  tuiCreateKeyStepsTransformer,
-  tuiDialog,
-  tuiDialogOptionsProvider,
-  tuiFormatNumber,
-  tuiGetFractionPartPadded,
   tuiGetHintProviders,
-  tuiGroupOptionsProvider,
   tuiHintOptionsProvider,
-  tuiKeyStepValueToPercentage,
-  tuiLoaderOptionsProvider,
   tuiNotificationOptionsProvider,
-  tuiNumberToStringWithoutExp,
-  tuiPercentageToKeyStepValue,
   tuiRadioOptionsProvider
-} from "./chunk-TAPANAMW.js";
-import "./chunk-JQ56UOWQ.js";
+} from "./chunk-NIGCBIR4.js";
+import {
+  TUI_LINK_OPTIONS,
+  TuiLink,
+  tuiLinkOptionsProvider
+} from "./chunk-FVJE5UTK.js";
+import {
+  TuiId
+} from "./chunk-O6TWERH2.js";
+import "./chunk-HKJM3ZKU.js";
+import "./chunk-7WZN7KDR.js";
 import {
   TUI_BUTTON_X_OPTIONS,
   TUI_FILTER_BY_INPUT_DEFAULT_OPTIONS,
@@ -102,16 +137,22 @@ import {
   tuiFilterByInputOptionsProvider,
   tuiInjectAuxiliary,
   tuiTextfieldOptionsProvider
-} from "./chunk-JFLPWJYA.js";
+} from "./chunk-OXEZ63PE.js";
 import {
-  TuiId
-} from "./chunk-J2BOA4UM.js";
+  TUI_DEFAULT_ITEMS_HANDLERS,
+  TUI_ITEMS_HANDLERS,
+  TuiItemsHandlersDirective,
+  TuiItemsHandlersValidator,
+  TuiWithItemsHandlers,
+  tuiItemsHandlersProvider
+} from "./chunk-J334YG6B.js";
 import {
   TuiValidationError
-} from "./chunk-3N5MX5KU.js";
+} from "./chunk-WKO66424.js";
 import {
   TuiItem
 } from "./chunk-UBR7MOSE.js";
+import "./chunk-W634VPBW.js";
 import {
   TUI_CELL_OPTIONS,
   TUI_DATA_LIST_HOST,
@@ -132,56 +173,7 @@ import {
   tuiAsOptionContent,
   tuiCellOptionsProvider,
   tuiInjectDataListSize
-} from "./chunk-XKBWSPXY.js";
-import {
-  AbstractTuiCalendar,
-  TUI_CALENDAR_DEFAULT_OPTIONS,
-  TUI_CALENDAR_OPTIONS,
-  TUI_CALENDAR_SHEET_DEFAULT_OPTIONS,
-  TUI_CALENDAR_SHEET_OPTIONS,
-  TUI_LINK_OPTIONS,
-  TuiCalendar,
-  TuiCalendarSheet,
-  TuiCalendarSheetPipe,
-  TuiCalendarSpin,
-  TuiCalendarYear,
-  TuiLink,
-  TuiOrderWeekDaysPipe,
-  TuiSpinButton,
-  tuiCalendarOptionsProvider,
-  tuiCalendarSheetOptionsProvider,
-  tuiLinkOptionsProvider
-} from "./chunk-37AZGZQM.js";
-import {
-  TUI_DEFAULT_ITEMS_HANDLERS,
-  TUI_ITEMS_HANDLERS,
-  TuiItemsHandlersDirective,
-  TuiItemsHandlersValidator,
-  TuiWithItemsHandlers,
-  tuiItemsHandlersProvider
-} from "./chunk-PGWYCRMT.js";
-import "./chunk-CG44YWTS.js";
-import "./chunk-HD22JS3S.js";
-import {
-  TUI_APPEARANCE_DEFAULT_OPTIONS,
-  TUI_APPEARANCE_OPTIONS,
-  TUI_BUTTON_DEFAULT_OPTIONS,
-  TUI_BUTTON_OPTIONS,
-  TuiAppearance,
-  TuiButton,
-  TuiIcons,
-  TuiWithAppearance,
-  TuiWithIcons,
-  tuiAppearance,
-  tuiAppearanceFocus,
-  tuiAppearanceMode,
-  tuiAppearanceOptionsProvider,
-  tuiAppearanceState,
-  tuiButtonOptionsProvider,
-  tuiIconEnd,
-  tuiIconStart
-} from "./chunk-6DII723A.js";
-import "./chunk-CSM553D7.js";
+} from "./chunk-AKQXG24B.js";
 import {
   TUI_ANIMATIONS_DEFAULT_DURATION,
   TUI_CDR,
@@ -249,15 +241,26 @@ import {
   tuiProvideAccessor,
   tuiRectAccessorFor,
   tuiSizeBigger
-} from "./chunk-3P3E5RW6.js";
-import "./chunk-EYFUUXEU.js";
-import "./chunk-EJQBUMGU.js";
-import "./chunk-6D3FKYJ5.js";
+} from "./chunk-ZAUGKNIQ.js";
 import {
-  PolymorpheusComponent,
-  PolymorpheusOutlet,
-  PolymorpheusTemplate
-} from "./chunk-EZVGK6YE.js";
+  TUI_APPEARANCE_DEFAULT_OPTIONS,
+  TUI_APPEARANCE_OPTIONS,
+  TUI_BUTTON_DEFAULT_OPTIONS,
+  TUI_BUTTON_OPTIONS,
+  TuiAppearance,
+  TuiButton,
+  TuiIcons,
+  TuiWithAppearance,
+  TuiWithIcons,
+  tuiAppearance,
+  tuiAppearanceFocus,
+  tuiAppearanceMode,
+  tuiAppearanceOptionsProvider,
+  tuiAppearanceState,
+  tuiButtonOptionsProvider,
+  tuiIconEnd,
+  tuiIconStart
+} from "./chunk-J6D5N42S.js";
 import {
   SCROLL_REF_SELECTOR,
   TUI_ANIMATIONS_SPEED,
@@ -316,7 +319,13 @@ import {
   tuiNumberFormatProvider,
   tuiScrollbarOptionsProvider,
   tuiValidationErrorsProvider
-} from "./chunk-443BZON3.js";
+} from "./chunk-YXYSKJQL.js";
+import {
+  PolymorpheusComponent,
+  PolymorpheusOutlet,
+  PolymorpheusTemplate
+} from "./chunk-2QPRVNSQ.js";
+import "./chunk-JVQW422X.js";
 import {
   TUI_FALSE_HANDLER,
   TUI_TRUE_HANDLER,
@@ -333,12 +342,15 @@ import {
   tuiIsString,
   tuiProvide,
   tuiSetSignal
-} from "./chunk-OB6TXSB6.js";
+} from "./chunk-SDRQHMGB.js";
 import {
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   NgControl
 } from "./chunk-SVYNCHRR.js";
+import "./chunk-46UQNXDB.js";
+import "./chunk-6D3FKYJ5.js";
+import "./chunk-EJQBUMGU.js";
 import {
   NgTemplateOutlet
 } from "./chunk-KWB6JEQH.js";
@@ -348,9 +360,6 @@ import {
   Component,
   Directive,
   ElementRef,
-  Injectable,
-  InjectionToken,
-  Output,
   Pipe,
   TemplateRef,
   VERSION,
@@ -365,7 +374,6 @@ import {
   signal,
   untracked,
   ɵɵHostDirectivesFeature,
-  ɵɵInheritDefinitionFeature,
   ɵɵProvidersFeature,
   ɵɵadvance,
   ɵɵattribute,
@@ -374,7 +382,6 @@ import {
   ɵɵcontentQuerySignal,
   ɵɵdefineComponent,
   ɵɵdefineDirective,
-  ɵɵdefineInjectable,
   ɵɵdefinePipe,
   ɵɵelement,
   ɵɵelementContainer,
@@ -401,7 +408,6 @@ import {
 } from "./chunk-PV7DW26G.js";
 import {
   BehaviorSubject,
-  Observable,
   __spreadProps,
   __spreadValues,
   combineLatest,
@@ -409,221 +415,11 @@ import {
   distinctUntilChanged,
   filter,
   map,
-  share,
   startWith,
   switchMap,
   takeWhile,
   timer
 } from "./chunk-IVSRFTZX.js";
-
-// node_modules/@ng-web-apis/intersection-observer/fesm2022/ng-web-apis-intersection-observer.mjs
-var SafeObserver = typeof IntersectionObserver === "undefined" ? class {
-  root = null;
-  rootMargin = "";
-  thresholds = [];
-  observe() {
-  }
-  unobserve() {
-  }
-  disconnect() {
-  }
-  takeRecords() {
-    return [];
-  }
-} : IntersectionObserver;
-var WA_INTERSECTION_ROOT = new InjectionToken(ngDevMode ? "[WA_INTERSECTION_ROOT]" : "");
-var WA_INTERSECTION_ROOT_MARGIN_DEFAULT = "0px 0px 0px 0px";
-var WA_INTERSECTION_ROOT_MARGIN = new InjectionToken(ngDevMode ? "[WA_INTERSECTION_ROOT_MARGIN]" : "", {
-  factory: () => WA_INTERSECTION_ROOT_MARGIN_DEFAULT
-});
-function rootMarginFactory() {
-  return inject(ElementRef).nativeElement.getAttribute("waIntersectionRootMargin") || WA_INTERSECTION_ROOT_MARGIN_DEFAULT;
-}
-var WA_INTERSECTION_THRESHOLD_DEFAULT = 0;
-var WA_INTERSECTION_THRESHOLD = new InjectionToken(ngDevMode ? "[WA_INTERSECTION_THRESHOLD]" : "", {
-  factory: () => WA_INTERSECTION_THRESHOLD_DEFAULT
-});
-function thresholdFactory() {
-  return inject(ElementRef).nativeElement.getAttribute("waIntersectionThreshold")?.split(",").map(Number.parseFloat) || WA_INTERSECTION_THRESHOLD_DEFAULT;
-}
-var WaIntersectionObserverDirective = class _WaIntersectionObserverDirective extends SafeObserver {
-  callbacks = /* @__PURE__ */ new Map();
-  margin = "";
-  threshold = "";
-  constructor() {
-    const root = inject(WA_INTERSECTION_ROOT, {
-      optional: true
-    });
-    super((entries) => {
-      this.callbacks.forEach((callback, element) => {
-        const filtered = entries.filter(({
-          target
-        }) => target === element);
-        if (filtered.length) {
-          callback(filtered, this);
-        }
-      });
-    }, {
-      root: root?.nativeElement,
-      rootMargin: rootMarginFactory(),
-      threshold: thresholdFactory()
-    });
-  }
-  observe(target, callback = () => {
-  }) {
-    super.observe(target);
-    this.callbacks.set(target, callback);
-  }
-  unobserve(target) {
-    super.unobserve(target);
-    this.callbacks.delete(target);
-  }
-  ngOnDestroy() {
-    this.disconnect();
-  }
-  static ɵfac = function WaIntersectionObserverDirective_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _WaIntersectionObserverDirective)();
-  };
-  static ɵdir = ɵɵdefineDirective({
-    type: _WaIntersectionObserverDirective,
-    selectors: [["", "waIntersectionObserver", ""]],
-    inputs: {
-      margin: [0, "waIntersectionRootMargin", "margin"],
-      threshold: [0, "waIntersectionThreshold", "threshold"]
-    },
-    exportAs: ["IntersectionObserver"],
-    features: [ɵɵInheritDefinitionFeature]
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(WaIntersectionObserverDirective, [{
-    type: Directive,
-    args: [{
-      selector: "[waIntersectionObserver]",
-      inputs: ["margin: waIntersectionRootMargin", "threshold: waIntersectionThreshold"],
-      exportAs: "IntersectionObserver"
-    }]
-  }], () => [], null);
-})();
-var WaIntersectionObserveeService = class _WaIntersectionObserveeService extends Observable {
-  constructor() {
-    const nativeElement = inject(ElementRef).nativeElement;
-    const observer = inject(WaIntersectionObserverDirective);
-    super((subscriber) => {
-      observer.observe(nativeElement, (entries) => {
-        subscriber.next(entries);
-      });
-      return () => {
-        observer.unobserve(nativeElement);
-      };
-    });
-    return this.pipe(share());
-  }
-  static ɵfac = function WaIntersectionObserveeService_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _WaIntersectionObserveeService)();
-  };
-  static ɵprov = ɵɵdefineInjectable({
-    token: _WaIntersectionObserveeService,
-    factory: _WaIntersectionObserveeService.ɵfac
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(WaIntersectionObserveeService, [{
-    type: Injectable
-  }], () => [], null);
-})();
-var WaIntersectionObservee = class _WaIntersectionObservee {
-  waIntersectionObservee = outputFromObservable(inject(WaIntersectionObserveeService));
-  static ɵfac = function WaIntersectionObservee_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _WaIntersectionObservee)();
-  };
-  static ɵdir = ɵɵdefineDirective({
-    type: _WaIntersectionObservee,
-    selectors: [["", "waIntersectionObservee", ""]],
-    outputs: {
-      waIntersectionObservee: "waIntersectionObservee"
-    },
-    features: [ɵɵProvidersFeature([WaIntersectionObserveeService])]
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(WaIntersectionObservee, [{
-    type: Directive,
-    args: [{
-      selector: "[waIntersectionObservee]",
-      providers: [WaIntersectionObserveeService]
-    }]
-  }], null, {
-    waIntersectionObservee: [{
-      type: Output,
-      args: ["waIntersectionObservee"]
-    }]
-  });
-})();
-var WaIntersectionRoot = class _WaIntersectionRoot {
-  static ɵfac = function WaIntersectionRoot_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _WaIntersectionRoot)();
-  };
-  static ɵdir = ɵɵdefineDirective({
-    type: _WaIntersectionRoot,
-    selectors: [["", "waIntersectionRoot", ""]],
-    features: [ɵɵProvidersFeature([{
-      provide: WA_INTERSECTION_ROOT,
-      useExisting: ElementRef
-    }])]
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(WaIntersectionRoot, [{
-    type: Directive,
-    args: [{
-      selector: "[waIntersectionRoot]",
-      providers: [{
-        provide: WA_INTERSECTION_ROOT,
-        useExisting: ElementRef
-      }]
-    }]
-  }], null, null);
-})();
-var WaIntersectionObserver = [WaIntersectionObserverDirective, WaIntersectionObservee, WaIntersectionRoot];
-var WaIntersectionObserverService = class _WaIntersectionObserverService extends Observable {
-  nativeElement = inject(ElementRef).nativeElement;
-  rootMargin = inject(WA_INTERSECTION_ROOT_MARGIN);
-  threshold = inject(WA_INTERSECTION_THRESHOLD);
-  root = inject(WA_INTERSECTION_ROOT, {
-    optional: true
-  })?.nativeElement ?? null;
-  constructor() {
-    super((subscriber) => {
-      const observer = new SafeObserver((entries) => {
-        subscriber.next(entries);
-      }, {
-        root: this.root,
-        rootMargin: this.rootMargin,
-        threshold: this.threshold
-      });
-      observer.observe(this.nativeElement);
-      return () => {
-        observer.disconnect();
-      };
-    });
-  }
-  static ɵfac = function WaIntersectionObserverService_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _WaIntersectionObserverService)();
-  };
-  static ɵprov = ɵɵdefineInjectable({
-    token: _WaIntersectionObserverService,
-    factory: _WaIntersectionObserverService.ɵfac
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(WaIntersectionObserverService, [{
-    type: Injectable
-  }], () => [], null);
-})();
-var WA_INTERSECTION_OBSERVER_SUPPORT = new InjectionToken(ngDevMode ? "[WA_INTERSECTION_OBSERVER_SUPPORT]" : "", {
-  factory: () => !!inject(WA_WINDOW).IntersectionObserver
-});
 
 // node_modules/@taiga-ui/core/fesm2022/taiga-ui-core-components-carousel.mjs
 var _c0 = (a0) => ({

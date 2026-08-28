@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserMenuComponent } from '././user-menu.component';
+import { UserMenuComponent } from '../../dashboard/user-menu/user-menu.component';
 
 @Component({
   selector: 'ph-header',

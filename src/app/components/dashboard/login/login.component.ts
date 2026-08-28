@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TuiButton, TuiError, TuiIcon, TuiNotification, TuiTextfield } from '@taiga-ui/core';
-import { TuiPassword } from '@taiga-ui/kit';
+import {FormControl,FormGroup,ReactiveFormsModule,Validators,} from '@angular/forms';
+import {TuiButton,TuiButtonX,TuiCheckbox,TuiIcon,TuiInput,TuiTextfield,} from '@taiga-ui/core';
+import {TuiPassword,} from '@taiga-ui/kit';
+import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 
 @Component({
@@ -12,40 +13,96 @@ import { AuthService } from '../../../services/auth.service';
     CommonModule,
     ReactiveFormsModule,
     TuiButton,
+    TuiButtonX,
+    TuiCheckbox,
+    TuiInput,
     TuiTextfield,
-    TuiPassword,
-    TuiError,
     TuiIcon,
-    TuiNotification,
+    TuiPassword,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  changeDetection:ChangeDetectionStrategy.OnPush,
+  templateUrl:'./login.component.html',
+  styleUrl:'./login.component.scss',
 })
 export class LoginComponent {
-  readonly authService = inject(AuthService);
 
-  readonly loginForm = new FormGroup({
-    username: new FormControl('thuanhv', [Validators.required, Validators.minLength(3)]),
-    password: new FormControl('HoangThuan@2025', [Validators.required, Validators.minLength(6)]),
-    rememberMe: new FormControl(true),
-  });
+  readonly authService =inject(AuthService);
+  private readonly router =inject(Router);
+  readonly loginForm =new FormGroup({
+      username: new FormControl(
+        'nta',
+        {
+          nonNullable: true,
+          validators: [
+            Validators.required,
+            Validators.minLength(3),
+          ],
+        }
+      ),
+      password: new FormControl(
+        '123456',
+        {
+          nonNullable: true,
+          validators: [
+            Validators.required,
+            Validators.minLength(6),
+          ],
+        }
+      ),
+      rememberMe: new FormControl(
+        true,
+        {
+          nonNullable: true,
+        }
+      ),
+    });
 
-  async onSubmit(): Promise<void> {
+  // CLEAR INPUT
+  clearUsername(): void {
+    this.loginForm.controls.username.setValue('');
+  }
+
+  clearPassword(): void {
+    this.loginForm.controls.password.setValue('');
+  }
+
+  // LOGIN
+  onSubmit(): void {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
     }
 
-    const { username, password, rememberMe } = this.loginForm.value;
-    await this.authService.login({
-      username: username ?? '',
-      password: password ?? '',
-      rememberMe: rememberMe ?? false,
-    });
+    const {
+      username,
+      password,
+      rememberMe,
+    } = this.loginForm.getRawValue();
+
+    this.authService
+      .login({
+        username,
+        password,
+        rememberMe,
+      })
+      .subscribe({
+        next: () => {
+          void this.router.navigate([
+            '/',
+          ]);
+        },
+        error: () => {
+          // AuthService đã xử lý loginError
+        },
+
+      });
   }
 
-  fillDemoCredentials(username: string, pass: string): void {
+  // DEMO
+  fillDemoCredentials(
+    username: string,
+    pass: string
+  ): void {
     this.loginForm.patchValue({
       username,
       password: pass,
@@ -53,11 +110,17 @@ export class LoginComponent {
     });
   }
 
+  // FORGOT PASSWORD
   onForgotPassword(): void {
-    alert('Vui lòng liên hệ Quản trị viên hệ thống để thiết lập lại mật khẩu.');
+    alert(
+      'Vui lòng liên hệ Quản trị viên hệ thống để thiết lập lại mật khẩu.'
+    );
   }
 
+  // REGISTER
   onGoToRegister(): void {
-    this.authService.setAuthMode('register');
+    void this.router.navigate([
+      '/register',
+    ]);
   }
 }

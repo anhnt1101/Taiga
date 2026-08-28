@@ -6,11 +6,13 @@ import {
   TuiSwipe,
   TuiSwipeService,
   TuiZoom,
-  TuiZoomService,
+  TuiZoomService
+} from "./chunk-ENUHPJOT.js";
+import {
   WA_MUTATION_OBSERVER_INIT,
   WaMutationObserverService,
   WaResizeObserverService
-} from "./chunk-LBFNM3QR.js";
+} from "./chunk-VLT53KJJ.js";
 import {
   AbstractTuiAutofocusHandler,
   TUI_AUTOFOCUS_HANDLER,
@@ -19,26 +21,12 @@ import {
   TuiAutoFocus,
   TuiDefaultAutofocusHandler,
   TuiFocusTrap,
-  TuiId,
   TuiIosAutofocusHandler,
-  TuiNativeValidator,
   TuiPlatform,
   TuiSynchronousAutofocusHandler,
   TuiVisualViewport,
   tuiAutoFocusOptionsProvider
-} from "./chunk-J2BOA4UM.js";
-import {
-  TUI_IDENTITY_VALUE_TRANSFORMER,
-  TuiControl,
-  TuiNonNullableValueTransformer,
-  TuiValidationError,
-  TuiValueTransformer,
-  tuiAsControl,
-  tuiValueTransformerFrom
-} from "./chunk-3N5MX5KU.js";
-import {
-  TuiItem
-} from "./chunk-UBR7MOSE.js";
+} from "./chunk-LDANRV5W.js";
 import {
   DATE_FILLER_LENGTH,
   DATE_RANGE_FILLER_LENGTH,
@@ -66,8 +54,6 @@ import {
   TuiDay,
   TuiDayOfWeek,
   TuiDayRange,
-  TuiHovered,
-  TuiHoveredService,
   TuiInvalidDayException,
   TuiMapperPipe,
   TuiMonth,
@@ -75,15 +61,32 @@ import {
   TuiMonthRange,
   TuiTime,
   TuiYear,
-  tuiDateClamp,
+  tuiDateClamp
+} from "./chunk-ITNURD5B.js";
+import {
+  TuiId,
+  TuiNativeValidator
+} from "./chunk-O6TWERH2.js";
+import {
+  TuiHovered,
+  TuiHoveredService,
   tuiHovered
-} from "./chunk-CG44YWTS.js";
+} from "./chunk-HKJM3ZKU.js";
+import {
+  TUI_IDENTITY_VALUE_TRANSFORMER,
+  TuiControl,
+  TuiNonNullableValueTransformer,
+  TuiValidationError,
+  TuiValueTransformer,
+  tuiAsControl,
+  tuiValueTransformerFrom
+} from "./chunk-WKO66424.js";
+import {
+  TuiItem
+} from "./chunk-UBR7MOSE.js";
 import {
   TuiValidator
-} from "./chunk-HD22JS3S.js";
-import {
-  TuiTransitioned
-} from "./chunk-CSM553D7.js";
+} from "./chunk-W634VPBW.js";
 import {
   TUI_ACTIVE_ELEMENT,
   TUI_FALLBACK_VALUE,
@@ -110,7 +113,10 @@ import {
   tuiIsFocused,
   tuiIsFocusedIn,
   tuiMoveFocus
-} from "./chunk-EZVGK6YE.js";
+} from "./chunk-2QPRVNSQ.js";
+import {
+  TuiTransitioned
+} from "./chunk-JVQW422X.js";
 import {
   CHAR_BULLET,
   CHAR_CURRENCY_SIGN,
@@ -218,7 +224,7 @@ import {
   tuiZonefreeScheduler,
   tuiZonefull,
   tuiZonefullScheduler
-} from "./chunk-OB6TXSB6.js";
+} from "./chunk-SDRQHMGB.js";
 import {
   ControlContainer,
   NgControl

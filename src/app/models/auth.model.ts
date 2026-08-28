@@ -1,13 +1,8 @@
 export interface User {
-  id: string;
+  id?: number;
   username: string;
-  fullName: string;
   role: string;
   email: string;
-  avatarInitials: string;
-  department: string;
-  status: 'active' | 'inactive';
-  lastLogin?: string;
 }
 
 export interface LoginCredentials {
@@ -16,14 +11,26 @@ export interface LoginCredentials {
   rememberMe?: boolean;
 }
 
-export interface RegisterData {
-  fullName: string;
+export interface LoginRequest {
   username: string;
-  email: string;
-  phone?: string;
-  department: string;
-  role: string;
   password: string;
-  confirmPassword?: string;
-  acceptTerms: boolean;
+}
+
+export interface LoginResponse {
+  token: string;
+  username: string;
+  roles: string[];
+}
+export interface RegisterData {
+  username: string;
+  password: string;
+  email: string;
+  role: string;
+}
+
+export interface RegisterResponse {
+  accessToken: string;
+  tokenType: string;
+  username: string;
+  roles: string[];
 }
