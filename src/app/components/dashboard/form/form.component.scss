@@ -229,108 +229,108 @@ tui-calendar {
     }
   }
 
-  tui-textfield {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    height: 42px;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    background-color: #ffffff;
-    transition: all 0.15s ease;
-    box-shadow: none;
+  // tui-textfield {
+  //   display: flex;
+  //   align-items: center;
+  //   width: 100%;
+  //   height: 42px;
+  //   border: 1px solid #cbd5e1;
+  //   border-radius: 8px;
+  //   background-color: #ffffff;
+  //   transition: all 0.15s ease;
+  //   box-shadow: none;
 
-    &:focus-within {
-      border-color: #0e6e5a;
-      box-shadow: 0 0 0 3px rgba(14, 110, 90, 0.12);
-    }
+  //   &:focus-within {
+  //     border-color: #0e6e5a;
+  //     box-shadow: 0 0 0 3px rgba(14, 110, 90, 0.12);
+  //   }
 
-    input[tuiTextfield],
-    select[tuiTextfield] {
-      width: 100%;
-      height: 100%;
-      padding: 0 14px !important;
-      border: none !important;
-      outline: none !important;
-      background: transparent !important;
-      // font-size: 14px;
-      color: #1e293b;
-      box-shadow: none !important;
+  //   input[tuiTextfield],
+  //   select[tuiTextfield] {
+  //     width: 100%;
+  //     height: 100%;
+  //     padding: 0 14px !important;
+  //     border: none !important;
+  //     outline: none !important;
+  //     background: transparent !important;
+  //     // font-size: 14px;
+  //     color: #1e293b;
+  //     box-shadow: none !important;
 
-      &::placeholder {
-        color: #94a3b8;
-      }
+  //     &::placeholder {
+  //       color: #94a3b8;
+  //     }
 
-      &:disabled,
-      &[disabled] {
-        color: #64748b !important;
-        cursor: not-allowed !important;
-      }
-    }
+  //     &:disabled,
+  //     &[disabled] {
+  //       color: #64748b !important;
+  //       cursor: not-allowed !important;
+  //     }
+  //   }
 
-    select[tuiTextfield] {
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E") !important;
-      background-repeat: no-repeat !important;
-      background-position: right 12px center !important;
-      background-size: 16px !important;
-      padding-right: 36px !important;
-      cursor: pointer;
-    }
+  //   select[tuiTextfield] {
+  //     appearance: none;
+  //     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E") !important;
+  //     background-repeat: no-repeat !important;
+  //     background-position: right 12px center !important;
+  //     background-size: 16px !important;
+  //     padding-right: 36px !important;
+  //     cursor: pointer;
+  //   }
 
-    &:has(input:disabled),
-    &:has(select:disabled) {
-      background-color: #f1f5f9 !important;
-      border-color: #cbd5e1 !important;
-      cursor: not-allowed !important;
-    }
-  }
+  //   &:has(input:disabled),
+  //   &:has(select:disabled) {
+  //     background-color: #f1f5f9 !important;
+  //     border-color: #cbd5e1 !important;
+  //     cursor: not-allowed !important;
+  //   }
+  // }
 
-  input[type='text']:not([tuiTextfield]),
-  select:not([tuiTextfield]) {
-    height: 42px;
-    padding: 0 14px;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    font-size: 14px;
-    color: #1e293b;
-    background-color: #ffffff;
-    outline: none;
-    transition: all 0.15s ease;
+  // input[type='text']:not([tuiTextfield]),
+  // select:not([tuiTextfield]) {
+  //   height: 42px;
+  //   padding: 0 14px;
+  //   border: 1px solid #cbd5e1;
+  //   border-radius: 8px;
+  //   font-size: 14px;
+  //   color: #1e293b;
+  //   background-color: #ffffff;
+  //   outline: none;
+  //   transition: all 0.15s ease;
 
-    &::placeholder {
-      color: #94a3b8;
-    }
+  //   &::placeholder {
+  //     color: #94a3b8;
+  //   }
 
-    &:focus {
-      border-color: #0e6e5a;
-      box-shadow: 0 0 0 3px rgba(14, 110, 90, 0.12);
-    }
+  //   &:focus {
+  //     border-color: #0e6e5a;
+  //     box-shadow: 0 0 0 3px rgba(14, 110, 90, 0.12);
+  //   }
 
-    &:disabled,
-    &[disabled] {
-      background-color: #f1f5f9 !important;
-      color: #64748b !important;
-      cursor: not-allowed !important;
-      border-color: #cbd5e1 !important;
-      user-select: none;
-    }
-  }
+  //   &:disabled,
+  //   &[disabled] {
+  //     background-color: #f1f5f9 !important;
+  //     color: #64748b !important;
+  //     cursor: not-allowed !important;
+  //     border-color: #cbd5e1 !important;
+  //     user-select: none;
+  //   }
+  // }
 
-  &--invalid {
+  // &--invalid {
 
-    tui-textfield,
-    input[type='text']:not([tuiTextfield]),
-    select:not([tuiTextfield]) {
-      border-color: #e11d48 !important;
-      background-color: #fff1f2 !important;
+  //   tui-textfield,
+  //   input[type='text']:not([tuiTextfield]),
+  //   select:not([tuiTextfield]) {
+  //     border-color: #e11d48 !important;
+  //     background-color: #fff1f2 !important;
 
-      &:focus,
-      &:focus-within {
-        box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.15) !important;
-      }
-    }
-  }
+  //     &:focus,
+  //     &:focus-within {
+  //       box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.15) !important;
+  //     }
+  //   }
+  // }
 
   select:not([tuiTextfield]) {
     appearance: none;
@@ -447,11 +447,43 @@ tui-calendar {
     }
   }
 }
-  :host ::ng-deep {
-  .field--invalid .component-code-select {
-    filter: drop-shadow(0 0 0.5px #ef4444);
 
-    outline: 1px solid #ef4444;
-    border-radius: 8px;
+// :host ::ng-deep {
+//   .field--invalid .component-code-select {
+//     filter: drop-shadow(0 0 0.5px #ef4444);
+
+//     outline: 1px solid #ef4444;
+//     border-radius: 8px;
+//   }
+// }
+
+/* ===============================
+   FORM VALIDATION ERROR
+   Taiga UI v5
+================================ */
+
+.field--invalid {
+  tui-textfield {
+    outline: 1px solid #e11d48 !important;
+    outline-offset: -1px;
+    border-radius: 8px !important;
+    background: #fff1f2 !important;
   }
+
+  tui-textfield:focus-within {
+    outline: 1px solid #e11d48 !important;
+    box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.15) !important;
+  }
+
+  input[tuiInput],
+  input[tuiInputDateTime],
+  select[tuiMultiSelect] {
+    background: transparent !important;
+  }
+}
+
+.error-msg {
+  font-size: 12px;
+  color: #e11d48;
+  font-weight: 500;
 }
