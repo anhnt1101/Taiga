@@ -6,7 +6,7 @@ import { TuiChevron, TuiInputDateTime, TuiMultiSelect, } from '@taiga-ui/kit'
 import { TuiDay, TuiTime, } from '@taiga-ui/cdk';
 import { ComponentCodeOption, DanhMucRow, } from '../../../models/danh-muc.model';
 import { DanhMucService, } from '../../../services/danh-muc.service';
-
+import { HasRoleDirective, } from '../../../directives/has-role.directive';
 
 @Component({
   selector: 'ph-form',
@@ -21,6 +21,7 @@ import { DanhMucService, } from '../../../services/danh-muc.service';
     TuiCalendar,
     TuiChevron,
     TuiMultiSelect,
+    HasRoleDirective
   ],
 
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -121,33 +122,40 @@ export class FormComponent implements OnInit {
     /**
      * Load danh sách cấu phần xử lý
      */
-    this.danhMucService.getComponentCodes().subscribe({
-      next: (options) => {
-        const codes =
-          (options ?? [])
-            .map(
-              (option) =>
-                option.componentCode
-            )
-            .filter(
-              (code): code is string =>
-                !!code
-            );
-        this.componentCodeItems = [
-          ...new Set([
-            ...this.componentCodeItems,
-            ...codes,
-          ]),
-        ];
-        this.cdr.markForCheck();
-      },
-      error: (err) => {
-        console.error(
-          'Không tải được danh sách cấu phần:',
-          err
-        );
-      },
-    });
+    this.danhMucService
+      .getComponentCodes()
+      .subscribe({
+        next: (options) => {
+
+          const codes =
+            (options ?? [])
+              .map(
+                option =>
+                  option?.componentCode
+              )
+              .filter(
+                (code): code is string =>
+                  !!code
+              );
+
+          this.componentCodeItems = [
+            ...new Set([
+              ...this.componentCodeItems,
+              ...codes,
+            ]),
+          ];
+
+          this.cdr.markForCheck();
+        },
+
+        error: (err) => {
+          console.error(
+            'Không tải được danh sách cấu phần:',
+            err
+          );
+        },
+      });
+
   }
 
   /**

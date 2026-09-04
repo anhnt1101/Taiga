@@ -170,40 +170,52 @@
       <!-- 1: Tạo mới -> nút Xóa, Gửi duyệt -->
       @if (statusCode === 1) {
       <button class="btn btn--outline-danger" tuiButton appearance="secondary-destructive" type="button"
-        (click)="openConfirm('delete')">Xóa</button>
+        *phHasRole="['ROLE_ADMIN']" (click)="openConfirm('delete')">Xóa</button>
+
       <button class="btn btn--submit" tuiButton appearance="primary" type="button"
-        (click)="openConfirm('submit_approval')">Gửi duyệt</button>
+        *phHasRole="['ROLE_ADMIN','ROLE_MAKER']" (click)="openConfirm('submit_approval')">Gửi duyệt</button>
       }
 
       <!-- 3: Chờ phê duyệt -> nút Từ chối, Phê duyệt -->
       @else if (statusCode === 3) {
       <button class="btn btn--outline-danger" tuiButton appearance="secondary-destructive" type="button"
-        (click)="openConfirm('reject')">Từ chối</button>
-      <button class="btn btn--submit" tuiButton appearance="primary" type="button" (click)="openConfirm('approve')">Phê
-        duyệt</button>
+        *phHasRole="['ROLE_ADMIN','ROLE_CHECKER']" (click)="openConfirm('reject')">
+        Từ chối
+      </button>
+
+      <button class="btn btn--submit" tuiButton appearance="primary" type="button"
+        *phHasRole="['ROLE_ADMIN','ROLE_CHECKER']" (click)="openConfirm('approve')">
+        Phê duyệt
+      </button>
       }
 
       <!-- 4: Đã phê duyệt -> nút Hủy phê duyệt -->
       @else if (statusCode === 4) {
       <button class="btn btn--submit" tuiButton appearance="primary" type="button"
-        (click)="openConfirm('cancel_approve')">Hủy phê duyệt</button>
+        *phHasRole="['ROLE_ADMIN','ROLE_CHECKER']" (click)="openConfirm('cancel_approve')">
+        Hủy phê duyệt
+      </button>
       }
 
       <!-- 7: Hủy phê duyệt -> nút Gửi duyệt -->
       @else if (statusCode === 7) {
       <button class="btn btn--submit" tuiButton appearance="primary" type="button"
-        (click)="openConfirm('submit_approval')">Gửi duyệt</button>
+        *phHasRole="['ROLE_ADMIN','ROLE_MAKER']" (click)="openConfirm('submit_approval')">
+        Gửi duyệt
+      </button>
       }
 
       <!-- 5: Từ chối -> nút Xóa, Gửi duyệt -->
       @else if (statusCode === 5) {
       @if (isDisplay === 1) {
       <button class="btn btn--outline-danger" tuiButton appearance="secondary-destructive" type="button"
-        (click)="openConfirm('delete')">
+        *phHasRole="['ROLE_ADMIN']" (click)="openConfirm('delete')">
         Xóa
       </button>
       } <button class="btn btn--submit" tuiButton appearance="primary" type="button"
-        (click)="openConfirm('submit_approval')">Gửi duyệt</button>
+        *phHasRole="['ROLE_ADMIN','ROLE_MAKER']" (click)="openConfirm('submit_approval')">
+        Gửi duyệt
+      </button>
       }
     </div>
   </div>
@@ -240,9 +252,9 @@
     </div>
     <div class="confirm-footer">
       <button class="btn-dialog btn-dialog--cancel" tuiButton appearance="secondary" type="button"
-        (click)="closeConfirmModal()">Hủy</button>
+        *phHasRole="['ROLE_ADMIN','ROLE_MAKER','ROLE_CHECKER']" (click)="closeConfirmModal()">Hủy</button>
       <button class="btn-dialog btn-dialog--confirm" tuiButton appearance="primary" type="button"
-        (click)="onConfirmAction()">Xác nhận</button>
+        *phHasRole="['ROLE_ADMIN','ROLE_MAKER','ROLE_CHECKER']" (click)="onConfirmAction()">Xác nhận</button>
     </div>
   </div>
 </div>
@@ -255,7 +267,7 @@
     <div class="reject-header">
       <h3 class="reject-title">Lý do từ chối</h3>
       <button class="btn-reject-close" tuiButton appearance="flat" size="s" type="button" (click)="closeConfirmModal()"
-        title="Đóng">
+        *phHasRole="['ROLE_ADMIN']" title="Đóng">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
           stroke-linejoin="round">
           <path d="M18 6L6 18M6 6l12 12" />
@@ -263,24 +275,28 @@
       </button>
     </div>
     <div class="reject-body">
+
       <div class="textarea-wrap">
+
         <tui-textfield>
-
-          <textarea tuiTextarea class="reject-textarea" placeholder="Nhập lý do từ chối" 
-          [(ngModel)]="rejectReason" [max]="4" [min]="3"></textarea>
-
+          <textarea tuiTextarea class="reject-textarea" placeholder="Nhập lý do từ chối" [(ngModel)]="rejectReason"
+            [max]="4" [min]="3"></textarea>
         </tui-textfield>
         <span class="char-count">{{ rejectReason.length }}/500</span>
+
       </div>
     </div>
+
     <div class="reject-footer">
       <button class="btn-dialog btn-dialog--cancel" tuiButton appearance="secondary" type="button"
-        (click)="closeConfirmModal()">Hủy</button>
+        *phHasRole="['ROLE_ADMIN','ROLE_CHECKER']" (click)="closeConfirmModal()">Hủy</button>
       <button class="btn-dialog btn-dialog--confirm" tuiButton appearance="primary" [disabled]="!rejectReason.trim()"
-        type="button" (click)="onConfirmAction()">
+        *phHasRole="['ROLE_ADMIN','ROLE_CHECKER']" type="button" (click)="onConfirmAction()">
         Xác nhận
       </button>
     </div>
+
   </div>
+
 </div>
 }

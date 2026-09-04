@@ -52,7 +52,7 @@
 
       <!-- Lưu -->
       <button class="btn-action btn-action--save" tuiButton appearance="secondary" type="button"
-        (click)="onSave(false)">
+        *phHasRole="['ROLE_MAKER','ROLE_ADMIN']" (click)="onSave(false)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
           stroke-linejoin="round">
           <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
@@ -63,7 +63,8 @@
       </button>
 
       <!-- Lưu và gửi duyệt -->
-      <button class="btn-action btn-action--submit" tuiButton appearance="primary" type="button" (click)="onSave(true)">
+      <button class="btn-action btn-action--submit" tuiButton appearance="primary" type="button"
+        *phHasRole="['ROLE_MAKER','ROLE_ADMIN']" (click)="onSave(true)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
           stroke-linejoin="round">
           <line x1="22" y1="2" x2="11" y2="13" />

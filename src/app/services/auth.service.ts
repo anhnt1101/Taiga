@@ -228,6 +228,34 @@ export class AuthService {
     return this._roles();
   }
 
+  hasRole(
+    role: string
+  ): boolean {
+
+    return this._roles()
+      .includes(role);
+  }
+
+
+  hasAnyRole(
+    roles: string[]
+  ): boolean {
+
+    return roles.some(
+      role =>
+        this._roles()
+          .includes(role)
+    );
+  }
+
+
+  isAdmin(): boolean {
+
+    return this.hasRole(
+      'ROLE_ADMIN'
+    );
+  }
+
   // LOGOUt
   logout(): void {
     this.clearAuthStorage();

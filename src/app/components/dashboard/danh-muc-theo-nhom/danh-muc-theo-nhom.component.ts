@@ -11,6 +11,7 @@ import { TableComponent } from '../table/table.component';
 import { DetailModalComponent } from '../detail-modal/detail-modal.component';
 //test
 import { Observable } from 'rxjs';
+import { HasRoleDirective, } from '../../../directives/has-role.directive';
 
 export { DanhMucRow };
 @Component({
@@ -23,6 +24,7 @@ export { DanhMucRow };
     FilterComponent,
     TableComponent,
     DetailModalComponent,
+    HasRoleDirective
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './danh-muc-theo-nhom.component.html',
@@ -203,7 +205,11 @@ export class DanhMucTheoNhomComponent implements OnInit {
   }
 
   copyRecord(row: DanhMucRow): void {
-    this.danhMucService.setEditingRow(row);
+    const copyRow: DanhMucRow = {
+      ...row,
+      newData: null,
+    };
+    this.danhMucService.setEditingRow(copyRow);
     this.router.navigate(['new'], { relativeTo: this.route.parent });
   }
 

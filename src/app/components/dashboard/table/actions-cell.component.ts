@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { TuiButton } from '@taiga-ui/core';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 import { ICellRendererParams } from 'ag-grid-community';
+import { HasRoleDirective, } from '../../../directives/has-role.directive';
 
 @Component({
   selector: 'ph-actions-cell',
   standalone: true,
-  imports: [CommonModule, TuiButton],
+  imports: [CommonModule, TuiButton, HasRoleDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="actions">
@@ -20,6 +21,7 @@ import { ICellRendererParams } from 'ag-grid-community';
         type="button"
         title="Sao chép"
         (click)="onCopy($event)"
+         *phHasRole="['ROLE_MAKER','ROLE_ADMIN']"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
@@ -28,38 +30,42 @@ import { ICellRendererParams } from 'ag-grid-community';
       </button>
 
       <!-- Sửa (Edit) -->
-      <button
-        *ngIf="canEdit()"
-        class="action-btn action-btn--edit"
-        tuiButton
-        appearance="flat"
-        size="s"
-        type="button"
-        title="Chỉnh sửa"
-        (click)="onEdit($event)"
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-        </svg>
-      </button>
+      @if (canEdit()) {
+        <button
+          class="action-btn action-btn--edit"
+          tuiButton
+          appearance="flat"
+          size="s"
+          type="button"
+          title="Chỉnh sửa"
+          (click)="onEdit($event)"
+          *phHasRole="['ROLE_MAKER','ROLE_ADMIN']"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+        </button>
+      }
 
       <!-- Xóa (Delete) -->
-      <button
-        *ngIf="canDelete()"
-        class="action-btn action-btn--delete"
-        tuiButton
-        appearance="flat"
-        size="s"
-        type="button"
-        title="Xóa bản ghi"
-        (click)="onDelete($event)"
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
-          <path d="M10 11v6M14 11v6" />
-        </svg>
-      </button>
+       @if (canDelete()) {
+        <button
+          class="action-btn action-btn--delete"
+          tuiButton
+          appearance="flat"
+          size="s"
+          type="button"
+          title="Xóa bản ghi"
+          (click)="onDelete($event)"
+           *phHasRole="['ROLE_ADMIN']"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+            <path d="M10 11v6M14 11v6" />
+          </svg>
+        </button>
+      }
     </div>
   `,
   styles: [
@@ -113,7 +119,7 @@ import { ICellRendererParams } from 'ag-grid-community';
 })
 export class ActionsCellComponent implements ICellRendererAngularComp {
   private params?: ICellRendererParams;
-  
+
   canEdit(): boolean {
     const status = this.params?.data?.status;
     return status !== 3 && status !== 4;
@@ -124,7 +130,7 @@ export class ActionsCellComponent implements ICellRendererAngularComp {
     const isDisplay = this.params?.data?.isDisplay;
     return status !== 3 && status !== 4 && isDisplay === 1;
   }
-  
+
   agInit(params: ICellRendererParams): void {
     this.params = params;
   }

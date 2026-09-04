@@ -72,7 +72,7 @@ const passwordMatchValidator: ValidatorFn = (
 export class RegisterComponent {
   readonly authService = inject(AuthService);
   private readonly router = inject(Router);
-  readonly roles: string[] = ['ROLE_USER', 'ROLE_ADMIN',];
+  readonly roles: string[] = ['ROLE_ADMIN', 'ROLE_MAKER', 'ROLE_CHECKER', 'ROLE_VIEWER'];
 
   readonly registerForm = new FormGroup({
     username: new FormControl(
@@ -96,7 +96,7 @@ export class RegisterComponent {
       }
     ),
     role: new FormControl(
-      'ROLE_USER',
+      'ROLE_ADMIN',
       {
         nonNullable: true,
         validators: [

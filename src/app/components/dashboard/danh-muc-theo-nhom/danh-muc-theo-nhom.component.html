@@ -6,7 +6,8 @@
 
 <div class="page-header">
   <h1 class="page-header__title">Tham số danh mục theo nhóm</h1>
-  <button class="btn btn--primary" tuiButton appearance="primary" type="button" (click)="addNew()">
+  <button class="btn btn--primary" tuiButton appearance="primary" type="button" (click)="addNew()"
+    *phHasRole="['ROLE_MAKER','ROLE_ADMIN']">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M12 5v14M5 12h14" />
     </svg>
@@ -49,14 +50,17 @@
     </div>
     <div class="modal-footer">
       @if (batchModal()!.type === 'approve' || batchModal()!.type === 'cancel') {
-      <button class="btn btn--outline" type="button" (click)="closeBatchModal()">
+      <button class="btn btn--outline" type="button" (click)="closeBatchModal()"
+        *phHasRole="['ROLE_MAKER','ROLE_CHECKER','ROLE_ADMIN']">
         Hủy
       </button>
-      <button class="btn btn--primary" type="button" (click)="confirmBatchApprove()">
+      <button class="btn btn--primary" type="button" (click)="confirmBatchApprove()"
+        *phHasRole="['ROLE_MAKER','ROLE_CHECKER','ROLE_ADMIN']">
         Đồng ý
       </button>
       } @else {
-      <button class="btn btn--primary" type="button" (click)="closeBatchModal()">
+      <button class="btn btn--primary" type="button" (click)="closeBatchModal()"
+        *phHasRole="['ROLE_MAKER','ROLE_CHECKER','ROLE_ADMIN']">
         Đóng
       </button>
       }
@@ -67,7 +71,7 @@
 
 <!-- Toast Notification (Bottom Left) -->
 @if (toastNotification()?.show) {
-<div class="toast-notification">
+<div class=" toast-notification">
   <div class="toast-notification__header">
     <div class="toast-notification__icon">
       @if(toastNotification()?.action === 'error'){
@@ -167,15 +171,14 @@
     </div>
     <div class="confirm-footer">
       <button class="btn-dialog btn-dialog--cancel" tuiButton appearance="secondary" type="button"
-        (click)="closeDeleteConfirm()">
+        *phHasRole="['ROLE_ADMIN']" (click)="closeDeleteConfirm()">
         Hủy
       </button>
       <button class="btn-dialog btn-dialog--confirm" tuiButton appearance="primary" type="button"
-        (click)="confirmDelete()">
+        *phHasRole="['ROLE_ADMIN']" (click)="confirmDelete()">
         Xác nhận
       </button>
     </div>
   </div>
 </div>
 }
-

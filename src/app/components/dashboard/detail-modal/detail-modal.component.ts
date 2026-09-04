@@ -3,7 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { TuiButton, TuiInput } from '@taiga-ui/core';
 import { DanhMucRow } from '../../../models/danh-muc.model';
 import { STATUS_OPTIONS } from '../../../models/danh-muc.model';
-import {TuiTextarea} from '@taiga-ui/kit';
+import { TuiTextarea } from '@taiga-ui/kit';
+import { HasRoleDirective, } from '../../../directives/has-role.directive';
 
 function formatDateString(val: any): string {
   if (val === undefined || val === null) return '';
@@ -30,7 +31,7 @@ function formatDateString(val: any): string {
 @Component({
   selector: 'ph-detail-modal',
   standalone: true,
-  imports: [FormsModule, TuiButton, TuiInput, TuiTextarea],
+  imports: [FormsModule, TuiButton, TuiInput, TuiTextarea, HasRoleDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './detail-modal.component.html',
   styleUrl: './detail-modal.component.scss',
@@ -107,11 +108,11 @@ export class DetailModalComponent {
     ) {
       val = (val as any).componentCode;
     }
-    if (val === undefined || val === null || val === '') {return '-';}
+    if (val === undefined || val === null || val === '') { return '-'; }
     if (
       fieldName === 'effectiveDate' ||
       fieldName === 'endEffectiveDate'
-    ) {return formatDateString(val);}
+    ) { return formatDateString(val); }
     return String(val);
   }
 
@@ -197,5 +198,5 @@ export class DetailModalComponent {
     }
     this.closeConfirmModal();
   }
-  
+
 }

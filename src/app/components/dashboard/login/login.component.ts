@@ -30,7 +30,7 @@ export class LoginComponent {
   private readonly router =inject(Router);
   readonly loginForm =new FormGroup({
       username: new FormControl(
-        'nta',
+        'nta_admin',
         {
           nonNullable: true,
           validators: [

@@ -125,8 +125,8 @@ export class AppComponent {
   ): boolean {
 
     return (
-      url === '/login' ||
-      url === '/register'
+      url.startsWith('/login') ||
+      url.startsWith('/register')
     );
   }
 }

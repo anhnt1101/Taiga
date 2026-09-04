@@ -1,0 +1,121 @@
+<section class="card table-card">
+    <!-- TOOLBAR -->
+    <div class="table-card__toolbar">
+        <h2>
+            Danh sách bản ghi
+            <span class="badge">
+                {{ totalElements }}
+            </span>
+        </h2>
+
+        <div class="table-card__actions">
+            <!-- WARNING -->
+            @if (selectionWarning()) {
+            <span class="selection-warning">
+                {{ selectionWarning() }}
+            </span>
+            }
+
+            <!-- DUYỆT -->
+            @if (selectedAction() === 'approve') {
+            <button class="btn btn--primary btn--approve" tuiButton appearance="primary" type="button"
+                *phHasRole="['ROLE_ADMIN','ROLE_CHECKER']" (click)="onBatchApproveClick()">
+                Duyệt
+                ({{ selectedRows().length }})
+            </button>
+            }
+            <!-- HỦY DUYỆT -->
+            @if (selectedAction() === 'cancel') {
+            <button class="btn btn--danger" tuiButton appearance="accent" type="button"
+                *phHasRole="['ROLE_ADMIN','ROLE_CHECKER']" (click)="onCancelApproveClick()">
+                Hủy duyệt
+                ({{ selectedRows().length }})
+            </button>
+            }
+
+            <!-- EXPORT EXCEL -->
+            <button class="btn btn--outline" tuiButton appearance="outline" type="button" (click)="onExportExcel()"
+                *phHasRole="['ROLE_ADMIN']">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M12 3v12m0 0l-4-4m4 4l4-4" />
+                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+                </svg>
+                Xuất Excel
+            </button>
+        </div>
+    </div>
+
+    <!-- AG GRID -->
+    <div class="table-card__grid">
+
+        <!-- Loading -->
+        @if (loading) {
+        <div class="table-loading-overlay">
+            <div class="spinner"></div>
+            <span>
+                Đang tải dữ liệu...
+            </span>
+        </div>
+        }
+
+        <!-- Grid -->
+        <ag-grid-angular class="ph-grid ag-theme-quartz" [rowData]="rowData" [columnDefs]="columnDefs"
+            [defaultColDef]="defaultColDef" [gridOptions]="gridOptions" (gridReady)="onGridReady($event)" />
+
+    </div>
+
+    <!-- CUSTOM PAGINATION -->
+    <div class="pagination">
+
+        <!-- PAGE SIZE -->
+        <div class="page-size">
+            <span>
+                Page Size:
+            </span>
+            <select [value]="pageSize" (change)="changePageSize($event)">
+                @for (size of pageSizes;track size) {
+                <option [value]="size">
+                    {{ size }}
+                </option>
+                }
+            </select>
+        </div>
+
+        <!-- FIRST PAGE -->
+        <button tuiButton appearance="secondary" size="s" type="button" [disabled]="currentPage === 0"
+            (click)="changePage(0)">
+            &laquo;
+        </button>
+
+        <!-- PREVIOUS PAGE -->
+        <button tuiButton appearance="secondary" size="s" type="button" [disabled]="currentPage === 0"
+            (click)="changePage(currentPage - 1)">
+            &lt;
+        </button>
+
+        <!-- PAGE INFORMATION -->
+        <span class="page-info">
+            Page
+            {{ currentPage + 1 }}
+            of
+            {{ totalPages }}
+        </span>
+
+        <!-- NEXT PAGE -->
+        <button tuiButton appearance="secondary" size="s" type="button" [disabled]="
+        totalPages === 0 ||
+        currentPage >= totalPages - 1
+        " (click)="changePage(currentPage + 1)">
+            &gt;
+        </button>
+
+        <!-- LAST PAGE -->
+        <button tuiButton appearance="secondary" size="s" type="button" [disabled]="
+        totalPages === 0 ||
+        currentPage >= totalPages - 1
+        " (click)="changePage(totalPages - 1)">
+            &raquo;
+        </button>
+    </div>
+
+</section>

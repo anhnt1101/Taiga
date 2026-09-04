@@ -1,52 +1,110 @@
+<!--
+  NÚT ĐÓNG / MỞ
+
+  collapsed = true
+  => chỉ còn nút này
+-->
+<button class="panel-toggle" [class.panel-toggle--collapsed]="collapsed()" [class.panel-toggle--expanded]="!collapsed()"
+  type="button" (click)="togglePanel()" [title]="collapsed() ? 'Mở menu' : 'Thu gọn menu'">
+  @if (collapsed()) {
+
+  <!-- MỞ -->
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <path d="M9 18l6-6-6-6" />
+  </svg>
+
+  } @else {
+
+  <!-- THU GỌN -->
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+    stroke-linejoin="round">
+    <path d="M15 18l-6-6 6-6" />
+  </svg>
+
+  }
+</button>
+
+
+<!--
+  Khi collapsed = true
+  => KHÔNG render panel.
+
+  Vì vậy:
+  - không còn logo
+  - không còn chữ
+  - không còn danh sách
+-->
+@if (!collapsed()) {
+
 <aside class="panel">
-  <!-- Top Logo Header -->
+
+  <!-- =========================
+         LOGO HEADER
+    ========================== -->
+
   <div class="panel__header">
+
     <div class="brand">
-      <span class="brand__payment">PAYMENT</span>
-      <span class="brand__icon">
-        <svg width="28" height="24" viewBox="0 0 32 26" fill="none">
-          <path
-            d="M5 13 C5 7.5, 9.5 3, 16 3 C20.5 3, 24.5 5.8, 26 10"
-            stroke="#007a6c"
-            stroke-width="2.8"
-            stroke-linecap="round"
-          />
-          <path
-            d="M22 10 L26.5 10 L26.5 5.5"
-            stroke="#007a6c"
-            stroke-width="2.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-          <path
-            d="M27 13 C27 18.5, 22.5 23, 16 23 C11.5 23, 7.5 20.2, 6 16"
-            stroke="#007a6c"
-            stroke-width="2.8"
-            stroke-linecap="round"
-          />
-          <path
-            d="M10 16 L5.5 16 L5.5 20.5"
-            stroke="#007a6c"
-            stroke-width="2.8"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
+
+      <span class="brand__payment">
+        PAYMENT
       </span>
-      <span class="brand__hub">HUB</span>
+
+
+      <span class="brand__icon">
+
+        <svg width="28" height="24" viewBox="0 0 32 26" fill="none">
+
+          <path d="M5 13 C5 7.5, 9.5 3, 16 3 C20.5 3, 24.5 5.8, 26 10" stroke="#007a6c" stroke-width="2.8"
+            stroke-linecap="round" />
+
+          <path d="M22 10 L26.5 10 L26.5 5.5" stroke="#007a6c" stroke-width="2.8" stroke-linecap="round"
+            stroke-linejoin="round" />
+
+          <path d="M27 13 C27 18.5, 22.5 23, 16 23 C11.5 23, 7.5 20.2, 6 16" stroke="#007a6c" stroke-width="2.8"
+            stroke-linecap="round" />
+
+          <path d="M10 16 L5.5 16 L5.5 20.5" stroke="#007a6c" stroke-width="2.8" stroke-linecap="round"
+            stroke-linejoin="round" />
+
+        </svg>
+
+      </span>
+
+
+      <span class="brand__hub">
+        HUB
+      </span>
+
     </div>
+
   </div>
 
-  <!-- Submenu Items List -->
+
+  <!-- =========================
+         SUBMENU LIST
+    ========================== -->
+
   <ul class="panel__list">
-    @for (item of items; track item.label) {
-      <li
-        class="panel__item"
-        [class.panel__item--active]="item.active"
-        [title]="item.fullLabel || item.label"
-      >
-        <span class="panel__label">{{ item.label }}</span>
-      </li>
+
+    @for (
+    item of items;
+    track item.label
+    ) {
+
+    <li class="panel__item" [class.panel__item--active]="item.active" [title]="item.fullLabel || item.label">
+
+      <span class="panel__label">
+        {{ item.label }}
+      </span>
+
+    </li>
+
     }
+
   </ul>
+
 </aside>
+
+}

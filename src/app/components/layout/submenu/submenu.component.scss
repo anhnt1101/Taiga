@@ -1,97 +1,335 @@
-.panel {
-  width: 248px;
-  flex-shrink: 0;
-  background: #ffffff;
-  border-right: 1px solid #e2e8f0;
-  display: flex;
-  flex-direction: column;
+/* =========================================================
+   HOST: <ph-submenu>
+========================================================= */
+
+:host {
+  position: relative;
+
+  display: block;
+
+  width: 40px;
+  min-width: 40px;
+
+  flex: 0 0 40px;
+
   height: 100vh;
-  overflow: hidden;
+
+  background: #ffffff;
+
+  border-right: 1px solid #e2e8f0;
+
+  box-sizing: border-box;
+
+  transition:
+    width 0.25s ease,
+    min-width 0.25s ease,
+    flex-basis 0.25s ease;
+
+  overflow: visible;
 }
 
-.panel__header {
-  height: 60px;
+
+/*
+ * Khi mở submenu
+ */
+:host(.submenu-expanded) {
+  width: 248px;
+  min-width: 248px;
+
+  flex-basis: 248px;
+}
+
+
+/* =========================================================
+   PANEL
+========================================================= */
+
+.panel {
+  width: 100%;
+  height: 100%;
+
+  background: #ffffff;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  box-sizing: border-box;
+
+  animation:
+    panelFadeIn 0.18s ease;
+}
+
+
+@keyframes panelFadeIn {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+
+/* =========================================================
+   TOGGLE BUTTON
+========================================================= */
+
+.panel-toggle {
+  position: absolute;
+
+  top: 15px;
+
+  z-index: 20;
+
+  width: 30px;
+  height: 30px;
+
+  padding: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid #f1f5f9;
-  flex-shrink: 0;
-  padding: 0 16px;
+
+  border:
+    1px solid #d9e2e7;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #007a6c;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 1px 3px
+    rgba(15, 23, 42, 0.08);
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+
+  box-sizing: border-box;
+
+
+  svg {
+    width: 17px;
+    height: 17px;
+  }
+
+
+  &:hover {
+    background: #eaf8f5;
+    border-color: #007a6c;
+    color: #005c52;
+  }
 }
+
+
+/*
+ * Khi submenu đang đóng:
+ *
+ * nút nằm giữa cột 40px
+ */
+.panel-toggle--collapsed {
+  left: 50%;
+  right: auto;
+
+  transform:
+    translateX(-50%);
+}
+
+
+/*
+ * Khi submenu đang mở:
+ *
+ * nút nằm bên phải header
+ */
+.panel-toggle--expanded {
+  left: auto;
+  right: 10px;
+
+  transform: none;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.panel__header {
+  height: 60px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /*
+   * Chừa chỗ bên phải cho nút <
+   */
+  padding:
+    0 48px 0 16px;
+
+  border-bottom:
+    1px solid #f1f5f9;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   BRAND
+========================================================= */
 
 .brand {
   display: flex;
   align-items: center;
+
   gap: 5px;
+
   user-select: none;
+
+  white-space: nowrap;
 }
+
 
 .brand__payment {
   color: #cb7c1e;
+
   font-weight: 800;
+
   font-size: 15.5px;
+
   letter-spacing: 0.05em;
 }
+
 
 .brand__icon {
   display: flex;
   align-items: center;
-  margin: 0 1px;
+
+  margin:
+    0 1px;
+
+  flex-shrink: 0;
 }
+
 
 .brand__hub {
   color: #005c52;
+
   font-weight: 800;
+
   font-size: 15.5px;
+
   letter-spacing: 0.05em;
 }
 
+
+/* =========================================================
+   LIST
+========================================================= */
+
 .panel__list {
   list-style: none;
+
   margin: 0;
+
   padding: 8px 0;
+
   flex: 1;
+
   overflow-y: auto;
+  overflow-x: hidden;
 }
+
+
+/* =========================================================
+   ITEM
+========================================================= */
 
 .panel__item {
   position: relative;
+
   display: flex;
   align-items: center;
-  padding: 11px 20px;
+
+  min-height: 40px;
+
+  padding:
+    10px 20px;
+
   cursor: pointer;
+
   color: #334155;
+
   font-size: 13.5px;
+
   line-height: 1.4;
-  transition: background 0.15s ease, color 0.15s ease;
+
   white-space: nowrap;
+
   overflow: hidden;
+
   text-overflow: ellipsis;
+
+  box-sizing: border-box;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+
 
   &:hover {
     background: #f8fafc;
     color: #0f172a;
   }
 
+
   &--active {
     background: #9ee2d4;
+
     color: #0f172a;
+
     font-weight: 600;
+
 
     &::before {
       content: '';
+
       position: absolute;
+
       left: 0;
       top: 0;
       bottom: 0;
+
       width: 4px;
+
       background: #007a6c;
     }
   }
 }
 
+
+/* =========================================================
+   LABEL
+========================================================= */
+
 .panel__label {
+  display: block;
+
+  width: 100%;
+
   overflow: hidden;
+
   text-overflow: ellipsis;
+
   white-space: nowrap;
 }
