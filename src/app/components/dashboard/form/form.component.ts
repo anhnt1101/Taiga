@@ -33,6 +33,8 @@ export class FormComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly componentCodeToLabel = new Map<string, string>();
+  private readonly componentLabelToCode = new Map<string, string>();
 
   mode: 'add' | 'edit' = 'add';
 
@@ -127,21 +129,58 @@ export class FormComponent implements OnInit {
       .subscribe({
         next: (options) => {
 
-          const codes =
-            (options ?? [])
-              .map(
-                option =>
-                  option?.componentCode
-              )
-              .filter(
-                (code): code is string =>
-                  !!code
+          const currentCodes =
+            this.selectedComponentCodes.map(value =>
+              this.componentLabelToCode.get(value) ?? value
+            );
+
+          this.componentCodeToLabel.clear();
+          this.componentLabelToCode.clear();
+
+          const labels = (options ?? [])
+            .filter(
+              (option): option is ComponentCodeOption =>
+                !!option?.componentCode
+            )
+            .map(option => {
+
+              const code =
+                option.componentCode.trim();
+
+              const name =
+                option.componentName?.trim();
+
+              const label =
+                name
+                  ? `${code} - ${name}`
+                  : code;
+
+              this.componentCodeToLabel.set(
+                code,
+                label
               );
+
+              this.componentLabelToCode.set(
+                label,
+                code
+              );
+
+              return label;
+            });
+
+          // Chuyển các code đang được chọn
+          // thành CODE - TÊN
+          this.selectedComponentCodes =
+            currentCodes.map(
+              code =>
+                this.componentCodeToLabel.get(code)
+                ?? code
+            );
 
           this.componentCodeItems = [
             ...new Set([
-              ...this.componentCodeItems,
-              ...codes,
+              ...labels,
+              ...this.selectedComponentCodes,
             ]),
           ];
 
@@ -304,7 +343,10 @@ export class FormComponent implements OnInit {
    * Khi MultiSelect thay đổi.
    */
   onComponentCodesChange(): void {
-    this.form.componentCode = this.selectedComponentCodes.join(',');
+    const codes = this.selectedComponentCodes.map(
+      value => this.componentLabelToCode.get(value) ?? value
+    );
+    this.form.componentCode = codes.join(',');
   }
 
 
@@ -563,8 +605,7 @@ export class FormComponent implements OnInit {
     });
     this.duplicateErrorMessage.set('');
 
-    //Đồng bộ component code.
-    this.form.componentCode = this.selectedComponentCodes.join(',');
+    this.onComponentCodesChange();
 
     // Đồng bộ date.
     this.form.effectiveDate = this.formatFromTuiDateTime(this.effectiveDateTime);

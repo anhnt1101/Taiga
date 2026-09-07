@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, signal, } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, signal, inject, } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TuiButton } from '@taiga-ui/core';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -8,6 +8,7 @@ import { StatusCellComponent } from './status-cell.component';
 import { ActiveStatusCellComponent } from './active-status-cell.component';
 import { ActionsCellComponent } from './actions-cell.component';
 import { HasRoleDirective, } from '../../../directives/has-role.directive';
+import { DanhMucService } from '../../../services/danh-muc.service';
 
 function formatDateString(val: any): string {
   if (val === undefined || val === null) {
@@ -114,7 +115,46 @@ export class TableComponent {
   readonly selectionWarning = signal<string>('');
   readonly selectedAction = signal<'approve' | 'cancel' | null>(null);
 
+  private readonly danhMucService = inject(DanhMucService);
+  private readonly componentCodeMap = new Map<string, string>();
 
+  constructor() {
+    this.danhMucService.getComponentCodes().subscribe({
+      next: (items) => {
+        (items ?? [])
+          .filter((item): item is ComponentCodeOption => !!item)
+          .forEach((item) => {
+            this.componentCodeMap.set(
+              item.componentCode,
+              item.componentName
+            );
+          });
+
+        this.gridApi?.refreshCells({
+          columns: ['componentCode'],
+          force: true,
+        });
+      },
+    });
+  }
+
+  private formatComponentCode(value: string): string {
+    if (!value) {
+      return '';
+    }
+
+    return value
+      .split(',')
+      .map(code => code.trim())
+      .filter(Boolean)
+      .map(code => {
+        const name =
+          this.componentCodeMap.get(code);
+
+         return name || '';
+      })
+      .join(', ');
+  }
   /*
    * =========================
    * OUTPUT EVENTS
@@ -206,23 +246,27 @@ export class TableComponent {
     {
       headerName: 'Cấu phần xử lý',
       field: 'componentCode',
-      width: 150,
+      minWidth: 220,
+
       valueGetter: (params) => {
-        const val =
-          params.data?.componentCode ||
-          (params.data as any)?.cauPhanXuLy;
+        const val = params.data?.componentCode || (params.data as any)?.cauPhanXuLy;
 
-        if (typeof val === 'object' && val !== null) {
-          return (val as ComponentCodeOption).componentCode || '';
+        if (!val) {
+          return '';
         }
-        return val || '';
-      },
 
-      valueFormatter: (params) => {
-        if (typeof params.value === 'object' && params.value !== null) {
-          return params.value.componentCode || '';
+        if (
+          typeof val === 'object' &&
+          val !== null
+        ) {
+          const option = val as ComponentCodeOption;
+
+          return option.componentName || '';
         }
-        return params.value || '';
+
+        return this.formatComponentCode(
+          String(val)
+        );
       },
     },
 

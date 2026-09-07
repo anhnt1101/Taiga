@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, inject, } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TuiButton, TuiInput } from '@taiga-ui/core';
-import { DanhMucRow } from '../../../models/danh-muc.model';
-import { STATUS_OPTIONS } from '../../../models/danh-muc.model';
+import { ComponentCodeOption, DanhMucRow, STATUS_OPTIONS, } from '../../../models/danh-muc.model';
 import { TuiTextarea } from '@taiga-ui/kit';
-import { HasRoleDirective, } from '../../../directives/has-role.directive';
+import { HasRoleDirective } from '../../../directives/has-role.directive';
+import { DanhMucService } from '../../../services/danh-muc.service';
 
 function formatDateString(val: any): string {
   if (val === undefined || val === null) return '';
@@ -36,8 +36,16 @@ function formatDateString(val: any): string {
   templateUrl: './detail-modal.component.html',
   styleUrl: './detail-modal.component.scss',
 })
-export class DetailModalComponent {
+export class DetailModalComponent implements OnInit {
 
+  private readonly danhMucService =
+    inject(DanhMucService);
+
+  private readonly cdr =
+    inject(ChangeDetectorRef);
+
+  private readonly componentCodeMap =
+    new Map<string, string>();
   @Input({ required: true }) row!: DanhMucRow;
 
   @Output() close = new EventEmitter<void>();
@@ -49,6 +57,86 @@ export class DetailModalComponent {
 
   activeConfirmModal: 'approve' | 'cancel_approve' | 'submit_approval' | 'delete' | 'reject' | null = null;
   rejectReason = '';
+
+  ngOnInit(): void {
+
+    this.danhMucService
+      .getComponentCodes()
+      .subscribe({
+        next: (options) => {
+          this.componentCodeMap.clear();
+          (options ?? [])
+            .filter(
+              (option): option is ComponentCodeOption =>
+                !!option?.componentCode
+            )
+            .forEach(option => {
+              this.componentCodeMap.set(
+                option.componentCode.trim(), option.componentName?.trim() || ''
+              );
+            });
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          console.error(
+            'Không tải được danh sách cấu phần:',
+            err
+          );
+        },
+      });
+  }
+
+  private formatComponentCode(
+    value: unknown
+  ): string {
+
+    if (value === null || value === undefined || value === '') {
+      return '-';
+    }
+
+    // Nếu API trả object
+    if (
+      typeof value === 'object' &&
+      !Array.isArray(value)
+    ) {
+
+      const option = value as ComponentCodeOption;
+      const code = option.componentCode?.trim();
+      if (!code) {
+        return '-';
+      }
+
+      const name = option.componentName?.trim() || this.componentCodeMap.get(code);
+      return name ? `${code} - ${name}` : code;
+    }
+
+    // Nếu API trả array
+    if (Array.isArray(value)) {
+
+      return value
+        .map(item =>
+          this.formatComponentCode(item)
+        )
+        .filter(item => item !== '-')
+        .join(', ');
+    }
+
+    // String: CR9 hoặc CR9,CR10
+    return String(value)
+      .split(',')
+      .map(code => code.trim())
+      .filter(Boolean)
+      .map(code => {
+
+        const name =
+          this.componentCodeMap.get(code);
+
+        return name
+          ? `${code} - ${name}`
+          : code;
+      })
+      .join(', ');
+  }
 
   get statusCode(): number {
     if (!this.row) return 1;
@@ -101,18 +189,15 @@ export class DetailModalComponent {
       return '-';
     }
     let val = this.row[fieldName];
-    if (
-      fieldName === 'componentCode' &&
-      typeof val === 'object' &&
-      val !== null
-    ) {
-      val = (val as any).componentCode;
+    if (fieldName === 'componentCode') {
+      return this.formatComponentCode(val);
     }
-    if (val === undefined || val === null || val === '') { return '-'; }
-    if (
-      fieldName === 'effectiveDate' ||
-      fieldName === 'endEffectiveDate'
-    ) { return formatDateString(val); }
+    if (val === undefined || val === null || val === '') {
+      return '-';
+    }
+    if (fieldName === 'effectiveDate' || fieldName === 'endEffectiveDate') {
+      return formatDateString(val);
+    }
     return String(val);
   }
 
@@ -120,7 +205,9 @@ export class DetailModalComponent {
     let val: any;
     if (this.row.newData) {
       let newObj: any;
-      if (typeof this.row.newData === 'string') {
+      if (
+        typeof this.row.newData === 'string'
+      ) {
         try {
           newObj = JSON.parse(this.row.newData);
         } catch {
@@ -131,17 +218,18 @@ export class DetailModalComponent {
       }
       val = newObj?.[fieldName];
     }
-    // Không có newData hoặc field không tồn tại trong newData
+
+    // Nếu newData không chứa field
+    // thì lấy dữ liệu hiện tại
     if (val === undefined || val === null || val === '') {
       val = this.row[fieldName];
     }
-    if (
-      fieldName === 'componentCode' &&
-      typeof val === 'object' &&
-      val !== null
-    ) {
-      val = val.componentCode;
+
+    // Cấu phần xử lý
+    if (fieldName === 'componentCode') {
+      return this.formatComponentCode(val);
     }
+
     if (val === undefined || val === null || val === '') {
       return '-';
     }

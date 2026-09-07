@@ -169,13 +169,9 @@
         </label>
 
         <tui-textfield multi tuiChevron class="component-code-select">
-          <select tuiMultiSelect [items]="[componentCodeItems]" [placeholder]="
-              selectedComponentCodes.length
-                ? ''
-                : 'Chọn cấu phần xử lý'
-            " [(ngModel)]="selectedComponentCodes" (ngModelChange)="
-              onComponentCodesChange()
-            ">
+          <select tuiMultiSelect [items]="[componentCodeItems]"
+            [placeholder]="selectedComponentCodes.length? '': 'Chọn cấu phần xử lý'"
+            [(ngModel)]="selectedComponentCodes" (ngModelChange)="onComponentCodesChange()">
           </select>
         </tui-textfield>
 
