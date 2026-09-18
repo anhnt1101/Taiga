@@ -7,12 +7,12 @@ import {
   TuiSwipeService,
   TuiZoom,
   TuiZoomService
-} from "./chunk-ENUHPJOT.js";
+} from "./chunk-RRGKA472.js";
 import {
   WA_MUTATION_OBSERVER_INIT,
   WaMutationObserverService,
   WaResizeObserverService
-} from "./chunk-VLT53KJJ.js";
+} from "./chunk-7TE2TQLS.js";
 import {
   AbstractTuiAutofocusHandler,
   TUI_AUTOFOCUS_HANDLER,
@@ -26,7 +26,7 @@ import {
   TuiSynchronousAutofocusHandler,
   TuiVisualViewport,
   tuiAutoFocusOptionsProvider
-} from "./chunk-LDANRV5W.js";
+} from "./chunk-4G6W7UTP.js";
 import {
   DATE_FILLER_LENGTH,
   DATE_RANGE_FILLER_LENGTH,
@@ -62,16 +62,11 @@ import {
   TuiTime,
   TuiYear,
   tuiDateClamp
-} from "./chunk-ITNURD5B.js";
+} from "./chunk-5DS6NKH2.js";
 import {
   TuiId,
   TuiNativeValidator
-} from "./chunk-O6TWERH2.js";
-import {
-  TuiHovered,
-  TuiHoveredService,
-  tuiHovered
-} from "./chunk-HKJM3ZKU.js";
+} from "./chunk-CCXSEBLC.js";
 import {
   TUI_IDENTITY_VALUE_TRANSFORMER,
   TuiControl,
@@ -80,13 +75,18 @@ import {
   TuiValueTransformer,
   tuiAsControl,
   tuiValueTransformerFrom
-} from "./chunk-WKO66424.js";
+} from "./chunk-HVUWLTAH.js";
 import {
   TuiItem
 } from "./chunk-UBR7MOSE.js";
 import {
+  TuiHovered,
+  TuiHoveredService,
+  tuiHovered
+} from "./chunk-BO6KWH4M.js";
+import {
   TuiValidator
-} from "./chunk-W634VPBW.js";
+} from "./chunk-6XT5X3PV.js";
 import {
   TUI_ACTIVE_ELEMENT,
   TUI_FALLBACK_VALUE,
@@ -113,10 +113,10 @@ import {
   tuiIsFocused,
   tuiIsFocusedIn,
   tuiMoveFocus
-} from "./chunk-2QPRVNSQ.js";
+} from "./chunk-K7A5NQKE.js";
 import {
   TuiTransitioned
-} from "./chunk-JVQW422X.js";
+} from "./chunk-AL3MDEYC.js";
 import {
   CHAR_BULLET,
   CHAR_CURRENCY_SIGN,
@@ -149,9 +149,7 @@ import {
   TuiAnimated,
   TuiDragState,
   WA_WINDOW,
-  outputFromObservable,
   svgNodeFilter,
-  toSignal,
   tuiArrayRemove,
   tuiArrayShallowEquals,
   tuiArrayToggle,
@@ -224,11 +222,15 @@ import {
   tuiZonefreeScheduler,
   tuiZonefull,
   tuiZonefullScheduler
-} from "./chunk-SDRQHMGB.js";
+} from "./chunk-RVUTN5RU.js";
 import {
   ControlContainer,
   NgControl
 } from "./chunk-SVYNCHRR.js";
+import {
+  outputFromObservable,
+  toSignal
+} from "./chunk-2IJ622OT.js";
 import "./chunk-KWB6JEQH.js";
 import {
   DOCUMENT,

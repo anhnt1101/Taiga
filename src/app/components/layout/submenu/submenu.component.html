@@ -93,13 +93,37 @@
     track item.label
     ) {
 
-    <li class="panel__item" [class.panel__item--active]="item.active" [title]="item.fullLabel || item.label">
+    @if (item.route) {
+
+    <!-- Item có route -->
+    <li class="panel__item" [routerLink]="item.route" routerLinkActive="panel__item--active" [routerLinkActiveOptions]="{
+          exact: true
+        }" [title]="
+          item.fullLabel ||
+          item.label
+        ">
 
       <span class="panel__label">
         {{ item.label }}
       </span>
 
     </li>
+
+    } @else {
+
+    <!-- Item chưa có route -->
+    <li class="panel__item" [title]="
+          item.fullLabel ||
+          item.label
+        ">
+
+      <span class="panel__label">
+        {{ item.label }}
+      </span>
+
+    </li>
+
+    }
 
     }
 

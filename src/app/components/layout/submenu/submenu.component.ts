@@ -7,10 +7,17 @@ import {
 
 import { CommonModule } from '@angular/common';
 
+import {
+  RouterLink,
+  RouterLinkActive,
+} from '@angular/router';
+
 interface SubmenuItem {
   label: string;
   fullLabel?: string;
-  active?: boolean;
+
+  // Có route thì item có thể chuyển trang
+  route?: string;
 }
 
 @Component({
@@ -19,13 +26,15 @@ interface SubmenuItem {
 
   imports: [
     CommonModule,
+    RouterLink,
+    RouterLinkActive,
   ],
 
   changeDetection:
     ChangeDetectionStrategy.OnPush,
 
   templateUrl:
-    './submenu.component.html',
+    '/submenu.component.html',
 
   styleUrl:
     './submenu.component.scss',
@@ -38,15 +47,6 @@ export class SubmenuComponent {
   readonly collapsed =
     signal<boolean>(true);
 
-
-  /**
-   * Gắn class trực tiếp lên:
-   *
-   * <ph-submenu>
-   *
-   * Khi mở:
-   * <ph-submenu class="submenu-expanded">
-   */
   @HostBinding(
     'class.submenu-expanded'
   )
@@ -54,13 +54,16 @@ export class SubmenuComponent {
     return !this.collapsed();
   }
 
-
   readonly items: SubmenuItem[] = [
 
     {
       label: 'Cấu phần xử lý',
     },
 
+    /**
+     * Trang hiện tại:
+     * Tham số danh mục theo nhóm
+     */
     {
       label:
         'Tham số danh mục theo n...',
@@ -68,7 +71,21 @@ export class SubmenuComponent {
       fullLabel:
         'Tham số danh mục theo nhóm',
 
-      active: true,
+      route: '/',
+    },
+
+    /**
+     * Trang mới
+     */
+    {
+      label:
+        'Transaction Log',
+
+      fullLabel:
+        'Transaction Log',
+
+      route:
+        '/transaction-log',
     },
 
     {
@@ -116,9 +133,7 @@ export class SubmenuComponent {
     },
   ];
 
-
   togglePanel(): void {
-
     this.collapsed.update(
       value => !value
     );

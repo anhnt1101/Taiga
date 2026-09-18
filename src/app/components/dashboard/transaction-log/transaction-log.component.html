@@ -1,0 +1,254 @@
+<div class="txn-page">
+  <!-- =====================================================
+       FILTER
+  ====================================================== -->
+
+  <section class="card filters">
+    <div class="filters__grid">
+      <!-- Mã giao dịch -->
+      <div class="field">
+        <label> Mã giao dịch </label>
+
+        <tui-textfield [tuiTextfieldCleaner]="true">
+          <input
+            tuiInput
+            type="text"
+            placeholder="Nhập mã giao dịch"
+            [(ngModel)]="filters.transactionCode"
+            (keyup.enter)="onSearch()"
+          />
+        </tui-textfield>
+      </div>
+
+      <!-- Số tài khoản -->
+      <div class="field">
+        <label> Số tài khoản </label>
+
+        <tui-textfield [tuiTextfieldCleaner]="true">
+          <input
+            tuiInput
+            type="text"
+            placeholder="Nhập số tài khoản"
+            [(ngModel)]="filters.accountNo"
+            (keyup.enter)="onSearch()"
+          />
+        </tui-textfield>
+      </div>
+
+      <!-- Trạng thái -->
+      <div class="field">
+        <label> Trạng thái </label>
+
+        <tui-textfield tuiChevron [stringify]="stringifyStatus" [tuiTextfieldCleaner]="true">
+          <input tuiSelect placeholder="Chọn trạng thái" [(ngModel)]="filters.status" />
+
+          <tui-data-list-wrapper *tuiDropdown [items]="statusItems" />
+        </tui-textfield>
+      </div>
+
+      <!-- Số tiền -->
+      <div class="field">
+        <label> Số tiền </label>
+
+        <div class="amount-range">
+          <!-- Số tiền tối thiểu -->
+          <tui-textfield [tuiTextfieldCleaner]="true">
+            <input
+              tuiInput
+              type="number"
+              min="0"
+              placeholder="Tối thiểu"
+              [(ngModel)]="filters.minAmount"
+              (keyup.enter)="onSearch()"
+            />
+          </tui-textfield>
+
+          <!-- Số tiền tối đa -->
+          <tui-textfield [tuiTextfieldCleaner]="true">
+            <input
+              tuiInput
+              type="number"
+              min="0"
+              placeholder="Tối đa"
+              [(ngModel)]="filters.maxAmount"
+              (keyup.enter)="onSearch()"
+            />
+          </tui-textfield>
+        </div>
+      </div>
+
+      <!-- Từ ngày -->
+      <div class="field">
+        <label> Từ ngày </label>
+
+        <tui-textfield [tuiTextfieldCleaner]="true">
+          <input
+            tuiInputDate
+            placeholder="Chọn từ ngày"
+            [ngModel]="fromDateValue"
+            (ngModelChange)="onFromDateChange($event)"
+          />
+
+          <tui-calendar *tuiDropdown />
+        </tui-textfield>
+      </div>
+
+      <!-- Đến ngày -->
+      <div class="field">
+        <label> Đến ngày </label>
+
+        <tui-textfield [tuiTextfieldCleaner]="true">
+          <input
+            tuiInputDate
+            placeholder="Chọn đến ngày"
+            [ngModel]="toDateValue"
+            (ngModelChange)="onToDateChange($event)"
+          />
+
+          <tui-calendar *tuiDropdown />
+        </tui-textfield>
+      </div>
+
+      <!-- Actions -->
+      <div class="filters__actions">
+        <button tuiButton appearance="secondary" type="button" [disabled]="loading()" (click)="onClearFilters()">
+          Xóa bộ lọc
+        </button>
+
+        <button tuiButton appearance="primary" type="button" [disabled]="loading()" (click)="onSearch()">
+          @if (loading()) {
+            Đang tìm kiếm...
+          } @else {
+            Tìm kiếm
+          }
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       TABLE
+  ====================================================== -->
+
+  <section class="card table-card">
+    <!-- TOOLBAR -->
+    <div class="table-card__toolbar">
+      <div class="toolbar-title-group">
+        <h2>Danh sách giao dịch</h2>
+
+        <span class="count-badge">
+          {{ totalElements() | number: '1.0-0' }}
+          bản ghi
+        </span>
+      </div>
+
+      <div class="toolbar-actions">
+        <!-- EXPORT -->
+        <button
+          tuiButton
+          appearance="outline"
+          type="button"
+          [disabled]="exporting() || downloading()"
+          (click)="onExportExcel()"
+        >
+          @if (exporting()) {
+            Đang xuất Excel...
+          } @else if (downloading()) {
+            Đang tải file...
+          } @else {
+            Xuất Excel
+          }
+        </button>
+      </div>
+    </div>
+
+    <!-- =====================================================
+         Thong bao
+    ====================================================== -->
+
+    <!-- =====================================================
+     TOAST NOTIFICATION
+     Bottom Left
+====================================================== -->
+
+    @if (toastNotification()?.show) {
+      <div class="toast-notification">
+        <div class="toast-notification__header">
+          <!-- ICON -->
+          <div class="toast-notification__icon">
+            @if (toastNotification()?.action === 'error') {
+              <!-- ERROR ICON -->
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" fill="#ef4444" />
+
+                <path d="M9 9l6 6M15 9l-6 6" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+              </svg>
+            } @else {
+              <!-- SUCCESS ICON -->
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" fill="#10b981" />
+
+                <path
+                  d="M8.5 12.5l2.5 2.5 4.5-5"
+                  stroke="#ffffff"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            }
+          </div>
+
+          <!-- CONTENT -->
+          <div class="toast-notification__titles">
+            <div class="toast-notification__title">
+              @switch (toastNotification()?.action) {
+                @case ('export') {
+                  Xuất Excel thành công
+                }
+
+                @case ('error') {
+                  Có lỗi xảy ra!!!
+                }
+              }
+            </div>
+
+            <!-- Nội dung chi tiết -->
+            @if (toastNotification()?.message; as message) {
+              <div class="toast-notification__subtitle">
+                {{ message }}
+              </div>
+            }
+          </div>
+
+          <!-- CLOSE -->
+          <button class="toast-notification__close" type="button" (click)="closeToast()" title="Đóng">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="toast-notification__actions">
+          <button type="button" class="toast-action toast-action--secondary" (click)="closeToast()">Đóng</button>
+        </div>
+      </div>
+    }
+
+    <!-- =====================================================
+         AG GRID
+    ====================================================== -->
+
+    <div class="table-container">
+      <ag-grid-angular
+        class="ph-grid ag-theme-quartz"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        [gridOptions]="gridOptions"
+        [datasource]="datasource"
+        (gridReady)="onGridReady($event)"
+      >
+      </ag-grid-angular>
+    </div>
+  </section>
+</div>

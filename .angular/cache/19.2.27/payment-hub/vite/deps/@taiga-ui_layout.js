@@ -1,7 +1,7 @@
 import {
   WaIntersectionObserverDirective,
   WaIntersectionRoot
-} from "./chunk-TZHSTLVB.js";
+} from "./chunk-S2YQZOKC.js";
 import {
   TUI_BLOCK_OPTIONS,
   TUI_CHEVRON,
@@ -16,12 +16,12 @@ import {
   tuiBreadcrumbsOptionsProvider,
   tuiSwitchOptionsProvider,
   tuiTabsOptionsProvider
-} from "./chunk-P2KAR3GD.js";
+} from "./chunk-IOZH5J5Y.js";
 import {
   WA_MUTATION_OBSERVER_INIT,
   WaMutationObserverService,
   WaResizeObserverService
-} from "./chunk-VLT53KJJ.js";
+} from "./chunk-7TE2TQLS.js";
 import {
   TUI_CHECKBOX_OPTIONS,
   TUI_NOTIFICATION_OPTIONS,
@@ -31,34 +31,30 @@ import {
   TuiIcon,
   TuiWithInput,
   tuiHintOptionsProvider
-} from "./chunk-NIGCBIR4.js";
-import {
-  tuiLinkOptionsProvider
-} from "./chunk-FVJE5UTK.js";
-import "./chunk-O6TWERH2.js";
-import "./chunk-HKJM3ZKU.js";
-import {
-  RouterLink,
-  RouterLinkActive
-} from "./chunk-7WZN7KDR.js";
+} from "./chunk-R2ODAW5Z.js";
 import {
   TuiTextfieldComponent,
   TuiTextfieldOptionsDirective,
   tuiTextfieldOptionsProvider
-} from "./chunk-OXEZ63PE.js";
-import "./chunk-J334YG6B.js";
-import "./chunk-WKO66424.js";
+} from "./chunk-KH6JGOT4.js";
+import "./chunk-CCXSEBLC.js";
+import "./chunk-HVUWLTAH.js";
 import {
   TuiItem
 } from "./chunk-UBR7MOSE.js";
-import "./chunk-W634VPBW.js";
+import {
+  tuiLinkOptionsProvider
+} from "./chunk-GDI34HKJ.js";
+import "./chunk-R63BH7ZJ.js";
+import "./chunk-BO6KWH4M.js";
+import "./chunk-6XT5X3PV.js";
 import {
   TuiDataList,
   TuiDataListComponent,
   TuiOptGroup,
   tuiAsDataListHost,
   tuiCellOptionsProvider
-} from "./chunk-AKQXG24B.js";
+} from "./chunk-O4TSISV6.js";
 import {
   TUI_DROPDOWN_COMPONENT,
   TUI_DROPDOWN_OPTIONS,
@@ -72,7 +68,15 @@ import {
   TuiWithDropdownOpen,
   tuiDropdown,
   tuiDropdownOptionsProvider
-} from "./chunk-ZAUGKNIQ.js";
+} from "./chunk-QPDRXNGW.js";
+import {
+  PolymorpheusComponent,
+  PolymorpheusOutlet,
+  TUI_PLATFORM,
+  TuiActiveZone,
+  injectContext,
+  tuiGetClosestFocusable
+} from "./chunk-K7A5NQKE.js";
 import {
   TUI_BUTTON_OPTIONS,
   TuiButton,
@@ -81,7 +85,7 @@ import {
   tuiAppearanceOptionsProvider,
   tuiButtonOptionsProvider,
   tuiIconStart
-} from "./chunk-J6D5N42S.js";
+} from "./chunk-5NG3GP6V.js";
 import {
   TUI_BREAKPOINT,
   TUI_CLOSE_WORD,
@@ -92,23 +96,13 @@ import {
   TuiScrollRef,
   TuiScrollbar,
   tuiExtractI18n
-} from "./chunk-YXYSKJQL.js";
-import {
-  PolymorpheusComponent,
-  PolymorpheusOutlet,
-  TUI_PLATFORM,
-  TuiActiveZone,
-  injectContext,
-  tuiGetClosestFocusable
-} from "./chunk-2QPRVNSQ.js";
-import "./chunk-JVQW422X.js";
+} from "./chunk-MSEIE4CX.js";
+import "./chunk-AL3MDEYC.js";
 import {
   TUI_ANIMATED,
   TUI_VERSION,
   TuiAnimated,
   WA_IS_MOBILE,
-  outputFromObservable,
-  toSignal,
   tuiContainsOrAfter,
   tuiCreateOptions,
   tuiDirectiveBinding,
@@ -121,10 +115,18 @@ import {
   tuiWithStyles,
   tuiZoneOptimized,
   tuiZonefull
-} from "./chunk-SDRQHMGB.js";
+} from "./chunk-RVUTN5RU.js";
 import {
   NgControl
 } from "./chunk-SVYNCHRR.js";
+import {
+  outputFromObservable,
+  toSignal
+} from "./chunk-2IJ622OT.js";
+import {
+  RouterLink,
+  RouterLinkActive
+} from "./chunk-7WZN7KDR.js";
 import "./chunk-46UQNXDB.js";
 import "./chunk-6D3FKYJ5.js";
 import "./chunk-EJQBUMGU.js";

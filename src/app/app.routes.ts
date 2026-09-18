@@ -26,6 +26,9 @@ import {
   roleGuard,
 } from './guards/role.guard';
 
+import {
+  TransactionLogComponent,
+} from './components/dashboard/transaction-log/transaction-log.component';
 
 export const routes: Routes = [
 
@@ -69,7 +72,27 @@ export const routes: Routes = [
 
         component:
           DanhMucTheoNhomComponent,
-          
+
+      },
+
+      {
+        path: 'transaction-log',
+
+        component:
+          TransactionLogComponent,
+
+        canActivate: [
+          roleGuard,
+        ],
+
+        data: {
+          roles: [
+            'ROLE_ADMIN',
+            'ROLE_MAKER',
+            'ROLE_CHECKER',
+            'ROLE_VIEWER',
+          ],
+        },
       },
 
       {
@@ -90,6 +113,7 @@ export const routes: Routes = [
             'ROLE_MAKER',
           ],
         },
+
       },
 
       {

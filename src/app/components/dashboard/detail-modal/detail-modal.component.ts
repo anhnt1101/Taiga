@@ -38,14 +38,10 @@ function formatDateString(val: any): string {
 })
 export class DetailModalComponent implements OnInit {
 
-  private readonly danhMucService =
-    inject(DanhMucService);
-
-  private readonly cdr =
-    inject(ChangeDetectorRef);
-
-  private readonly componentCodeMap =
-    new Map<string, string>();
+  private readonly danhMucService = inject(DanhMucService);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly componentCodeMap = new Map<string, string>();
+  
   @Input({ required: true }) row!: DanhMucRow;
 
   @Output() close = new EventEmitter<void>();
