@@ -12,24 +12,25 @@ import {
   TuiOrderWeekDaysPipe,
   tuiCalendarOptionsProvider,
   tuiCalendarSheetOptionsProvider
-} from "./chunk-DTZWYZCF.js";
-import "./chunk-5DS6NKH2.js";
-import "./chunk-GDI34HKJ.js";
-import "./chunk-R63BH7ZJ.js";
-import "./chunk-BO6KWH4M.js";
-import "./chunk-6XT5X3PV.js";
-import "./chunk-5NG3GP6V.js";
-import "./chunk-MSEIE4CX.js";
-import "./chunk-AL3MDEYC.js";
-import "./chunk-RVUTN5RU.js";
-import "./chunk-SVYNCHRR.js";
-import "./chunk-2IJ622OT.js";
-import "./chunk-KWB6JEQH.js";
-import "./chunk-43U6UUQ6.js";
-import "./chunk-J6YSA62T.js";
-import "./chunk-XVJVK3DV.js";
-import "./chunk-PV7DW26G.js";
-import "./chunk-IVSRFTZX.js";
+} from "./chunk-EHELFNP5.js";
+import "./chunk-HBZ5DGMQ.js";
+import "./chunk-KQ34HAL4.js";
+import "./chunk-WM2Q2M6F.js";
+import "./chunk-OM465WUU.js";
+import "./chunk-ZRYRRHNI.js";
+import "./chunk-MFHI4UPR.js";
+import "./chunk-53EVVPG6.js";
+import "./chunk-LT7YQREC.js";
+import "./chunk-EW5P4Z7F.js";
+import "./chunk-B3H7L2CY.js";
+import "./chunk-LYSESRVI.js";
+import "./chunk-TOTXTOAQ.js";
+import "./chunk-F65Z7COG.js";
+import "./chunk-RU5PXVWH.js";
+import "./chunk-QO67QQ3F.js";
+import "./chunk-WMWTRTCA.js";
+import "./chunk-PADBOZH3.js";
+import "./chunk-3OV72XIM.js";
 export {
   AbstractTuiCalendar,
   TUI_CALENDAR_DEFAULT_OPTIONS,

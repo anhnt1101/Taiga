@@ -7,12 +7,12 @@ import {
   TuiSwipeService,
   TuiZoom,
   TuiZoomService
-} from "./chunk-RRGKA472.js";
+} from "./chunk-TIG4B2MV.js";
 import {
   WA_MUTATION_OBSERVER_INIT,
   WaMutationObserverService,
   WaResizeObserverService
-} from "./chunk-7TE2TQLS.js";
+} from "./chunk-67XZO6XY.js";
 import {
   AbstractTuiAutofocusHandler,
   TUI_AUTOFOCUS_HANDLER,
@@ -26,7 +26,7 @@ import {
   TuiSynchronousAutofocusHandler,
   TuiVisualViewport,
   tuiAutoFocusOptionsProvider
-} from "./chunk-4G6W7UTP.js";
+} from "./chunk-FAMN535L.js";
 import {
   DATE_FILLER_LENGTH,
   DATE_RANGE_FILLER_LENGTH,
@@ -62,11 +62,16 @@ import {
   TuiTime,
   TuiYear,
   tuiDateClamp
-} from "./chunk-5DS6NKH2.js";
+} from "./chunk-HBZ5DGMQ.js";
 import {
   TuiId,
   TuiNativeValidator
-} from "./chunk-CCXSEBLC.js";
+} from "./chunk-4DT5UDWS.js";
+import {
+  TuiHovered,
+  TuiHoveredService,
+  tuiHovered
+} from "./chunk-WM2Q2M6F.js";
 import {
   TUI_IDENTITY_VALUE_TRANSFORMER,
   TuiControl,
@@ -75,18 +80,13 @@ import {
   TuiValueTransformer,
   tuiAsControl,
   tuiValueTransformerFrom
-} from "./chunk-HVUWLTAH.js";
-import {
-  TuiItem
-} from "./chunk-UBR7MOSE.js";
-import {
-  TuiHovered,
-  TuiHoveredService,
-  tuiHovered
-} from "./chunk-BO6KWH4M.js";
+} from "./chunk-33D7DZAC.js";
 import {
   TuiValidator
-} from "./chunk-6XT5X3PV.js";
+} from "./chunk-ZRYRRHNI.js";
+import {
+  TuiItem
+} from "./chunk-OA2YHZ76.js";
 import {
   TUI_ACTIVE_ELEMENT,
   TUI_FALLBACK_VALUE,
@@ -113,10 +113,10 @@ import {
   tuiIsFocused,
   tuiIsFocusedIn,
   tuiMoveFocus
-} from "./chunk-K7A5NQKE.js";
+} from "./chunk-5XJITJCW.js";
 import {
   TuiTransitioned
-} from "./chunk-AL3MDEYC.js";
+} from "./chunk-LT7YQREC.js";
 import {
   CHAR_BULLET,
   CHAR_CURRENCY_SIGN,
@@ -222,20 +222,20 @@ import {
   tuiZonefreeScheduler,
   tuiZonefull,
   tuiZonefullScheduler
-} from "./chunk-RVUTN5RU.js";
-import {
-  ControlContainer,
-  NgControl
-} from "./chunk-SVYNCHRR.js";
+} from "./chunk-EW5P4Z7F.js";
 import {
   outputFromObservable,
   toSignal
-} from "./chunk-2IJ622OT.js";
-import "./chunk-KWB6JEQH.js";
+} from "./chunk-B3H7L2CY.js";
+import {
+  ControlContainer,
+  NgControl
+} from "./chunk-LYSESRVI.js";
+import "./chunk-TOTXTOAQ.js";
 import {
   DOCUMENT,
   isPlatformBrowser
-} from "./chunk-43U6UUQ6.js";
+} from "./chunk-F65Z7COG.js";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -270,9 +270,9 @@ import {
   ɵɵlistener,
   ɵɵresolveDocument,
   ɵɵstyleProp
-} from "./chunk-J6YSA62T.js";
-import "./chunk-XVJVK3DV.js";
-import "./chunk-PV7DW26G.js";
+} from "./chunk-RU5PXVWH.js";
+import "./chunk-QO67QQ3F.js";
+import "./chunk-WMWTRTCA.js";
 import {
   Subject,
   distinctUntilChanged,
@@ -280,7 +280,8 @@ import {
   map,
   skip,
   switchMap
-} from "./chunk-IVSRFTZX.js";
+} from "./chunk-PADBOZH3.js";
+import "./chunk-3OV72XIM.js";
 
 // node_modules/@taiga-ui/cdk/fesm2022/taiga-ui-cdk-directives-control.mjs
 var TuiNgControl = class _TuiNgControl {

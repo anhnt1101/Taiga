@@ -3,7 +3,7 @@ import {
   WaIntersectionObservee,
   WaIntersectionObserver,
   WaIntersectionObserverDirective
-} from "./chunk-S2YQZOKC.js";
+} from "./chunk-BEFDJ6TS.js";
 import {
   TUI_DIALOGS_CLOSE,
   TUI_DIALOG_OPTIONS,
@@ -37,8 +37,7 @@ import {
   tuiLoaderOptionsProvider,
   tuiNumberToStringWithoutExp,
   tuiPercentageToKeyStepValue
-} from "./chunk-YYJKZG24.js";
-import "./chunk-4G6W7UTP.js";
+} from "./chunk-HLGG4A2Q.js";
 import {
   AbstractTuiCalendar,
   TUI_CALENDAR_DEFAULT_OPTIONS,
@@ -54,8 +53,9 @@ import {
   TuiSpinButton,
   tuiCalendarOptionsProvider,
   tuiCalendarSheetOptionsProvider
-} from "./chunk-DTZWYZCF.js";
-import "./chunk-5DS6NKH2.js";
+} from "./chunk-EHELFNP5.js";
+import "./chunk-FAMN535L.js";
+import "./chunk-HBZ5DGMQ.js";
 import {
   TUI_CHECKBOX_OPTIONS,
   TUI_HINT_COMPONENT,
@@ -102,7 +102,16 @@ import {
   tuiHintOptionsProvider,
   tuiNotificationOptionsProvider,
   tuiRadioOptionsProvider
-} from "./chunk-R2ODAW5Z.js";
+} from "./chunk-Z4Z66TRK.js";
+import {
+  TUI_LINK_OPTIONS,
+  TuiLink,
+  tuiLinkOptionsProvider
+} from "./chunk-KQ34HAL4.js";
+import {
+  TuiId
+} from "./chunk-4DT5UDWS.js";
+import "./chunk-WM2Q2M6F.js";
 import {
   TUI_BUTTON_X_OPTIONS,
   TUI_FILTER_BY_INPUT_DEFAULT_OPTIONS,
@@ -127,21 +136,7 @@ import {
   tuiFilterByInputOptionsProvider,
   tuiInjectAuxiliary,
   tuiTextfieldOptionsProvider
-} from "./chunk-KH6JGOT4.js";
-import {
-  TuiId
-} from "./chunk-CCXSEBLC.js";
-import {
-  TuiValidationError
-} from "./chunk-HVUWLTAH.js";
-import {
-  TuiItem
-} from "./chunk-UBR7MOSE.js";
-import {
-  TUI_LINK_OPTIONS,
-  TuiLink,
-  tuiLinkOptionsProvider
-} from "./chunk-GDI34HKJ.js";
+} from "./chunk-INXJ2Q3N.js";
 import {
   TUI_DEFAULT_ITEMS_HANDLERS,
   TUI_ITEMS_HANDLERS,
@@ -149,9 +144,15 @@ import {
   TuiItemsHandlersValidator,
   TuiWithItemsHandlers,
   tuiItemsHandlersProvider
-} from "./chunk-R63BH7ZJ.js";
-import "./chunk-BO6KWH4M.js";
-import "./chunk-6XT5X3PV.js";
+} from "./chunk-OM465WUU.js";
+import {
+  TuiValidationError
+} from "./chunk-33D7DZAC.js";
+import "./chunk-ZRYRRHNI.js";
+import {
+  TuiItem
+} from "./chunk-OA2YHZ76.js";
+import "./chunk-3SNGMMOM.js";
 import {
   TUI_CELL_OPTIONS,
   TUI_DATA_LIST_HOST,
@@ -172,7 +173,7 @@ import {
   tuiAsOptionContent,
   tuiCellOptionsProvider,
   tuiInjectDataListSize
-} from "./chunk-O4TSISV6.js";
+} from "./chunk-BA4UVH66.js";
 import {
   TUI_ANIMATIONS_DEFAULT_DURATION,
   TUI_CDR,
@@ -240,12 +241,7 @@ import {
   tuiProvideAccessor,
   tuiRectAccessorFor,
   tuiSizeBigger
-} from "./chunk-QPDRXNGW.js";
-import {
-  PolymorpheusComponent,
-  PolymorpheusOutlet,
-  PolymorpheusTemplate
-} from "./chunk-K7A5NQKE.js";
+} from "./chunk-QY7TJROF.js";
 import {
   TUI_APPEARANCE_DEFAULT_OPTIONS,
   TUI_APPEARANCE_OPTIONS,
@@ -264,7 +260,7 @@ import {
   tuiButtonOptionsProvider,
   tuiIconEnd,
   tuiIconStart
-} from "./chunk-5NG3GP6V.js";
+} from "./chunk-MFHI4UPR.js";
 import {
   SCROLL_REF_SELECTOR,
   TUI_ANIMATIONS_SPEED,
@@ -323,8 +319,13 @@ import {
   tuiNumberFormatProvider,
   tuiScrollbarOptionsProvider,
   tuiValidationErrorsProvider
-} from "./chunk-MSEIE4CX.js";
-import "./chunk-AL3MDEYC.js";
+} from "./chunk-53EVVPG6.js";
+import {
+  PolymorpheusComponent,
+  PolymorpheusOutlet,
+  PolymorpheusTemplate
+} from "./chunk-5XJITJCW.js";
+import "./chunk-LT7YQREC.js";
 import {
   TUI_FALSE_HANDLER,
   TUI_TRUE_HANDLER,
@@ -338,25 +339,24 @@ import {
   tuiIsString,
   tuiProvide,
   tuiSetSignal
-} from "./chunk-RVUTN5RU.js";
-import {
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  NgControl
-} from "./chunk-SVYNCHRR.js";
+} from "./chunk-EW5P4Z7F.js";
 import {
   outputFromObservable,
   toObservable,
   toSignal
-} from "./chunk-2IJ622OT.js";
-import "./chunk-7WZN7KDR.js";
-import "./chunk-46UQNXDB.js";
-import "./chunk-6D3FKYJ5.js";
-import "./chunk-EJQBUMGU.js";
+} from "./chunk-B3H7L2CY.js";
+import "./chunk-BXM32DC7.js";
+import "./chunk-O4E3NYQT.js";
+import {
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  NgControl
+} from "./chunk-LYSESRVI.js";
+import "./chunk-I33BTKEZ.js";
 import {
   NgTemplateOutlet
-} from "./chunk-KWB6JEQH.js";
-import "./chunk-43U6UUQ6.js";
+} from "./chunk-TOTXTOAQ.js";
+import "./chunk-F65Z7COG.js";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -402,16 +402,14 @@ import {
   ɵɵsanitizeHtml,
   ɵɵstyleProp,
   ɵɵtemplate
-} from "./chunk-J6YSA62T.js";
-import "./chunk-XVJVK3DV.js";
+} from "./chunk-RU5PXVWH.js";
 import {
   fromEvent,
   merge
-} from "./chunk-PV7DW26G.js";
+} from "./chunk-QO67QQ3F.js";
+import "./chunk-WMWTRTCA.js";
 import {
   BehaviorSubject,
-  __spreadProps,
-  __spreadValues,
   combineLatest,
   debounceTime,
   distinctUntilChanged,
@@ -421,7 +419,11 @@ import {
   switchMap,
   takeWhile,
   timer
-} from "./chunk-IVSRFTZX.js";
+} from "./chunk-PADBOZH3.js";
+import {
+  __spreadProps,
+  __spreadValues
+} from "./chunk-3OV72XIM.js";
 
 // node_modules/@taiga-ui/core/fesm2022/taiga-ui-core-components-carousel.mjs
 var _c0 = (a0) => ({

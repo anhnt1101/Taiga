@@ -1,7 +1,7 @@
 import {
   WaIntersectionObserverDirective,
   WaIntersectionRoot
-} from "./chunk-S2YQZOKC.js";
+} from "./chunk-BEFDJ6TS.js";
 import {
   TUI_BLOCK_OPTIONS,
   TUI_CHEVRON,
@@ -16,12 +16,12 @@ import {
   tuiBreadcrumbsOptionsProvider,
   tuiSwitchOptionsProvider,
   tuiTabsOptionsProvider
-} from "./chunk-IOZH5J5Y.js";
+} from "./chunk-KYTUYCLF.js";
 import {
   WA_MUTATION_OBSERVER_INIT,
   WaMutationObserverService,
   WaResizeObserverService
-} from "./chunk-7TE2TQLS.js";
+} from "./chunk-67XZO6XY.js";
 import {
   TUI_CHECKBOX_OPTIONS,
   TUI_NOTIFICATION_OPTIONS,
@@ -31,30 +31,34 @@ import {
   TuiIcon,
   TuiWithInput,
   tuiHintOptionsProvider
-} from "./chunk-R2ODAW5Z.js";
+} from "./chunk-Z4Z66TRK.js";
+import {
+  tuiLinkOptionsProvider
+} from "./chunk-KQ34HAL4.js";
+import "./chunk-4DT5UDWS.js";
+import "./chunk-WM2Q2M6F.js";
 import {
   TuiTextfieldComponent,
   TuiTextfieldOptionsDirective,
   tuiTextfieldOptionsProvider
-} from "./chunk-KH6JGOT4.js";
-import "./chunk-CCXSEBLC.js";
-import "./chunk-HVUWLTAH.js";
+} from "./chunk-INXJ2Q3N.js";
+import "./chunk-OM465WUU.js";
+import "./chunk-33D7DZAC.js";
+import "./chunk-ZRYRRHNI.js";
 import {
   TuiItem
-} from "./chunk-UBR7MOSE.js";
+} from "./chunk-OA2YHZ76.js";
 import {
-  tuiLinkOptionsProvider
-} from "./chunk-GDI34HKJ.js";
-import "./chunk-R63BH7ZJ.js";
-import "./chunk-BO6KWH4M.js";
-import "./chunk-6XT5X3PV.js";
+  RouterLink,
+  RouterLinkActive
+} from "./chunk-3SNGMMOM.js";
 import {
   TuiDataList,
   TuiDataListComponent,
   TuiOptGroup,
   tuiAsDataListHost,
   tuiCellOptionsProvider
-} from "./chunk-O4TSISV6.js";
+} from "./chunk-BA4UVH66.js";
 import {
   TUI_DROPDOWN_COMPONENT,
   TUI_DROPDOWN_OPTIONS,
@@ -68,15 +72,7 @@ import {
   TuiWithDropdownOpen,
   tuiDropdown,
   tuiDropdownOptionsProvider
-} from "./chunk-QPDRXNGW.js";
-import {
-  PolymorpheusComponent,
-  PolymorpheusOutlet,
-  TUI_PLATFORM,
-  TuiActiveZone,
-  injectContext,
-  tuiGetClosestFocusable
-} from "./chunk-K7A5NQKE.js";
+} from "./chunk-QY7TJROF.js";
 import {
   TUI_BUTTON_OPTIONS,
   TuiButton,
@@ -85,7 +81,7 @@ import {
   tuiAppearanceOptionsProvider,
   tuiButtonOptionsProvider,
   tuiIconStart
-} from "./chunk-5NG3GP6V.js";
+} from "./chunk-MFHI4UPR.js";
 import {
   TUI_BREAKPOINT,
   TUI_CLOSE_WORD,
@@ -96,8 +92,16 @@ import {
   TuiScrollRef,
   TuiScrollbar,
   tuiExtractI18n
-} from "./chunk-MSEIE4CX.js";
-import "./chunk-AL3MDEYC.js";
+} from "./chunk-53EVVPG6.js";
+import {
+  PolymorpheusComponent,
+  PolymorpheusOutlet,
+  TUI_PLATFORM,
+  TuiActiveZone,
+  injectContext,
+  tuiGetClosestFocusable
+} from "./chunk-5XJITJCW.js";
+import "./chunk-LT7YQREC.js";
 import {
   TUI_ANIMATED,
   TUI_VERSION,
@@ -115,26 +119,22 @@ import {
   tuiWithStyles,
   tuiZoneOptimized,
   tuiZonefull
-} from "./chunk-RVUTN5RU.js";
-import {
-  NgControl
-} from "./chunk-SVYNCHRR.js";
+} from "./chunk-EW5P4Z7F.js";
 import {
   outputFromObservable,
   toSignal
-} from "./chunk-2IJ622OT.js";
+} from "./chunk-B3H7L2CY.js";
+import "./chunk-BXM32DC7.js";
+import "./chunk-O4E3NYQT.js";
 import {
-  RouterLink,
-  RouterLinkActive
-} from "./chunk-7WZN7KDR.js";
-import "./chunk-46UQNXDB.js";
-import "./chunk-6D3FKYJ5.js";
-import "./chunk-EJQBUMGU.js";
+  NgControl
+} from "./chunk-LYSESRVI.js";
+import "./chunk-I33BTKEZ.js";
 import {
   AsyncPipe,
   NgTemplateOutlet
-} from "./chunk-KWB6JEQH.js";
-import "./chunk-43U6UUQ6.js";
+} from "./chunk-TOTXTOAQ.js";
+import "./chunk-F65Z7COG.js";
 import {
   ChangeDetectionStrategy,
   Component,
@@ -198,20 +198,22 @@ import {
   ɵɵtextInterpolate,
   ɵɵtextInterpolate1,
   ɵɵviewQuerySignal
-} from "./chunk-J6YSA62T.js";
-import "./chunk-XVJVK3DV.js";
+} from "./chunk-RU5PXVWH.js";
 import {
   fromEvent,
   merge
-} from "./chunk-PV7DW26G.js";
+} from "./chunk-QO67QQ3F.js";
+import "./chunk-WMWTRTCA.js";
 import {
-  __spreadProps,
-  __spreadValues,
   debounceTime,
   distinctUntilChanged,
   map,
   pairwise
-} from "./chunk-IVSRFTZX.js";
+} from "./chunk-PADBOZH3.js";
+import {
+  __spreadProps,
+  __spreadValues
+} from "./chunk-3OV72XIM.js";
 
 // node_modules/@taiga-ui/layout/fesm2022/taiga-ui-layout-components-app-bar.mjs
 function TuiProgressiveBlur_For_1_Template(rf, ctx) {

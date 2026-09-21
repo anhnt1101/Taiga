@@ -30,21 +30,22 @@ import {
   tuiDropdownEnabled,
   tuiDropdownHoverOptionsProvider,
   tuiDropdownOptionsProvider
-} from "./chunk-QPDRXNGW.js";
-import "./chunk-K7A5NQKE.js";
-import "./chunk-MSEIE4CX.js";
-import "./chunk-RVUTN5RU.js";
-import "./chunk-SVYNCHRR.js";
-import "./chunk-2IJ622OT.js";
-import "./chunk-46UQNXDB.js";
-import "./chunk-6D3FKYJ5.js";
-import "./chunk-EJQBUMGU.js";
-import "./chunk-KWB6JEQH.js";
-import "./chunk-43U6UUQ6.js";
-import "./chunk-J6YSA62T.js";
-import "./chunk-XVJVK3DV.js";
-import "./chunk-PV7DW26G.js";
-import "./chunk-IVSRFTZX.js";
+} from "./chunk-QY7TJROF.js";
+import "./chunk-53EVVPG6.js";
+import "./chunk-5XJITJCW.js";
+import "./chunk-EW5P4Z7F.js";
+import "./chunk-B3H7L2CY.js";
+import "./chunk-BXM32DC7.js";
+import "./chunk-O4E3NYQT.js";
+import "./chunk-LYSESRVI.js";
+import "./chunk-I33BTKEZ.js";
+import "./chunk-TOTXTOAQ.js";
+import "./chunk-F65Z7COG.js";
+import "./chunk-RU5PXVWH.js";
+import "./chunk-QO67QQ3F.js";
+import "./chunk-WMWTRTCA.js";
+import "./chunk-PADBOZH3.js";
+import "./chunk-3OV72XIM.js";
 export {
   TUI_DROPDOWN_COMPONENT,
   TUI_DROPDOWN_CONTEXT,

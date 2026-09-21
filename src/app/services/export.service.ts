@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
+
 import { HttpClient } from '@angular/common/http';
-import { Observable, timer } from 'rxjs';
-import { switchMap, takeWhile } from 'rxjs/operators';
+
+import { Observable } from 'rxjs';
 
 import { TransactionLogFilterParams } from '../models/transaction-log.model';
 
@@ -16,53 +17,110 @@ export class ExportService {
   private readonly apiUrl = 'http://localhost:8080/api/export-requests';
 
   /**
-   * Tạo yêu cầu export TRANSACTION_LOG.
+   * =====================================================
+   * CREATE TRANSACTION LOG EXPORT
+   * =====================================================
    *
-   * params chính là filter đang dùng để search.
+   * Tạo yêu cầu export.
+   *
+   * Flow backend:
+   *
+   * Angular
+   *   ↓
+   * POST /api/export-requests
+   *   ↓
+   * EXPORT_REQUEST = NEW
+   *   ↓
+   * Kafka
+   *   ↓
+   * Worker
    */
   createTransactionLogExport(params: TransactionLogFilterParams): Observable<ExportRequestResponse> {
     return this.http.post<ExportRequestResponse>(this.apiUrl, {
       exportType: 'TRANSACTION_LOG',
+
       params,
     });
   }
 
-  getLatestPendingDownload(): Observable<ExportRequestResponse | null> {
-    return this.http.get<ExportRequestResponse | null>(`${this.apiUrl}/latest-pending-download`);
-  }
-
   /**
-   * FE polling trạng thái.
+   * =====================================================
+   * GET EXPORT STATUS
+   * =====================================================
+   *
+   * Không còn dùng để polling.
+   *
+   * Chỉ dùng khi cần lấy lại dữ liệu đầy đủ
+   * của một export cụ thể.
+   *
+   * Ví dụ:
+   * WebSocket báo COMPLETED
+   * => gọi GET status đúng 1 lần.
    */
   getStatus(id: number): Observable<ExportRequestResponse> {
     return this.http.get<ExportRequestResponse>(`${this.apiUrl}/${id}`);
   }
 
   /**
-   * 50 export gần nhất.
+   * =====================================================
+   * GET MY EXPORT REQUESTS
+   * =====================================================
+   *
+   * Dùng cho:
+   *
+   * "Danh sách file xuất"
+   *
+   * API:
+   *
+   * GET /api/export-requests/mine
    */
-  getMine(): Observable<ExportRequestResponse[]> {
+  getMyRequests(): Observable<ExportRequestResponse[]> {
     return this.http.get<ExportRequestResponse[]>(`${this.apiUrl}/mine`);
   }
 
   /**
-   * Xin MinIO presigned URL.
+   * =====================================================
+   * GET MINE
+   * =====================================================
+   *
+   * Giữ lại method này để code cũ nếu đang gọi:
+   *
+   * exportService.getMine()
+   *
+   * vẫn hoạt động.
+   *
+   * Thực chất dùng chung API với getMyRequests().
    */
-  getDownloadUrl(id: number): Observable<DownloadUrlResponse> {
-    return this.http.get<DownloadUrlResponse>(`${this.apiUrl}/${id}/download-url`);
+  getMine(): Observable<ExportRequestResponse[]> {
+    return this.getMyRequests();
   }
 
   /**
-   * Poll 5 giây/lần.
+   * =====================================================
+   * GET LATEST PENDING DOWNLOAD
+   * =====================================================
    *
-   * Tự dừng khi:
-   * COMPLETED hoặc ERROR.
+   * Lấy file mới nhất:
+   *
+   * EXPORT_STATUS = COMPLETED
+   * DOWNLOAD_STATUS = NOT_DOWNLOADED
+   *
+   * của user hiện tại.
    */
-  pollUntilDone(id: number, intervalMs = 5000): Observable<ExportRequestResponse> {
-    return timer(0, intervalMs).pipe(
-      switchMap(() => this.getStatus(id)),
+  getLatestPendingDownload(): Observable<ExportRequestResponse | null> {
+    return this.http.get<ExportRequestResponse | null>(`${this.apiUrl}/latest-pending-download`);
+  }
 
-      takeWhile((response) => response.exportStatus !== 'COMPLETED' && response.exportStatus !== 'ERROR', true),
-    );
+  /**
+   * =====================================================
+   * GET DOWNLOAD URL
+   * =====================================================
+   *
+   * Xin MinIO Presigned URL.
+   *
+   * Browser sẽ tải trực tiếp từ MinIO.
+   */
+  getDownloadUrl(id: number): Observable<DownloadUrlResponse> {
+    return this.http.get<DownloadUrlResponse>(`${this.apiUrl}/${id}/download-url`);
   }
 }

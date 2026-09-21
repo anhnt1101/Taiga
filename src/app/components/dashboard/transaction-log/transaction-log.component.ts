@@ -1,4 +1,14 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -21,9 +31,11 @@ import {
   ValueFormatterParams,
 } from 'ag-grid-community';
 
-import { finalize } from 'rxjs';
+import { concatMap, finalize, from, tap } from 'rxjs';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+import { Client, IMessage } from '@stomp/stompjs';
 
 import {
   TransactionLogFilterParams,
@@ -38,6 +50,10 @@ import { ExportService } from '../../../services/export.service';
 import { ExportRequestResponse } from '../../../models/export.model';
 
 import { TransactionStatusCellComponent } from './transaction-status-cell.component';
+import { AuthService } from '../../../services/auth.service';
+/* =========================================================
+   TOAST
+========================================================= */
 
 type ToastAction = 'export' | 'error';
 
@@ -45,6 +61,86 @@ interface ToastNotification {
   show: boolean;
   action: ToastAction;
   message?: string;
+}
+
+/* =========================================================
+   WEBSOCKET EVENT
+========================================================= */
+
+interface ExportNotification {
+  requestId: number;
+
+  userId: number;
+
+  exportStatus: 'NEW' | 'PROCESSING' | 'COMPLETED' | 'ERROR';
+
+  progress: number;
+
+  fileName: string | null;
+
+  message: string | null;
+}
+
+/* =========================================================
+   INLINE PROGRESS
+========================================================= */
+
+interface ExportProgressState {
+  requestId: number | null;
+
+  isExporting: boolean;
+
+  isComplete: boolean;
+
+  progressPercent: number;
+
+  currentStepMessage: string;
+
+  processedRecords: number;
+
+  exportedFile: ExportFileItem | null;
+}
+
+/* =========================================================
+   EXPORT FILE MANAGER
+========================================================= */
+
+type ExportFileStatus = 'ready' | 'downloaded';
+
+type ExportFileTab = 'ready' | 'downloaded' | 'all';
+
+interface ExportFileItem {
+  id: number;
+
+  fileName: string;
+
+  status: ExportFileStatus;
+
+  createdAt: string;
+
+  downloadedAt: string | null;
+
+  downloadCount: number;
+
+  /*
+   * Backend hiện chưa trả recordCount
+   * trong ExportRequestResponse.
+   *
+   * Export tạo trong phiên hiện tại sẽ
+   * lấy từ totalElements().
+   *
+   * Export lịch sử chưa biết thì hiển thị "—".
+   */
+  recordCount: number | string;
+
+  /*
+   * Backend hiện chưa trả fileSize.
+   */
+  fileSize: string;
+
+  filterSummary: string;
+
+  raw: ExportRequestResponse;
 }
 
 @Component({
@@ -61,6 +157,7 @@ interface ToastNotification {
     TuiDropdown,
     TuiInput,
     TuiTextfield,
+
     TuiChevron,
     TuiDataListWrapper,
     TuiInputDate,
@@ -75,12 +172,10 @@ interface ToastNotification {
 
   styleUrl: './transaction-log.component.scss',
 })
-export class TransactionLogComponent {
-  /*
-   * ==========================================
-   * SERVICE
-   * ==========================================
-   */
+export class TransactionLogComponent implements OnInit, OnDestroy {
+  /* ========================================================
+     SERVICE
+  ======================================================== */
 
   private readonly transactionLogService = inject(TransactionLogService);
 
@@ -88,30 +183,21 @@ export class TransactionLogComponent {
 
   private readonly destroyRef = inject(DestroyRef);
 
-  /*
-   * ==========================================
-   * GRID
-   * ==========================================
-   */
+  private readonly ngZone = inject(NgZone);
+
+  /* ========================================================
+     GRID
+  ======================================================== */
 
   private gridApi: GridApi<TransactionLogRow> | null = null;
 
-  /*
-   * ==========================================
-   * STATE
-   * ==========================================
-   */
+  /* ========================================================
+     BASIC STATE
+  ======================================================== */
 
   readonly totalElements = signal<number>(0);
 
   readonly loading = signal<boolean>(false);
-
-  /*
-   * ==========================================
-   * EXPORT STATE
-   * ==========================================
-   */
-  readonly checkingPendingDownload = signal<boolean>(false);
 
   readonly exporting = signal<boolean>(false);
 
@@ -119,16 +205,130 @@ export class TransactionLogComponent {
 
   readonly currentExport = signal<ExportRequestResponse | null>(null);
 
+  /* ========================================================
+     TOAST
+  ======================================================== */
+
   readonly toastNotification = signal<ToastNotification | null>(null);
 
   private toastTimer: ReturnType<typeof setTimeout> | null = null;
-  private exportStartTime = 0;
-  private exportCreatedTime = 0;
+
+  /* ========================================================
+     EXPORT PROGRESS
+  ======================================================== */
+
+  readonly exportProgress = signal<ExportProgressState | null>(null);
+
   /*
-   * ==========================================
-   * STATUS
-   * ==========================================
+   * Ghi lại số record của request
+   * được tạo trong phiên hiện tại.
+   *
+   * requestId -> total rows
    */
+  private readonly exportRecordCounts = new Map<number, number>();
+
+  /*
+   * requestId -> mô tả filter.
+   */
+  private readonly exportFilterSummaries = new Map<number, string>();
+
+  /* ========================================================
+     EXPORT FILE LIST
+  ======================================================== */
+
+  readonly exportFiles = signal<ExportFileItem[]>([]);
+
+  readonly exportDrawerOpen = signal<boolean>(false);
+
+  readonly exportFileActiveTab = signal<ExportFileTab>('ready');
+
+  readonly exportFileSearchKeyword = signal<string>('');
+
+  /*
+   * Chỉ xóa khỏi UI trong phiên hiện tại.
+   *
+   * Không xóa DB / MinIO.
+   */
+  private readonly hiddenExportFileIds = signal<Set<number>>(new Set<number>());
+
+  readonly readyExportFiles = computed(() => this.exportFiles().filter((file) => file.status === 'ready'));
+
+  readonly downloadedExportFiles = computed(() => this.exportFiles().filter((file) => file.status === 'downloaded'));
+
+  readonly readyExportFilesCount = computed(() => this.readyExportFiles().length);
+
+  readonly downloadedExportFilesCount = computed(() => this.downloadedExportFiles().length);
+
+  readonly allExportFilesCount = computed(() => this.exportFiles().length);
+  private readonly authService = inject(AuthService);
+  readonly displayedExportFiles = computed(() => {
+    const activeTab = this.exportFileActiveTab();
+
+    const keyword = this.exportFileSearchKeyword().trim().toLowerCase();
+
+    let files = this.exportFiles();
+
+    if (activeTab === 'ready') {
+      files = files.filter((file) => file.status === 'ready');
+    } else if (activeTab === 'downloaded') {
+      files = files.filter((file) => file.status === 'downloaded');
+    }
+
+    if (keyword) {
+      files = files.filter((file) => file.fileName.toLowerCase().includes(keyword));
+    }
+
+    return files;
+  });
+
+  /*
+   * Facade để HTML hiện tại dùng:
+   *
+   * exportManager.currentProgress()
+   * exportManager.readyFiles()
+   * exportManager.isDrawerOpen()
+   * exportManager.toggleDrawer()
+   * exportManager.dismissProgressModal()
+   */
+  readonly exportManager = {
+    currentProgress: this.exportProgress,
+
+    readyFiles: this.readyExportFiles,
+
+    isDrawerOpen: this.exportDrawerOpen,
+
+    toggleDrawer: (open?: boolean): void => {
+      if (typeof open === 'boolean') {
+        this.exportDrawerOpen.set(open);
+      } else {
+        this.exportDrawerOpen.update((value) => !value);
+      }
+
+      /*
+       * Mỗi lần mở drawer
+       * load lại dữ liệu thật từ DB.
+       */
+      if (this.exportDrawerOpen()) {
+        this.loadExportFiles();
+      }
+    },
+
+    dismissProgressModal: (): void => {
+      this.exportProgress.set(null);
+    },
+  };
+
+  /* ========================================================
+     WEBSOCKET
+  ======================================================== */
+
+  private stompClient: Client | null = null;
+
+  readonly websocketConnected = signal<boolean>(false);
+
+  /* ========================================================
+     STATUS
+  ======================================================== */
 
   readonly statusItems: Array<TransactionStatus | ''> = ['', 'SUCCESS', 'FAILED'];
 
@@ -144,11 +344,9 @@ export class TransactionLogComponent {
     return labels[value] ?? value;
   };
 
-  /*
-   * ==========================================
-   * FILTER
-   * ==========================================
-   */
+  /* ========================================================
+     FILTER
+  ======================================================== */
 
   readonly filters: TransactionLogFilterParams = {
     transactionCode: '',
@@ -166,21 +364,17 @@ export class TransactionLogComponent {
     toDate: '',
   };
 
-  /*
-   * ==========================================
-   * DATE
-   * ==========================================
-   */
+  /* ========================================================
+     DATE
+  ======================================================== */
 
   fromDateValue: TuiDay | null = null;
 
   toDateValue: TuiDay | null = null;
 
-  /*
-   * ==========================================
-   * COLUMN DEFINITIONS
-   * ==========================================
-   */
+  /* ========================================================
+     COLUMN DEFINITIONS
+  ======================================================== */
 
   readonly columnDefs: ColDef<TransactionLogRow>[] = [
     /*
@@ -310,11 +504,9 @@ export class TransactionLogComponent {
     },
   ];
 
-  /*
-   * ==========================================
-   * DEFAULT COLUMN
-   * ==========================================
-   */
+  /* ========================================================
+     DEFAULT COLUMN
+  ======================================================== */
 
   readonly defaultColDef: ColDef<TransactionLogRow> = {
     sortable: false,
@@ -324,11 +516,9 @@ export class TransactionLogComponent {
     suppressMovable: false,
   };
 
-  /*
-   * ==========================================
-   * GRID OPTIONS
-   * ==========================================
-   */
+  /* ========================================================
+     GRID OPTIONS
+  ======================================================== */
 
   readonly gridOptions: GridOptions<TransactionLogRow> = {
     rowModelType: 'infinite',
@@ -350,11 +540,9 @@ export class TransactionLogComponent {
     suppressCellFocus: true,
   };
 
-  /*
-   * ==========================================
-   * DATASOURCE
-   * ==========================================
-   */
+  /* ========================================================
+     DATASOURCE
+  ======================================================== */
 
   readonly datasource: IDatasource = {
     getRows: (params: IGetRowsParams): void => {
@@ -374,11 +562,7 @@ export class TransactionLogComponent {
 
       const page = Math.floor(startRow / size);
 
-      console.log('===================================');
-
-      console.log('[TRANSACTION LOG] GET ROWS');
-
-      console.log({
+      console.log('[TRANSACTION LOG] GET ROWS', {
         startRow,
         endRow,
         page,
@@ -398,8 +582,6 @@ export class TransactionLogComponent {
         )
         .subscribe({
           next: (response) => {
-            console.log('[TRANSACTION LOG] API RESPONSE', response);
-
             const rows = response.content ?? [];
 
             const total = response.totalElements ?? 0;
@@ -418,23 +600,42 @@ export class TransactionLogComponent {
     },
   };
 
-  /*
-   * ==========================================
-   * GRID READY
-   * ==========================================
-   */
+  /* ========================================================
+     INIT
+  ======================================================== */
+
+  ngOnInit(): void {
+    /*
+     * Load danh sách file export cũ.
+     */
+    this.loadExportFiles();
+
+    /*
+     * Kết nối WebSocket ngay khi
+     * mở màn Transaction Log.
+     */
+    this.connectWebSocket();
+  }
+
+  ngOnDestroy(): void {
+    this.closeToast();
+
+    if (this.stompClient) {
+      void this.stompClient.deactivate();
+    }
+  }
+
+  /* ========================================================
+     GRID READY
+  ======================================================== */
 
   onGridReady(event: GridReadyEvent<TransactionLogRow>): void {
-    console.log('[TRANSACTION LOG] GRID READY');
-
     this.gridApi = event.api;
   }
 
-  /*
-   * ==========================================
-   * FROM DATE
-   * ==========================================
-   */
+  /* ========================================================
+     DATE
+  ======================================================== */
 
   onFromDateChange(value: TuiDay | null): void {
     this.fromDateValue = value;
@@ -442,23 +643,11 @@ export class TransactionLogComponent {
     this.filters.fromDate = this.formatTuiDay(value);
   }
 
-  /*
-   * ==========================================
-   * TO DATE
-   * ==========================================
-   */
-
   onToDateChange(value: TuiDay | null): void {
     this.toDateValue = value;
 
     this.filters.toDate = this.formatTuiDay(value);
   }
-
-  /*
-   * ==========================================
-   * FORMAT DATE
-   * ==========================================
-   */
 
   private formatTuiDay(value: TuiDay | null): string {
     if (!value) {
@@ -474,16 +663,11 @@ export class TransactionLogComponent {
     return `${year}-${month}-${day}`;
   }
 
-  /*
-   * ==========================================
-   * VALIDATE FILTER
-   * ==========================================
-   */
+  /* ========================================================
+     VALIDATE
+  ======================================================== */
 
   private validateFilters(): boolean {
-    /*
-     * MIN > MAX
-     */
     if (
       this.filters.minAmount != null &&
       this.filters.maxAmount != null &&
@@ -494,27 +678,18 @@ export class TransactionLogComponent {
       return false;
     }
 
-    /*
-     * MIN < 0
-     */
     if (this.filters.minAmount != null && this.filters.minAmount < 0) {
       this.showToast('error', 'Số tiền tối thiểu không được nhỏ hơn 0');
 
       return false;
     }
 
-    /*
-     * MAX < 0
-     */
     if (this.filters.maxAmount != null && this.filters.maxAmount < 0) {
       this.showToast('error', 'Số tiền tối đa không được nhỏ hơn 0');
 
       return false;
     }
 
-    /*
-     * FROM DATE > TO DATE
-     */
     if (this.filters.fromDate && this.filters.toDate && this.filters.fromDate > this.filters.toDate) {
       this.showToast('error', 'Từ ngày không được lớn hơn đến ngày');
 
@@ -524,11 +699,9 @@ export class TransactionLogComponent {
     return true;
   }
 
-  /*
-   * ==========================================
-   * SEARCH
-   * ==========================================
-   */
+  /* ========================================================
+     SEARCH
+  ======================================================== */
 
   onSearch(): void {
     if (!this.validateFilters()) {
@@ -541,27 +714,14 @@ export class TransactionLogComponent {
       return;
     }
 
-    console.log('[TRANSACTION LOG] SEARCH');
-
-    /*
-     * Search mới
-     * => về page đầu.
-     */
     this.gridApi.paginationGoToFirstPage();
 
-    /*
-     * Xóa cache.
-     *
-     * Grid tự gọi lại getRows().
-     */
     this.gridApi.purgeInfiniteCache();
   }
 
-  /*
-   * ==========================================
-   * CLEAR FILTER
-   * ==========================================
-   */
+  /* ========================================================
+     CLEAR FILTER
+  ======================================================== */
 
   onClearFilters(): void {
     this.filters.transactionCode = '';
@@ -591,12 +751,15 @@ export class TransactionLogComponent {
     this.gridApi.purgeInfiniteCache();
   }
 
-  // thong bao
-  private showToast(action: ToastAction, message?: string): void {
-    /*
-     * Nếu đang có timer cũ
-     * thì hủy trước.
-     */
+  /* ========================================================
+     TOAST
+  ======================================================== */
+
+  private showToast(
+    action: ToastAction,
+
+    message?: string,
+  ): void {
     if (this.toastTimer) {
       clearTimeout(this.toastTimer);
     }
@@ -607,9 +770,6 @@ export class TransactionLogComponent {
       message,
     });
 
-    /*
-     * Tự đóng sau 5 giây.
-     */
     this.toastTimer = setTimeout(() => {
       this.closeToast();
     }, 5000);
@@ -625,19 +785,9 @@ export class TransactionLogComponent {
     this.toastNotification.set(null);
   }
 
-  /*
-   * ==========================================
-   * EXPORT EXCEL
-   * ==========================================
-   *
-   * Không export page hiện tại.
-   *
-   * Gửi filter hiện tại cho backend.
-   *
-   * Backend export TOÀN BỘ record
-   * thỏa filter.
-   * ==========================================
-   */
+  /* ========================================================
+     EXPORT EXCEL
+  ======================================================== */
 
   onExportExcel(): void {
     if (this.exporting() || this.downloading()) {
@@ -648,14 +798,8 @@ export class TransactionLogComponent {
       return;
     }
 
-    this.currentExport.set(null);
-
-    this.exporting.set(true);
-
-    this.exportStartTime = performance.now();
-
     /*
-     * Copy riêng filter.
+     * Copy filter.
      *
      * Không gửi page / size.
      */
@@ -675,6 +819,39 @@ export class TransactionLogComponent {
       toDate: this.filters.toDate || '',
     };
 
+    /*
+     * Snapshot số record.
+     *
+     * Dùng để hiển thị:
+     *
+     * "Xuất xong 100.000 bản ghi"
+     */
+    const recordCount = this.totalElements();
+
+    this.currentExport.set(null);
+
+    this.exporting.set(true);
+
+    /*
+     * Hiển thị progress ngay,
+     * kể cả Kafka chưa nhận.
+     */
+    this.exportProgress.set({
+      requestId: null,
+
+      isExporting: true,
+
+      isComplete: false,
+
+      progressPercent: 0,
+
+      currentStepMessage: 'Đang tạo yêu cầu xuất Excel...',
+
+      processedRecords: 0,
+
+      exportedFile: null,
+    });
+
     console.log('[TRANSACTION LOG] CREATE EXPORT', exportParams);
 
     this.exportService
@@ -687,11 +864,34 @@ export class TransactionLogComponent {
           this.currentExport.set(response);
 
           /*
-           * NEW đã được tạo trong DB.
-           *
-           * Bắt đầu polling.
+           * Ghi metadata cho file
+           * của phiên hiện tại.
            */
-          this.pollExport(response.id);
+          this.exportRecordCounts.set(response.id, recordCount);
+
+          this.exportFilterSummaries.set(response.id, this.buildFilterSummary(exportParams));
+
+          this.exportProgress.set({
+            requestId: response.id,
+
+            isExporting: true,
+
+            isComplete: false,
+
+            progressPercent: 0,
+
+            currentStepMessage: 'Đang chờ Kafka xử lý...',
+
+            processedRecords: 0,
+
+            exportedFile: null,
+          });
+
+          /*
+           * KHÔNG pollUntilDone() nữa.
+           *
+           * Từ đây WebSocket sẽ cập nhật.
+           */
         },
 
         error: (error) => {
@@ -699,81 +899,416 @@ export class TransactionLogComponent {
 
           this.exporting.set(false);
 
+          this.exportProgress.set(null);
+
           this.showToast('error', this.getHttpErrorMessage(error, 'Không thể tạo yêu cầu xuất Excel'));
         },
       });
   }
 
-  /*
-   * ==========================================
-   * POLL EXPORT
-   * ==========================================
-   */
+  /* ========================================================
+     WEBSOCKET
+  ======================================================== */
 
-  private pollExport(id: number): void {
+  private connectWebSocket(): void {
+    if (this.stompClient) {
+      return;
+    }
+
+    const client = new Client({
+      brokerURL: 'ws://localhost:8080/ws',
+
+      reconnectDelay: 5000,
+
+      heartbeatIncoming: 10000,
+
+      heartbeatOutgoing: 10000,
+
+      debug: (message: string) => {
+        console.debug('[STOMP]', message);
+      },
+
+      onConnect: () => {
+        this.ngZone.run(() => {
+          console.log('[WEBSOCKET] CONNECTED');
+
+          this.websocketConnected.set(true);
+        });
+
+        client.subscribe(
+          '/user/queue/exports',
+
+          (message: IMessage) => {
+            this.ngZone.run(() => {
+              this.handleExportWebSocketMessage(message);
+            });
+          },
+        );
+
+        this.loadExportFiles();
+      },
+
+      onDisconnect: () => {
+        this.ngZone.run(() => {
+          this.websocketConnected.set(false);
+        });
+      },
+
+      onWebSocketClose: (event) => {
+        this.ngZone.run(() => {
+          this.websocketConnected.set(false);
+        });
+
+        console.warn('[WEBSOCKET] CLOSED', event.code, event.reason);
+      },
+
+      onWebSocketError: (error) => {
+        console.error('[WEBSOCKET] ERROR', error);
+      },
+
+      onStompError: (frame) => {
+        console.error('[WEBSOCKET] STOMP ERROR', {
+          command: frame.command,
+
+          headers: frame.headers,
+
+          body: frame.body,
+        });
+      },
+    });
+
+    /*
+     * Rất quan trọng:
+     *
+     * Mỗi lần connect/reconnect
+     * đều lấy JWT mới nhất từ AuthService.
+     */
+    client.beforeConnect = async () => {
+      const token = this.authService.getToken();
+
+      if (!token) {
+        console.error('[WEBSOCKET] Không có JWT token');
+
+        throw new Error('Không có JWT token để kết nối WebSocket');
+      }
+
+      client.connectHeaders = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      console.log('[WEBSOCKET] CONNECT STOMP với JWT');
+    };
+
+    this.stompClient = client;
+
+    client.activate();
+  }
+
+  private handleExportWebSocketMessage(message: IMessage): void {
+    let notification: ExportNotification;
+
+    try {
+      notification = JSON.parse(message.body) as ExportNotification;
+    } catch (error) {
+      console.error('[WEBSOCKET] JSON không hợp lệ', message.body, error);
+
+      return;
+    }
+
+    console.log('[WEBSOCKET] EXPORT EVENT', notification);
+
+    /*
+     * Nếu đây là event PROCESSING.
+     */
+    if (notification.exportStatus === 'PROCESSING') {
+      this.handleProcessingEvent(notification);
+
+      return;
+    }
+
+    /*
+     * Export COMPLETED.
+     */
+    if (notification.exportStatus === 'COMPLETED') {
+      this.handleCompletedEvent(notification);
+
+      return;
+    }
+
+    /*
+     * Export ERROR.
+     */
+    if (notification.exportStatus === 'ERROR') {
+      this.handleErrorEvent(notification);
+    }
+  }
+
+  private handleProcessingEvent(notification: ExportNotification): void {
+    const current = this.currentExport();
+
+    /*
+     * Progress của request cũ / request khác
+     * không làm thay đổi thanh progress hiện tại.
+     */
+    if (!current || current.id !== notification.requestId) {
+      return;
+    }
+
+    const progress = this.clampProgress(notification.progress);
+
+    const totalRecords = this.exportRecordCounts.get(notification.requestId) ?? 0;
+
+    const processedRecords = totalRecords > 0 ? Math.round((totalRecords * progress) / 100) : 0;
+
+    this.exporting.set(true);
+
+    this.exportProgress.set({
+      requestId: notification.requestId,
+
+      isExporting: true,
+
+      isComplete: false,
+
+      progressPercent: progress,
+
+      currentStepMessage: notification.message || `Đang xuất ${progress}%`,
+
+      processedRecords,
+
+      exportedFile: null,
+    });
+  }
+
+  private handleCompletedEvent(notification: ExportNotification): void {
+    /*
+     * Luôn reload list vì có thể
+     * đây là export chạy từ tab/session khác.
+     */
+    this.loadExportFiles();
+
+    const current = this.currentExport();
+
+    /*
+     * Event không phải request
+     * đang hiển thị inline.
+     */
+    if (!current || current.id !== notification.requestId) {
+      this.showToast(
+        'export',
+        notification.fileName ? `File ${notification.fileName} đã sẵn sàng` : 'Một file Excel đã xuất xong',
+      );
+
+      return;
+    }
+
+    this.exporting.set(false);
+
+    /*
+     * GET một lần sau COMPLETED
+     * để lấy DTO đầy đủ.
+     *
+     * Đây KHÔNG phải polling.
+     */
     this.exportService
-      .pollUntilDone(id, 5000)
+      .getStatus(notification.requestId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          console.log('[TRANSACTION LOG] EXPORT STATUS', response);
-
           this.currentExport.set(response);
 
-          /*
-           * ==================================
-           * COMPLETED
-           * ==================================
-           */
-          if (response.exportStatus === 'COMPLETED') {
-            this.exporting.set(false);
+          const file = this.toExportFile(response);
 
-            /*
-             * Hiển thị Toast thành công.
-             */
-            this.showToast(
-              'export',
-              response.fileName
-                ? `File ${response.fileName} đã được tạo thành công`
-                : 'File Excel đã được tạo thành công',
-            );
+          const totalRecords = this.exportRecordCounts.get(response.id) ?? 0;
 
-            /*
-             * Sau đó tự tải.
-             */
+          this.exportProgress.set({
+            requestId: response.id,
 
-            this.downloadExport();
+            isExporting: false,
 
-            return;
-          }
+            isComplete: true,
 
-          /*
-           * ==================================
-           * ERROR
-           * ==================================
-           */
-          if (response.exportStatus === 'ERROR') {
-            this.exporting.set(false);
+            progressPercent: 100,
 
-            this.showToast('error', response.errorMessage || 'Xuất Excel thất bại');
-          }
+            currentStepMessage: notification.message || 'File Excel đã sẵn sàng',
+
+            processedRecords: totalRecords,
+
+            exportedFile: file,
+          });
+
+          this.showToast(
+            'export',
+            response.fileName
+              ? `File ${response.fileName} đã được tạo thành công`
+              : 'File Excel đã được tạo thành công',
+          );
+
+          this.loadExportFiles();
         },
 
         error: (error) => {
-          console.error('[TRANSACTION LOG] POLL EXPORT ERROR', error);
+          console.error('[TRANSACTION LOG] GET COMPLETED EXPORT ERROR', error);
 
-          this.exporting.set(false);
+          /*
+           * Event WebSocket đã xác nhận COMPLETED,
+           * nên vẫn hiển thị hoàn tất dù GET status lỗi.
+           */
+          this.exportProgress.update((currentProgress) => {
+            if (!currentProgress) {
+              return currentProgress;
+            }
 
-          this.showToast('error', this.getHttpErrorMessage(error, 'Không kiểm tra được trạng thái xuất Excel'));
+            return {
+              ...currentProgress,
+
+              isExporting: false,
+
+              isComplete: true,
+
+              progressPercent: 100,
+
+              currentStepMessage: notification.message || 'File Excel đã sẵn sàng',
+            };
+          });
         },
       });
   }
 
+  private handleErrorEvent(notification: ExportNotification): void {
+    this.loadExportFiles();
+
+    const current = this.currentExport();
+
+    if (current && current.id === notification.requestId) {
+      this.exporting.set(false);
+
+      this.exportProgress.set({
+        requestId: notification.requestId,
+
+        isExporting: false,
+
+        isComplete: false,
+
+        progressPercent: this.exportProgress()?.progressPercent ?? 0,
+
+        currentStepMessage: notification.message || 'Xuất Excel thất bại',
+
+        processedRecords: this.exportProgress()?.processedRecords ?? 0,
+
+        exportedFile: null,
+      });
+    }
+
+    this.showToast('error', notification.message || 'Xuất Excel thất bại');
+  }
+
   /*
-   * ==========================================
-   * DOWNLOAD EXPORT
-   * ==========================================
+   * JWT của project thường đang được
+   * interceptor đọc từ localStorage.
+   *
+   * Nếu project của bạn dùng đúng
+   * "accessToken" thì nhánh đầu tiên chạy.
+   *
+   * Có thêm fallback "token".
    */
+  private getAccessToken(): string | null {
+    return this.authService.getToken();
+  }
+
+  private clampProgress(progress: number | null | undefined): number {
+    const value = Number(progress ?? 0);
+
+    if (Number.isNaN(value)) {
+      return 0;
+    }
+
+    return Math.max(0, Math.min(100, Math.round(value)));
+  }
+
+  /* ========================================================
+     EXPORT FILE LIST
+  ======================================================== */
+
+  private loadExportFiles(): void {
+    this.exportService
+      .getMyRequests()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (response) => {
+          const hiddenIds = this.hiddenExportFileIds();
+
+          const files = (response ?? [])
+
+            /*
+             * Drawer chỉ hiển thị
+             * file đã tạo xong.
+             */
+            .filter((item) => item.exportStatus === 'COMPLETED')
+
+            .filter((item) => !hiddenIds.has(item.id))
+
+            .map((item) => this.toExportFile(item))
+
+            .sort((a, b) => b.id - a.id);
+
+          this.exportFiles.set(files);
+        },
+
+        error: (error) => {
+          console.error('[EXPORT FILES] LOAD ERROR', error);
+        },
+      });
+  }
+
+  private toExportFile(item: ExportRequestResponse): ExportFileItem {
+    const downloaded = item.downloadStatus === 'DOWNLOADED';
+
+    return {
+      id: item.id,
+
+      fileName: item.fileName || `export_${item.id}.xlsx`,
+
+      status: downloaded ? 'downloaded' : 'ready',
+
+      createdAt: this.formatDateTime(item.createdDate),
+
+      downloadedAt: item.downloadedDate ? this.formatDateTime(item.downloadedDate) : null,
+
+      downloadCount: downloaded ? 1 : 0,
+
+      recordCount: this.exportRecordCounts.get(item.id) ?? '—',
+
+      fileSize: '',
+
+      filterSummary: this.exportFilterSummaries.get(item.id) ?? '',
+
+      raw: item,
+    };
+  }
+
+  onExportFileSearchInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    this.exportFileSearchKeyword.set(input.value);
+  }
+
+  onClearExportFileSearch(): void {
+    this.exportFileSearchKeyword.set('');
+  }
+
+  onDeleteExportFile(id: number): void {
+    const next = new Set(this.hiddenExportFileIds());
+
+    next.add(id);
+
+    this.hiddenExportFileIds.set(next);
+
+    this.exportFiles.update((files) => files.filter((file) => file.id !== id));
+  }
+
+  /* ========================================================
+     DOWNLOAD
+  ======================================================== */
 
   downloadExport(): void {
     const current = this.currentExport();
@@ -788,16 +1323,24 @@ export class TransactionLogComponent {
       return;
     }
 
+    const file = this.toExportFile(current);
+
+    this.onDownloadExportFile(file);
+  }
+
+  onDownloadNow(file: ExportFileItem): void {
+    this.onDownloadExportFile(file);
+  }
+
+  onDownloadExportFile(file: ExportFileItem): void {
     if (this.downloading()) {
       return;
     }
 
-    const downloadStartTime = performance.now();
-
     this.downloading.set(true);
 
     this.exportService
-      .getDownloadUrl(current.id)
+      .getDownloadUrl(file.id)
       .pipe(
         finalize(() => {
           this.downloading.set(false);
@@ -807,36 +1350,16 @@ export class TransactionLogComponent {
       )
       .subscribe({
         next: (response) => {
-          console.log('[TRANSACTION LOG] DOWNLOAD URL', response);
+          this.triggerBrowserDownload(response.url, file.fileName);
 
-          const link = document.createElement('a');
-
-          link.href = response.url;
-
-          link.rel = 'noopener';
-
-          document.body.appendChild(link);
-
-          link.click();
-
-          link.remove();
-          // ==========================
-          // THỜI GIAN DOWNLOAD API
-          // ==========================
-
-          const downloadEndTime = performance.now();
-
-          const downloadSeconds = (downloadEndTime - downloadStartTime) / 1000;
-
-          console.log(`[TRANSACTION LOG] Download mất: ${downloadSeconds.toFixed(2)}s`);
-
-          // ==========================
-          // TỔNG THỜI GIAN
-          // ==========================
-
-          const totalSeconds = (downloadEndTime - this.exportStartTime) / 1000;
-
-          console.log(`[TRANSACTION LOG] Tổng thời gian từ lúc tạo request đến download: ${totalSeconds.toFixed(2)}s`);
+          /*
+           * Backend hiện tại của bạn
+           * đang cập nhật download status
+           * khi xin URL.
+           *
+           * Load lại list để READY -> DOWNLOADED.
+           */
+          this.loadExportFiles();
         },
 
         error: (error) => {
@@ -847,13 +1370,137 @@ export class TransactionLogComponent {
       });
   }
 
-  /*
-   * ==========================================
-   * HTTP ERROR MESSAGE
-   * ==========================================
-   */
+  onDownloadAllReadyFiles(): void {
+    const files = this.readyExportFiles();
 
-  private getHttpErrorMessage(error: any, fallback: string): string {
+    if (files.length === 0 || this.downloading()) {
+      return;
+    }
+
+    this.downloading.set(true);
+
+    /*
+     * Xin URL lần lượt,
+     * tránh bắn hàng loạt request cùng lúc.
+     */
+    from(files)
+      .pipe(
+        concatMap((file) =>
+          this.exportService.getDownloadUrl(file.id).pipe(
+            tap((response) => {
+              this.triggerBrowserDownload(response.url, file.fileName);
+            }),
+          ),
+        ),
+
+        finalize(() => {
+          this.downloading.set(false);
+
+          this.loadExportFiles();
+        }),
+
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe({
+        error: (error) => {
+          console.error('[EXPORT FILES] DOWNLOAD ALL ERROR', error);
+
+          this.showToast('error', this.getHttpErrorMessage(error, 'Không thể tải tất cả file'));
+        },
+      });
+  }
+
+  private triggerBrowserDownload(
+    url: string,
+
+    fileName?: string | null,
+  ): void {
+    const link = document.createElement('a');
+
+    link.href = url;
+
+    link.rel = 'noopener';
+
+    if (fileName) {
+      link.download = fileName;
+    }
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    link.remove();
+  }
+
+  /* ========================================================
+     FILTER SUMMARY
+  ======================================================== */
+
+  private buildFilterSummary(filters: TransactionLogFilterParams): string {
+    const parts: string[] = [];
+
+    if (filters.transactionCode) {
+      parts.push(`Mã GD: ${filters.transactionCode}`);
+    }
+
+    if (filters.accountNo) {
+      parts.push(`STK: ${filters.accountNo}`);
+    }
+
+    if (filters.status) {
+      parts.push(`Trạng thái: ${filters.status}`);
+    }
+
+    if (filters.minAmount != null) {
+      parts.push(`Từ tiền: ${new Intl.NumberFormat('vi-VN').format(filters.minAmount)}`);
+    }
+
+    if (filters.maxAmount != null) {
+      parts.push(`Đến tiền: ${new Intl.NumberFormat('vi-VN').format(filters.maxAmount)}`);
+    }
+
+    if (filters.fromDate) {
+      parts.push(`Từ ngày: ${filters.fromDate}`);
+    }
+
+    if (filters.toDate) {
+      parts.push(`Đến ngày: ${filters.toDate}`);
+    }
+
+    if (parts.length === 0) {
+      return 'Toàn bộ dữ liệu';
+    }
+
+    return parts.join(' • ');
+  }
+
+  /* ========================================================
+     DATE FORMAT
+  ======================================================== */
+
+  private formatDateTime(value: string | null | undefined): string {
+    if (!value) {
+      return '';
+    }
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+
+    return date.toLocaleString('vi-VN');
+  }
+
+  /* ========================================================
+     HTTP ERROR
+  ======================================================== */
+
+  private getHttpErrorMessage(
+    error: any,
+
+    fallback: string,
+  ): string {
     return error?.error?.message || error?.error?.error || error?.message || fallback;
   }
 }
