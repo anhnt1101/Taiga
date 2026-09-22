@@ -80,39 +80,6 @@ export class ExportService {
 
   /**
    * =====================================================
-   * GET MINE
-   * =====================================================
-   *
-   * Giữ lại method này để code cũ nếu đang gọi:
-   *
-   * exportService.getMine()
-   *
-   * vẫn hoạt động.
-   *
-   * Thực chất dùng chung API với getMyRequests().
-   */
-  getMine(): Observable<ExportRequestResponse[]> {
-    return this.getMyRequests();
-  }
-
-  /**
-   * =====================================================
-   * GET LATEST PENDING DOWNLOAD
-   * =====================================================
-   *
-   * Lấy file mới nhất:
-   *
-   * EXPORT_STATUS = COMPLETED
-   * DOWNLOAD_STATUS = NOT_DOWNLOADED
-   *
-   * của user hiện tại.
-   */
-  getLatestPendingDownload(): Observable<ExportRequestResponse | null> {
-    return this.http.get<ExportRequestResponse | null>(`${this.apiUrl}/latest-pending-download`);
-  }
-
-  /**
-   * =====================================================
    * GET DOWNLOAD URL
    * =====================================================
    *

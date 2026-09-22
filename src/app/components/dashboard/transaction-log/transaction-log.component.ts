@@ -253,13 +253,12 @@ export class TransactionLogComponent implements OnInit, OnDestroy {
 
   readonly readyExportFiles = computed(() => this.exportFiles().filter((file) => file.status === 'ready'));
 
-  readonly downloadedExportFiles = computed(() => this.exportFiles().filter((file) => file.status === 'downloaded'));
+  // readonly downloadedExportFiles = computed(() => this.exportFiles().filter((file) => file.status === 'downloaded'));
 
   readonly readyExportFilesCount = computed(() => this.readyExportFiles().length);
 
-  readonly downloadedExportFilesCount = computed(() => this.downloadedExportFiles().length);
+  // readonly allExportFilesCount = computed(() => this.exportFiles().length);
 
-  readonly allExportFilesCount = computed(() => this.exportFiles().length);
   private readonly authService = inject(AuthService);
   readonly displayedExportFiles = computed(() => {
     const activeTab = this.exportFileActiveTab();
@@ -1366,46 +1365,6 @@ export class TransactionLogComponent implements OnInit, OnDestroy {
           console.error('[TRANSACTION LOG] DOWNLOAD ERROR', error);
 
           this.showToast('error', this.getHttpErrorMessage(error, 'Không thể tải file Excel'));
-        },
-      });
-  }
-
-  onDownloadAllReadyFiles(): void {
-    const files = this.readyExportFiles();
-
-    if (files.length === 0 || this.downloading()) {
-      return;
-    }
-
-    this.downloading.set(true);
-
-    /*
-     * Xin URL lần lượt,
-     * tránh bắn hàng loạt request cùng lúc.
-     */
-    from(files)
-      .pipe(
-        concatMap((file) =>
-          this.exportService.getDownloadUrl(file.id).pipe(
-            tap((response) => {
-              this.triggerBrowserDownload(response.url, file.fileName);
-            }),
-          ),
-        ),
-
-        finalize(() => {
-          this.downloading.set(false);
-
-          this.loadExportFiles();
-        }),
-
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe({
-        error: (error) => {
-          console.error('[EXPORT FILES] DOWNLOAD ALL ERROR', error);
-
-          this.showToast('error', this.getHttpErrorMessage(error, 'Không thể tải tất cả file'));
         },
       });
   }

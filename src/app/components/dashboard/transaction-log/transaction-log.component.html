@@ -1,12 +1,10 @@
 <div class="txn-page">
-
   <!-- =====================================================
        FILTER
   ====================================================== -->
 
   <section class="card filters">
     <div class="filters__grid">
-
       <!-- Mã giao dịch -->
       <div class="field">
         <label>Mã giao dịch</label>
@@ -41,21 +39,10 @@
       <div class="field">
         <label>Trạng thái</label>
 
-        <tui-textfield
-          tuiChevron
-          [stringify]="stringifyStatus"
-          [tuiTextfieldCleaner]="true"
-        >
-          <input
-            tuiSelect
-            placeholder="Chọn trạng thái"
-            [(ngModel)]="filters.status"
-          />
+        <tui-textfield tuiChevron [stringify]="stringifyStatus" [tuiTextfieldCleaner]="true">
+          <input tuiSelect placeholder="Chọn trạng thái" [(ngModel)]="filters.status" />
 
-          <tui-data-list-wrapper
-            *tuiDropdown
-            [items]="statusItems"
-          />
+          <tui-data-list-wrapper *tuiDropdown [items]="statusItems" />
         </tui-textfield>
       </div>
 
@@ -64,7 +51,6 @@
         <label>Số tiền</label>
 
         <div class="amount-range">
-
           <tui-textfield [tuiTextfieldCleaner]="true">
             <input
               tuiInput
@@ -86,7 +72,6 @@
               (keyup.enter)="onSearch()"
             />
           </tui-textfield>
-
         </div>
       </div>
 
@@ -124,62 +109,41 @@
 
       <!-- Actions -->
       <div class="filters__actions">
-
-        <button
-          tuiButton
-          appearance="secondary"
-          type="button"
-          [disabled]="loading()"
-          (click)="onClearFilters()"
-        >
+        <button tuiButton appearance="secondary" type="button" [disabled]="loading()" (click)="onClearFilters()">
           Xóa bộ lọc
         </button>
 
-        <button
-          tuiButton
-          appearance="primary"
-          type="button"
-          [disabled]="loading()"
-          (click)="onSearch()"
-        >
+        <button tuiButton appearance="primary" type="button" [disabled]="loading()" (click)="onSearch()">
           @if (loading()) {
             Đang tìm kiếm...
           } @else {
             Tìm kiếm
           }
         </button>
-
       </div>
     </div>
   </section>
-
 
   <!-- =====================================================
        TABLE
   ====================================================== -->
 
   <section class="card table-card">
-
     <!-- =====================================================
          TOOLBAR
     ====================================================== -->
 
     <div class="table-card__toolbar">
-
       <div class="toolbar-title-group">
-
         <h2>Danh sách giao dịch</h2>
 
         <span class="count-badge">
           {{ totalElements() | number: '1.0-0' }}
           bản ghi
         </span>
-
       </div>
 
-
       <div class="toolbar-actions">
-
         <!-- =================================================
              DANH SÁCH FILE XUẤT
         ================================================== -->
@@ -190,66 +154,34 @@
           (click)="exportManager.toggleDrawer()"
           title="Xem danh sách file xuất"
         >
-
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-            />
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
 
             <polyline points="14 2 14 8 20 8" />
 
-            <line
-              x1="16"
-              y1="13"
-              x2="8"
-              y2="13"
-            />
+            <line x1="16" y1="13" x2="8" y2="13" />
 
-            <line
-              x1="16"
-              y1="17"
-              x2="8"
-              y2="17"
-            />
+            <line x1="16" y1="17" x2="8" y2="17" />
           </svg>
 
-          <span>
-            Danh sách file xuất
-          </span>
+          <span> Danh sách file xuất </span>
 
           @if (exportManager.readyFiles().length > 0) {
-
             <span class="badge-ready">
               {{ exportManager.readyFiles().length }}
               sẵn sàng
             </span>
-
           }
-
         </button>
-
 
         <!-- =================================================
              INLINE EXPORT PROGRESS
         ================================================== -->
 
         @if (exportManager.currentProgress(); as progress) {
-
           @if (progress.isExporting) {
-
-            <div
-              class="inline-export-progress"
-              role="status"
-              aria-live="polite"
-            >
-
+            <div class="inline-export-progress" role="status" aria-live="polite">
               <div class="inline-progress-top">
-
                 <!-- Spinner -->
                 <span class="inline-progress-spinner"></span>
 
@@ -259,60 +191,29 @@
                 </span>
 
                 <!-- % -->
-                <span class="inline-progress-percent">
-                  {{ progress.progressPercent }}%
-                </span>
-
+                <span class="inline-progress-percent"> {{ progress.progressPercent }}% </span>
               </div>
-
 
               <!-- Progress Bar -->
               <div class="inline-progress-track">
-
-                <div
-                  class="inline-progress-fill"
-                  [style.width.%]="progress.progressPercent"
-                >
-
+                <div class="inline-progress-fill" [style.width.%]="progress.progressPercent">
                   <div class="inline-shimmer"></div>
-
                 </div>
-
               </div>
-
             </div>
-
-          } @else if (
-            progress.isComplete &&
-            progress.exportedFile
-          ) {
-
+          } @else if (progress.isComplete && progress.exportedFile) {
             <!-- =============================================
                  EXPORT HOÀN THÀNH
             ============================================== -->
 
             <div class="inline-export-done">
-
               <span class="inline-done-badge">
-
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2.5"
-                >
-                  <polyline
-                    points="20 6 9 17 4 12"
-                  />
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
                 </svg>
 
-                <span>
-                  Xuất xong
-                  ({{ progress.processedRecords }} bản ghi)
-                </span>
-
+                <span> Xuất xong ({{ progress.processedRecords }} bản ghi) </span>
               </span>
-
 
               <button
                 type="button"
@@ -320,26 +221,14 @@
                 (click)="onDownloadNow(progress.exportedFile)"
                 title="Tải file Excel ngay"
               >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 3v12m0 0l-4-4m4 4l4-4" />
 
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path
-                    d="M12 3v12m0 0l-4-4m4 4l4-4"
-                  />
-
-                  <path
-                    d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"
-                  />
+                  <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
                 </svg>
 
                 Tải về
-
               </button>
-
 
               <button
                 type="button"
@@ -347,36 +236,15 @@
                 (click)="exportManager.dismissProgressModal()"
                 title="Đóng"
               >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18" />
 
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <line
-                    x1="18"
-                    y1="6"
-                    x2="6"
-                    y2="18"
-                  />
-
-                  <line
-                    x1="6"
-                    y1="6"
-                    x2="18"
-                    y2="18"
-                  />
+                  <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
-
               </button>
-
             </div>
-
           }
-
         }
-
 
         <!-- =================================================
              XUẤT EXCEL
@@ -386,78 +254,36 @@
           tuiButton
           appearance="outline"
           type="button"
-          [disabled]="
-            exportManager.currentProgress()?.isExporting ||
-            exporting() ||
-            downloading()
-          "
+          [disabled]="exportManager.currentProgress()?.isExporting || exporting() || downloading()"
           (click)="onExportExcel()"
         >
-
           @if (downloading()) {
-
             Đang tải file...
-
           } @else {
-
             Xuất Excel
-
           }
-
         </button>
-
       </div>
     </div>
-
 
     <!-- =====================================================
          TOAST NOTIFICATION
     ====================================================== -->
 
     @if (toastNotification()?.show) {
-
       <div class="toast-notification">
-
         <div class="toast-notification__header">
-
           <!-- ICON -->
           <div class="toast-notification__icon">
+            @if (toastNotification()?.action === 'error') {
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" fill="#ef4444" />
 
-            @if (
-              toastNotification()?.action === 'error'
-            ) {
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  fill="#ef4444"
-                />
-
-                <path
-                  d="M9 9l6 6M15 9l-6 6"
-                  stroke="#ffffff"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                />
+                <path d="M9 9l6 6M15 9l-6 6" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
               </svg>
-
             } @else {
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  fill="#10b981"
-                />
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" fill="#10b981" />
 
                 <path
                   d="M8.5 12.5l2.5 2.5 4.5-5"
@@ -467,19 +293,13 @@
                   stroke-linejoin="round"
                 />
               </svg>
-
             }
-
           </div>
-
 
           <!-- CONTENT -->
           <div class="toast-notification__titles">
-
             <div class="toast-notification__title">
-
               @switch (toastNotification()?.action) {
-
                 @case ('export') {
                   Xuất Excel thành công
                 }
@@ -487,73 +307,35 @@
                 @case ('error') {
                   Có lỗi xảy ra!!!
                 }
-
               }
-
             </div>
 
-
-            @if (
-              toastNotification()?.message;
-              as message
-            ) {
-
+            @if (toastNotification()?.message; as message) {
               <div class="toast-notification__subtitle">
                 {{ message }}
               </div>
-
             }
-
           </div>
 
-
           <!-- CLOSE -->
-          <button
-            class="toast-notification__close"
-            type="button"
-            (click)="closeToast()"
-            title="Đóng"
-          >
-
-            <svg
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path
-                d="M18 6L6 18M6 6l12 12"
-              />
+          <button class="toast-notification__close" type="button" (click)="closeToast()" title="Đóng">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12" />
             </svg>
-
           </button>
-
         </div>
-
 
         <div class="toast-notification__actions">
-
-          <button
-            type="button"
-            class="toast-action toast-action--secondary"
-            (click)="closeToast()"
-          >
-            Đóng
-          </button>
-
+          <button type="button" class="toast-action toast-action--secondary" (click)="closeToast()">Đóng</button>
         </div>
-
       </div>
-
     }
-
 
     <!-- =====================================================
          AG GRID
     ====================================================== -->
 
     <div class="table-container">
-
       <ag-grid-angular
         class="ph-grid ag-theme-quartz"
         [columnDefs]="columnDefs"
@@ -563,666 +345,235 @@
         (gridReady)="onGridReady($event)"
       >
       </ag-grid-angular>
-
     </div>
-
   </section>
-
 
   <!-- =====================================================
        DANH SÁCH FILE XUẤT - DRAWER
   ====================================================== -->
 
   @if (exportManager.isDrawerOpen()) {
-
-    <div
-      class="drawer-backdrop"
-      (click)="exportManager.toggleDrawer(false)"
-    >
-
-      <div
-        class="drawer-modal"
-        (click)="$event.stopPropagation()"
-      >
-
+    <div class="drawer-backdrop" (click)="exportManager.toggleDrawer(false)">
+      <div class="drawer-modal" (click)="$event.stopPropagation()">
         <div class="files-panel">
-
           <!-- =================================================
                HEADER
           ================================================== -->
 
           <div class="files-panel__header">
-
             <div class="title-group">
-
               <div class="panel-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
 
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
+                  <polyline points="14 2 14 8 20 8" />
 
-                  <path
-                    d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-                  />
+                  <line x1="16" y1="13" x2="8" y2="13" />
 
-                  <polyline
-                    points="14 2 14 8 20 8"
-                  />
-
-                  <line
-                    x1="16"
-                    y1="13"
-                    x2="8"
-                    y2="13"
-                  />
-
-                  <line
-                    x1="16"
-                    y1="17"
-                    x2="8"
-                    y2="17"
-                  />
-
+                  <line x1="16" y1="17" x2="8" y2="17" />
                 </svg>
-
               </div>
-
 
               <div>
+                <h3 class="panel-title">Danh sách file xuất (TRANSACTION_LOG)</h3>
 
-                <h3 class="panel-title">
-                  Danh sách file xuất
-                  (TRANSACTION_LOG)
-                </h3>
-
-                <p class="panel-subtitle">
-                  Theo dõi file đã sẵn sàng để tải
-                  và lịch sử các file đã tải
-                </p>
-
+                <p class="panel-subtitle">Theo dõi file đã sẵn sàng để tải và lịch sử các file đã tải</p>
               </div>
-
             </div>
-
 
             <div class="header-actions">
+              <button type="button" class="btn-close-panel" (click)="exportManager.toggleDrawer(false)" title="Đóng">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18" />
 
-              @if (
-                readyExportFilesCount() > 0
-              ) {
-
-                <button
-                  type="button"
-                  class="btn-download-all"
-                  (click)="onDownloadAllReadyFiles()"
-                >
-
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                  >
-
-                    <path
-                      d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"
-                    />
-
-                    <polyline
-                      points="7 10 12 15 17 10"
-                    />
-
-                    <line
-                      x1="12"
-                      y1="15"
-                      x2="12"
-                      y2="3"
-                    />
-
-                  </svg>
-
-                  Tải tất cả
-                  ({{ readyExportFilesCount() }})
-
-                </button>
-
-              }
-
-
-              <button
-                type="button"
-                class="btn-close-panel"
-                (click)="exportManager.toggleDrawer(false)"
-                title="Đóng"
-              >
-
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-
-                  <line
-                    x1="18"
-                    y1="6"
-                    x2="6"
-                    y2="18"
-                  />
-
-                  <line
-                    x1="6"
-                    y1="6"
-                    x2="18"
-                    y2="18"
-                  />
-
+                  <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
-
               </button>
-
             </div>
-
           </div>
-
 
           <!-- =================================================
                TAB + SEARCH
           ================================================== -->
 
           <div class="files-panel__subbar">
-
             <div class="nav-tabs">
-
               <!-- READY -->
               <button
                 type="button"
                 class="tab-btn"
-                [class.tab-btn--active]="
-                  exportFileActiveTab() === 'ready'
-                "
-                (click)="
-                  exportFileActiveTab.set('ready')
-                "
+                [class.tab-btn--active]="exportFileActiveTab() === 'ready'"
+                (click)="exportFileActiveTab.set('ready')"
               >
+                <span class="tab-label"> File sẵn sàng tải </span>
 
-                <span class="tab-label">
-                  File sẵn sàng tải
-                </span>
-
-                <span
-                  class="tab-badge tab-badge--ready"
-                >
+                <span class="tab-badge tab-badge--ready">
                   {{ readyExportFilesCount() }}
                 </span>
-
               </button>
-
-
-              <!-- DOWNLOADED -->
-              <button
-                type="button"
-                class="tab-btn"
-                [class.tab-btn--active]="
-                  exportFileActiveTab() === 'downloaded'
-                "
-                (click)="
-                  exportFileActiveTab.set('downloaded')
-                "
-              >
-
-                <span class="tab-label">
-                  File đã tải
-                </span>
-
-                <span
-                  class="tab-badge tab-badge--downloaded"
-                >
-                  {{ downloadedExportFilesCount() }}
-                </span>
-
-              </button>
-
-
-              <!-- ALL -->
-              <button
-                type="button"
-                class="tab-btn"
-                [class.tab-btn--active]="
-                  exportFileActiveTab() === 'all'
-                "
-                (click)="
-                  exportFileActiveTab.set('all')
-                "
-              >
-
-                <span class="tab-label">
-                  Tất cả
-                </span>
-
-                <span
-                  class="tab-badge tab-badge--all"
-                >
-                  {{ allExportFilesCount() }}
-                </span>
-
-              </button>
-
             </div>
-
-
-            <!-- SEARCH FILE -->
-            <div class="search-box">
-
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <circle
-                  cx="11"
-                  cy="11"
-                  r="8"
-                />
-
-                <line
-                  x1="21"
-                  y1="21"
-                  x2="16.65"
-                  y2="16.65"
-                />
-              </svg>
-
-
-              <input
-                type="text"
-                placeholder="Tìm theo tên file..."
-                [value]="
-                  exportFileSearchKeyword()
-                "
-                (input)="
-                  onExportFileSearchInput($event)
-                "
-              />
-
-
-              @if (
-                exportFileSearchKeyword()
-              ) {
-
-                <button
-                  type="button"
-                  class="btn-clear-search"
-                  (click)="
-                    onClearExportFileSearch()
-                  "
-                >
-                  ×
-                </button>
-
-              }
-
-            </div>
-
           </div>
-
 
           <!-- =================================================
                LIST FILE
           ================================================== -->
 
           <div class="files-panel__list">
-
-            @if (
-              displayedExportFiles().length === 0
-            ) {
-
+            @if (displayedExportFiles().length === 0) {
               <!-- EMPTY -->
               <div class="empty-state">
-
                 <div class="empty-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
 
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.8"
-                  >
+                    <polyline points="14 2 14 8 20 8" />
 
-                    <path
-                      d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-                    />
+                    <line x1="12" y1="18" x2="12" y2="12" />
 
-                    <polyline
-                      points="14 2 14 8 20 8"
-                    />
-
-                    <line
-                      x1="12"
-                      y1="18"
-                      x2="12"
-                      y2="12"
-                    />
-
-                    <line
-                      x1="9"
-                      y1="15"
-                      x2="15"
-                      y2="15"
-                    />
-
+                    <line x1="9" y1="15" x2="15" y2="15" />
                   </svg>
-
                 </div>
 
-
-                <h4>
-                  Chưa có file nào trong mục này
-                </h4>
-
+                <h4>Chưa có file nào trong mục này</h4>
 
                 <p>
-
-                  @if (
-                    exportFileActiveTab() === 'ready'
-                  ) {
-
-                    Hiện không có file nào
-                    đang chờ tải.
-
-                  } @else if (
-                    exportFileActiveTab()
-                      === 'downloaded'
-                  ) {
-
+                  @if (exportFileActiveTab() === 'ready') {
+                    Hiện không có file nào đang chờ tải.
+                  } @else if (exportFileActiveTab() === 'downloaded') {
                     Bạn chưa tải file nào.
-
                   } @else {
-
                     Không tìm thấy file phù hợp.
-
                   }
-
                 </p>
-
               </div>
-
             } @else {
-
               <!-- =============================================
                    FILE GRID
               ============================================== -->
 
               <div class="files-grid">
-
-                @for (
-                  file of displayedExportFiles();
-                  track file.id
-                ) {
-
-                  <div
-                    class="file-card"
-                    [class.file-card--ready]="
-                      file.status === 'ready'
-                    "
-                  >
-
+                @for (file of displayedExportFiles(); track file.id) {
+                  <div class="file-card" [class.file-card--ready]="file.status === 'ready'">
                     <!-- ICON -->
-                    <div
-                      class="file-card__icon"
-                      [class.file-card__icon--ready]="
-                        file.status === 'ready'
-                      "
-                    >
+                    <div class="file-card__icon" [class.file-card__icon--ready]="file.status === 'ready'">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
 
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      >
+                        <polyline points="14 2 14 8 20 8" />
 
-                        <path
-                          d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-                        />
-
-                        <polyline
-                          points="14 2 14 8 20 8"
-                        />
-
-                        <path
-                          d="M8 13h8M8 17h8M10 9h4"
-                        />
-
+                        <path d="M8 13h8M8 17h8M10 9h4" />
                       </svg>
 
-                      <span class="file-ext">
-                        XLSX
-                      </span>
-
+                      <span class="file-ext"> XLSX </span>
                     </div>
-
 
                     <!-- MAIN INFO -->
                     <div class="file-card__main">
-
                       <div class="name-status-row">
-
-                        <span
-                          class="file-name"
-                          [title]="file.fileName"
-                        >
+                        <span class="file-name" [title]="file.fileName">
                           {{ file.fileName }}
                         </span>
 
-
-                        @if (
-                          file.status === 'ready'
-                        ) {
-
-                          <span
-                            class="status-tag status-tag--ready"
-                          >
-
-                            <span
-                              class="status-pulse"
-                            ></span>
+                        @if (file.status === 'ready') {
+                          <span class="status-tag status-tag--ready">
+                            <span class="status-pulse"></span>
 
                             Sẵn sàng tải
-
                           </span>
-
                         } @else {
-
-                          <span
-                            class="status-tag status-tag--downloaded"
-                          >
-
-                            <svg
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2.5"
-                            >
-                              <polyline
-                                points="20 6 9 17 4 12"
-                              />
+                          <span class="status-tag status-tag--downloaded">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                              <polyline points="20 6 9 17 4 12" />
                             </svg>
 
                             Đã tải
-
                           </span>
-
                         }
-
                       </div>
-
 
                       <!-- METADATA -->
                       <div class="meta-row">
-
                         <span class="meta-item">
                           Tạo lúc:
                           {{ file.createdAt }}
                         </span>
 
-
                         <span class="meta-item">
-
                           {{ file.recordCount }}
                           bản ghi
 
                           @if (file.fileSize) {
                             • {{ file.fileSize }}
                           }
-
                         </span>
 
-
-                        @if (
-                          file.downloadedAt
-                        ) {
-
-                          <span
-                            class="meta-item meta-item--download-time"
-                          >
-
+                        @if (file.downloadedAt) {
+                          <span class="meta-item meta-item--download-time">
                             Đã tải:
                             {{ file.downloadedAt }}
 
-                            @if (
-                              file.downloadCount
-                            ) {
+                            @if (file.downloadCount) {
                               ({{ file.downloadCount }} lần)
                             }
-
                           </span>
-
                         }
-
                       </div>
 
-
-                      @if (
-                        file.filterSummary
-                      ) {
-
+                      @if (file.filterSummary) {
                         <div class="filter-note">
-
-                          <span>
-                            Điều kiện xuất:
-                          </span>
+                          <span> Điều kiện xuất: </span>
 
                           {{ file.filterSummary }}
-
                         </div>
-
                       }
-
                     </div>
-
 
                     <!-- ACTION -->
                     <div class="file-card__actions">
-
-                      @if (
-                        file.status === 'ready'
-                      ) {
-
+                      @if (file.status === 'ready') {
                         <button
                           type="button"
                           class="btn-action btn-action--download"
-                          (click)="
-                            onDownloadExportFile(file)
-                          "
+                          (click)="onDownloadExportFile(file)"
                         >
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 3v12m0 0l-4-4m4 4l4-4" />
 
-                          <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                          >
-
-                            <path
-                              d="M12 3v12m0 0l-4-4m4 4l4-4"
-                            />
-
-                            <path
-                              d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"
-                            />
-
+                            <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
                           </svg>
 
                           Tải xuống
-
                         </button>
-
                       } @else {
-
                         <button
                           type="button"
                           class="btn-action btn-action--redownload"
-                          (click)="
-                            onDownloadExportFile(file)
-                          "
+                          (click)="onDownloadExportFile(file)"
                         >
-
                           Tải lại
-
                         </button>
-
                       }
-
 
                       <button
                         type="button"
                         class="btn-delete"
-                        (click)="
-                          onDeleteExportFile(file.id)
-                        "
+                        (click)="onDeleteExportFile(file.id)"
                         title="Xóa khỏi danh sách"
                       >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <polyline points="3 6 5 6 21 6" />
 
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                        >
-
-                          <polyline
-                            points="3 6 5 6 21 6"
-                          />
-
-                          <path
-                            d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
-                          />
-
+                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                         </svg>
-
                       </button>
-
                     </div>
-
                   </div>
-
                 }
-
               </div>
-
             }
-
           </div>
-
         </div>
       </div>
     </div>
-
   }
-
 </div>
