@@ -38,7 +38,6 @@ export interface DanhMucRow {
   newData: Partial<DanhMucRow> | null;
   isDisplay: number;
   lyDoTuChoi?: string;
-
 }
 
 export interface DanhMucFilterParams {
@@ -52,17 +51,11 @@ export interface DanhMucFilterParams {
 }
 
 export interface PageResponse<T> {
-
   content: T[];
-
   totalElements: number;
-
   totalPages: number;
-
   size: number;
-
   number: number;
-
 }
 
 export const DANH_MUC_OPTIONS = ['Điều chỉnh thông tin', 'Hoàn trả'];
@@ -74,4 +67,3 @@ export const STATUS_OPTIONS: StatusValue[] = [
   { code: 5, text: 'Từ chối', tone: 'rejected' },
   { code: 7, text: 'Hủy duyệt', tone: 'canceled' },
 ];
-

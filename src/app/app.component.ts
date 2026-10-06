@@ -1,14 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-import {
-  NavigationEnd,
-  Router,
-  RouterOutlet,
-} from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
 import { filter } from 'rxjs';
 
@@ -22,48 +14,31 @@ import { SubmenuComponent } from './components/layout/submenu/submenu.component'
   selector: 'ph-root',
   standalone: true,
 
-  imports: [
-    TuiRoot,
-    RouterOutlet,
-    HeaderComponent,
-    MenuComponent,
-    SubmenuComponent,
-  ],
+  imports: [TuiRoot, RouterOutlet, HeaderComponent, MenuComponent, SubmenuComponent],
 
-  changeDetection:
-    ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 
   template: `
     <tui-root>
-
       @if (isAuthPage) {
-
         <!-- LOGIN / REGISTER - FULL SCREEN -->
         <router-outlet />
-
       } @else {
-
         <!-- DASHBOARD LAYOUT -->
         <div class="shell">
-
           <ph-menu />
 
           <ph-submenu />
 
           <div class="shell__main">
-
             <ph-header />
 
             <main class="shell__content">
               <router-outlet />
             </main>
-
           </div>
-
         </div>
-
       }
-
     </tui-root>
   `,
 
@@ -92,41 +67,19 @@ import { SubmenuComponent } from './components/layout/submenu/submenu.component'
   ],
 })
 export class AppComponent {
+  private readonly router = inject(Router);
 
-  private readonly router =
-    inject(Router);
-
-  isAuthPage =
-    this.checkAuthPage(
-      this.router.url
-    );
+  isAuthPage = this.checkAuthPage(this.router.url);
 
   constructor() {
-
     this.router.events
-      .pipe(
-        filter(
-          (event): event is NavigationEnd =>
-            event instanceof NavigationEnd
-        )
-      )
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe((event) => {
-
-        this.isAuthPage =
-          this.checkAuthPage(
-            event.urlAfterRedirects
-          );
-
+        this.isAuthPage = this.checkAuthPage(event.urlAfterRedirects);
       });
   }
 
-  private checkAuthPage(
-    url: string
-  ): boolean {
-
-    return (
-      url.startsWith('/login') ||
-      url.startsWith('/register')
-    );
+  private checkAuthPage(url: string): boolean {
+    return url.startsWith('/login') || url.startsWith('/register');
   }
 }

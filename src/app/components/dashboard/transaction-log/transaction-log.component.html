@@ -1,365 +1,28 @@
 <div class="txn-page">
-  <!-- =====================================================
-       FILTER
-  ====================================================== -->
+  <!-- FILTER -->
+  <ph-transaction-log-filter (filtersApplied)="onFiltersApplied($event)" />
 
-  <section class="card filters">
-    <div class="filters__grid">
-      <!-- Mã giao dịch -->
-      <div class="field">
-        <label>Mã giao dịch</label>
+  <!-- TABLE -->
+  <ph-transaction-log-table
+    [filters]="filters()"
+    [exporting]="exporting()"
+    [downloading]="downloading()"
+    [progress]="exportProgress()"
+    [readyFilesCount]="readyExportFilesCount()"
+    [toast]="toastNotification()"
+    (totalElementsChange)="onTotalElementsChange($event)"
+    (exportExcel)="onExportExcel()"
+    (toggleFilesDrawer)="toggleDrawer()"
+    (dismissProgress)="dismissProgressModal()"
+    (closeToast)="closeToast()"
+  />
 
-        <tui-textfield [tuiTextfieldCleaner]="true">
-          <input
-            tuiInput
-            type="text"
-            placeholder="Nhập mã giao dịch"
-            [(ngModel)]="filters.transactionCode"
-            (keyup.enter)="onSearch()"
-          />
-        </tui-textfield>
-      </div>
-
-      <!-- Số tài khoản -->
-      <div class="field">
-        <label>Số tài khoản</label>
-
-        <tui-textfield [tuiTextfieldCleaner]="true">
-          <input
-            tuiInput
-            type="text"
-            placeholder="Nhập số tài khoản"
-            [(ngModel)]="filters.accountNo"
-            (keyup.enter)="onSearch()"
-          />
-        </tui-textfield>
-      </div>
-
-      <!-- Trạng thái -->
-      <div class="field">
-        <label>Trạng thái</label>
-
-        <tui-textfield tuiChevron [stringify]="stringifyStatus" [tuiTextfieldCleaner]="true">
-          <input tuiSelect placeholder="Chọn trạng thái" [(ngModel)]="filters.status" />
-
-          <tui-data-list-wrapper *tuiDropdown [items]="statusItems" />
-        </tui-textfield>
-      </div>
-
-      <!-- Số tiền -->
-      <div class="field">
-        <label>Số tiền</label>
-
-        <div class="amount-range">
-          <tui-textfield [tuiTextfieldCleaner]="true">
-            <input
-              tuiInput
-              type="number"
-              min="0"
-              placeholder="Tối thiểu"
-              [(ngModel)]="filters.minAmount"
-              (keyup.enter)="onSearch()"
-            />
-          </tui-textfield>
-
-          <tui-textfield [tuiTextfieldCleaner]="true">
-            <input
-              tuiInput
-              type="number"
-              min="0"
-              placeholder="Tối đa"
-              [(ngModel)]="filters.maxAmount"
-              (keyup.enter)="onSearch()"
-            />
-          </tui-textfield>
-        </div>
-      </div>
-
-      <!-- Từ ngày -->
-      <div class="field">
-        <label>Từ ngày</label>
-
-        <tui-textfield [tuiTextfieldCleaner]="true">
-          <input
-            tuiInputDate
-            placeholder="Chọn từ ngày"
-            [ngModel]="fromDateValue"
-            (ngModelChange)="onFromDateChange($event)"
-          />
-
-          <tui-calendar *tuiDropdown />
-        </tui-textfield>
-      </div>
-
-      <!-- Đến ngày -->
-      <div class="field">
-        <label>Đến ngày</label>
-
-        <tui-textfield [tuiTextfieldCleaner]="true">
-          <input
-            tuiInputDate
-            placeholder="Chọn đến ngày"
-            [ngModel]="toDateValue"
-            (ngModelChange)="onToDateChange($event)"
-          />
-
-          <tui-calendar *tuiDropdown />
-        </tui-textfield>
-      </div>
-
-      <!-- Actions -->
-      <div class="filters__actions">
-        <button tuiButton appearance="secondary" type="button" [disabled]="loading()" (click)="onClearFilters()">
-          Xóa bộ lọc
-        </button>
-
-        <button tuiButton appearance="primary" type="button" [disabled]="loading()" (click)="onSearch()">
-          @if (loading()) {
-            Đang tìm kiếm...
-          } @else {
-            Tìm kiếm
-          }
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- =====================================================
-       TABLE
-  ====================================================== -->
-
-  <section class="card table-card">
-    <!-- =====================================================
-         TOOLBAR
-    ====================================================== -->
-
-    <div class="table-card__toolbar">
-      <div class="toolbar-title-group">
-        <h2>Danh sách giao dịch</h2>
-
-        <span class="count-badge">
-          {{ totalElements() | number: '1.0-0' }}
-          bản ghi
-        </span>
-      </div>
-
-      <div class="toolbar-actions">
-        <!-- =================================================
-             DANH SÁCH FILE XUẤT
-        ================================================== -->
-
-        <button
-          type="button"
-          class="btn-files-manager"
-          (click)="exportManager.toggleDrawer()"
-          title="Xem danh sách file xuất"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-
-            <polyline points="14 2 14 8 20 8" />
-
-            <line x1="16" y1="13" x2="8" y2="13" />
-
-            <line x1="16" y1="17" x2="8" y2="17" />
-          </svg>
-
-          <span> Danh sách file xuất </span>
-
-          @if (exportManager.readyFiles().length > 0) {
-            <span class="badge-ready">
-              {{ exportManager.readyFiles().length }}
-              sẵn sàng
-            </span>
-          }
-        </button>
-
-        <!-- =================================================
-             INLINE EXPORT PROGRESS
-        ================================================== -->
-
-        @if (exportManager.currentProgress(); as progress) {
-          @if (progress.isExporting) {
-            <div class="inline-export-progress" role="status" aria-live="polite">
-              <div class="inline-progress-top">
-                <!-- Spinner -->
-                <span class="inline-progress-spinner"></span>
-
-                <!-- Nội dung -->
-                <span class="inline-progress-text">
-                  {{ progress.currentStepMessage }}
-                </span>
-
-                <!-- % -->
-                <span class="inline-progress-percent"> {{ progress.progressPercent }}% </span>
-              </div>
-
-              <!-- Progress Bar -->
-              <div class="inline-progress-track">
-                <div class="inline-progress-fill" [style.width.%]="progress.progressPercent">
-                  <div class="inline-shimmer"></div>
-                </div>
-              </div>
-            </div>
-          } @else if (progress.isComplete && progress.exportedFile) {
-            <!-- =============================================
-                 EXPORT HOÀN THÀNH
-            ============================================== -->
-
-            <div class="inline-export-done">
-              <span class="inline-done-badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-
-                <span> Xuất xong ({{ progress.processedRecords }} bản ghi) </span>
-              </span>
-
-              <button
-                type="button"
-                class="btn-inline-download"
-                (click)="onDownloadNow(progress.exportedFile)"
-                title="Tải file Excel ngay"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 3v12m0 0l-4-4m4 4l4-4" />
-
-                  <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
-                </svg>
-
-                Tải về
-              </button>
-
-              <button
-                type="button"
-                class="btn-inline-close"
-                (click)="exportManager.dismissProgressModal()"
-                title="Đóng"
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-              </button>
-            </div>
-          }
-        }
-
-        <!-- =================================================
-             XUẤT EXCEL
-        ================================================== -->
-
-        <button
-          tuiButton
-          appearance="outline"
-          type="button"
-          [disabled]="exportManager.currentProgress()?.isExporting || exporting() || downloading()"
-          (click)="onExportExcel()"
-        >
-          @if (downloading()) {
-            Đang tải file...
-          } @else {
-            Xuất Excel
-          }
-        </button>
-      </div>
-    </div>
-
-    <!-- =====================================================
-         TOAST NOTIFICATION
-    ====================================================== -->
-
-    @if (toastNotification()?.show) {
-      <div class="toast-notification">
-        <div class="toast-notification__header">
-          <!-- ICON -->
-          <div class="toast-notification__icon">
-            @if (toastNotification()?.action === 'error') {
-              <svg viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" fill="#ef4444" />
-
-                <path d="M9 9l6 6M15 9l-6 6" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
-              </svg>
-            } @else {
-              <svg viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" fill="#10b981" />
-
-                <path
-                  d="M8.5 12.5l2.5 2.5 4.5-5"
-                  stroke="#ffffff"
-                  stroke-width="2.5"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            }
-          </div>
-
-          <!-- CONTENT -->
-          <div class="toast-notification__titles">
-            <div class="toast-notification__title">
-              @switch (toastNotification()?.action) {
-                @case ('export') {
-                  Xuất Excel thành công
-                }
-
-                @case ('error') {
-                  Có lỗi xảy ra!!!
-                }
-              }
-            </div>
-
-            @if (toastNotification()?.message; as message) {
-              <div class="toast-notification__subtitle">
-                {{ message }}
-              </div>
-            }
-          </div>
-
-          <!-- CLOSE -->
-          <button class="toast-notification__close" type="button" (click)="closeToast()" title="Đóng">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 6L6 18M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-
-        <div class="toast-notification__actions">
-          <button type="button" class="toast-action toast-action--secondary" (click)="closeToast()">Đóng</button>
-        </div>
-      </div>
-    }
-
-    <!-- =====================================================
-         AG GRID
-    ====================================================== -->
-
-    <div class="table-container">
-      <ag-grid-angular
-        class="ph-grid ag-theme-quartz"
-        [columnDefs]="columnDefs"
-        [defaultColDef]="defaultColDef"
-        [gridOptions]="gridOptions"
-        [datasource]="datasource"
-        (gridReady)="onGridReady($event)"
-      >
-      </ag-grid-angular>
-    </div>
-  </section>
-
-  <!-- =====================================================
-       DANH SÁCH FILE XUẤT - DRAWER
-  ====================================================== -->
-
-  @if (exportManager.isDrawerOpen()) {
-    <div class="drawer-backdrop" (click)="exportManager.toggleDrawer(false)">
+  <!-- DANH SÁCH FILE XUẤT -->
+  @if (exportDrawerOpen()) {
+    <div class="drawer-backdrop" (click)="toggleDrawer(false)">
       <div class="drawer-modal" (click)="$event.stopPropagation()">
         <div class="files-panel">
-          <!-- =================================================
-               HEADER
-          ================================================== -->
-
+          <!-- HEADER -->
           <div class="files-panel__header">
             <div class="title-group">
               <div class="panel-icon">
@@ -382,7 +45,7 @@
             </div>
 
             <div class="header-actions">
-              <button type="button" class="btn-close-panel" (click)="exportManager.toggleDrawer(false)" title="Đóng">
+              <button type="button" class="btn-close-panel" (click)="toggleDrawer(false)" title="Đóng">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <line x1="18" y1="6" x2="6" y2="18" />
 
@@ -391,10 +54,7 @@
               </button>
             </div>
           </div>
-
-          <!-- =================================================
-               TAB + SEARCH
-          ================================================== -->
+          <!-- TAB + SEARCH -->
 
           <div class="files-panel__subbar">
             <div class="nav-tabs">

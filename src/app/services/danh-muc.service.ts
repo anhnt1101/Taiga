@@ -13,11 +13,9 @@ import {
 @Injectable({
   providedIn: 'root',
 })
-
 export class DanhMucService {
   private readonly http = inject(HttpClient);
 
-  // API Endpoints
   private readonly apiUrl = 'http://localhost:8080/api/group-category';
   private readonly apiUrlComponent = 'http://localhost:8080/api/component-code';
 
@@ -79,8 +77,10 @@ export class DanhMucService {
     const id = Number(row.id || row.stt || Date.now());
     const stt = Number(row.stt || row.id || 1);
 
-    const paramType = row.paramType || (row as any).loaiThamSo || (row as any).param_type || (row as any).groupCategory || '';
-    const paramValue = row.paramValue || (row as any).giaTriThamSo || (row as any).param_value || (row as any).value || '';
+    const paramType =
+      row.paramType || (row as any).loaiThamSo || (row as any).param_type || (row as any).groupCategory || '';
+    const paramValue =
+      row.paramValue || (row as any).giaTriThamSo || (row as any).param_value || (row as any).value || '';
     const paramName = row.paramName || (row as any).tenThamSo || (row as any).param_name || (row as any).name || '';
     const description = row.description || (row as any).moTa || (row as any).desc || '';
 
@@ -104,9 +104,19 @@ export class DanhMucService {
     }
 
     const rawEffectiveDate =
-      row.effectiveDate ?? (row as any).ngayHieuLuc ?? (row as any).effective_date ?? (row as any).fromDate ?? (row as any).startDate ?? '';
+      row.effectiveDate ??
+      (row as any).ngayHieuLuc ??
+      (row as any).effective_date ??
+      (row as any).fromDate ??
+      (row as any).startDate ??
+      '';
     const rawEndEffectiveDate =
-      row.endEffectiveDate ?? (row as any).ngayHetHieuLuc ?? (row as any).end_effective_date ?? (row as any).toDate ?? (row as any).endDate ?? '';
+      row.endEffectiveDate ??
+      (row as any).ngayHetHieuLuc ??
+      (row as any).end_effective_date ??
+      (row as any).toDate ??
+      (row as any).endDate ??
+      '';
 
     const effectiveDate = this.formatDateString(rawEffectiveDate);
     const endEffectiveDate = this.formatDateString(rawEndEffectiveDate);
@@ -189,22 +199,17 @@ export class DanhMucService {
       // size
       params = params.set('size', String(filters.size ?? 10));
     }
-    return this.http
-      .get<PageResponse<DanhMucRow>>(this.apiUrl, { params })
-      .pipe(
-        map((res) => ({
-          ...res,
-          content: res.content.map((item, index) => ({
-            ...this.normalizeRow(item),
-            stt: res.number * res.size + index + 1
-          }))
-        }))
-      );
+    return this.http.get<PageResponse<DanhMucRow>>(this.apiUrl, { params }).pipe(
+      map((res) => ({
+        ...res,
+        content: res.content.map((item, index) => ({
+          ...this.normalizeRow(item),
+          stt: res.number * res.size + index + 1,
+        })),
+      })),
+    );
   }
 
-  //Lấy chi tiết theo id — dùng khi trang Form được mở trực tiếp qua URL (F5, mở link) mà
-  //không có sẵn dữ liệu truyền qua setEditingRow().
-  //⚠️ Giả định endpoint theo cùng quy ước REST với delete() bên dưới — kiểm tra lại với BE nếu khác.
   getById(id: number): Observable<DanhMucRow> {
     return this.http.get<DanhMucRow>(`${this.apiUrl}/${id}`).pipe(map((res) => this.normalizeRow(res)));
   }
@@ -215,9 +220,9 @@ export class DanhMucService {
       ...data,
       submitForApproval,
     };
-    console.log(payload)
+    console.log(payload);
 
-    return this.http.post<DanhMucRow>(this.apiUrl, payload).pipe(map((res) => this.normalizeRow(res)),)
+    return this.http.post<DanhMucRow>(this.apiUrl, payload).pipe(map((res) => this.normalizeRow(res)));
   }
 
   //update
@@ -237,7 +242,7 @@ export class DanhMucService {
       }),
       submitForApproval,
     };
-    return this.http.put<DanhMucRow>(this.apiUrl, payload).pipe(map((res) => this.normalizeRow(res)),);
+    return this.http.put<DanhMucRow>(this.apiUrl, payload).pipe(map((res) => this.normalizeRow(res)));
   }
 
   //Xóa danh mục (DELETE)
@@ -248,36 +253,26 @@ export class DanhMucService {
   //Trình duyệt bản ghi
 
   submitApproval(ids: number[], status: number): Observable<DanhMucRow[]> {
-    console.log(ids)
-
-    return this.http
-      .post<DanhMucRow[]>(`${this.apiUrl}/submit-approval`, { ids, status })  
-    }
-    
-
+    console.log(ids);
+    return this.http.post<DanhMucRow[]>(`${this.apiUrl}/submit-approval`, { ids, status });
+  }
 
   //Phê duyệt bản ghi
   approve(ids: number[], status: number): Observable<DanhMucRow[]> {
-    console.log(ids)
-
-    return this.http
-      .post<DanhMucRow[]>(`${this.apiUrl}/approve`, { ids, status })      
+    console.log(ids);
+    return this.http.post<DanhMucRow[]>(`${this.apiUrl}/approve`, { ids, status });
   }
 
-  // Hủy duyệt bản ghi 
+  // Hủy duyệt bản ghi
   cancelApprove(ids: number[], status: number): Observable<DanhMucRow[]> {
-    console.log(ids)
-
-    return this.http
-      .post<DanhMucRow[]>(`${this.apiUrl}/cancel-approve`, { ids, status })
+    console.log(ids);
+    return this.http.post<DanhMucRow[]>(`${this.apiUrl}/cancel-approve`, { ids, status });
   }
 
-  //Từ chối duyệt bản ghi 
+  //Từ chối duyệt bản ghi
   reject(ids: number[], status: number): Observable<DanhMucRow[]> {
-    console.log(ids)
-
-    return this.http
-      .post<DanhMucRow[]>(`${this.apiUrl}/reject`, { ids, status })
+    console.log(ids);
+    return this.http.post<DanhMucRow[]>(`${this.apiUrl}/reject`, { ids, status });
   }
 
   //tìm kiếm
@@ -286,31 +281,24 @@ export class DanhMucService {
   }
 
   exportAll(filters: DanhMucFilterParams): Observable<HttpResponse<Blob>> {
-    return this.http.post(
-      `${this.apiUrl}/exportAll`, filters, { observe: 'response', responseType: 'blob' }
-    );
-
+    return this.http.post(`${this.apiUrl}/exportAll`, filters, { observe: 'response', responseType: 'blob' });
   }
 
   connectChangeEvent(): Observable<MessageEvent> {
-  return new Observable(observer => {
-    const eventSource = new EventSource(
-      'http://localhost:8080/api/group-category/events'
-    );
+    return new Observable((observer) => {
+      const eventSource = new EventSource('http://localhost:8080/api/group-category/events');
 
-    eventSource.addEventListener('group-category-changed', event => {
-      observer.next(event as MessageEvent);
+      eventSource.addEventListener('group-category-changed', (event) => {
+        observer.next(event as MessageEvent);
+      });
+
+      eventSource.onerror = (error) => {
+        console.warn('SSE connection lost:', error);
+      };
+
+      return () => {
+        eventSource.close();
+      };
     });
-
-    eventSource.onerror = error => {
-      console.warn('SSE connection lost:', error);
-    };
-
-    return () => {
-      eventSource.close();
-    };
-  });
+  }
 }
-
-}
-

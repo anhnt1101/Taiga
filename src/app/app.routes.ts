@@ -1,154 +1,60 @@
-import {
-  Routes,
-} from '@angular/router';
-
-import {
-  DanhMucTheoNhomComponent,
-} from './components/dashboard/danh-muc-theo-nhom/danh-muc-theo-nhom.component';
-
-import {
-  DanhMucFormComponent,
-} from './components/dashboard/form/form.component';
-
-import {
-  LoginComponent,
-} from './components/dashboard/login/login.component';
-
-import {
-  RegisterComponent,
-} from './components/dashboard/register/register.component';
-
-import {
-  authGuard,
-} from './guards/auth.guard';
-
-import {
-  roleGuard,
-} from './guards/role.guard';
-
-import {
-  TransactionLogComponent,
-} from './components/dashboard/transaction-log/transaction-log.component';
+import { Routes } from '@angular/router';
+import { DanhMucTheoNhomComponent } from './components/dashboard/danh-muc-theo-nhom/danh-muc-theo-nhom.component';
+import { DanhMucFormComponent } from './components/dashboard/form/form.component';
+import { LoginComponent } from './components/dashboard/login/login.component';
+import { RegisterComponent } from './components/dashboard/register/register.component';
+import { authGuard } from './guards/auth.guard';
+import { roleGuard } from './guards/role.guard';
+import { TransactionLogComponent } from './components/dashboard/transaction-log/transaction-log.component';
 
 export const routes: Routes = [
-
-  /**
-   * ===============================
-   * PUBLIC ROUTES
-   * ===============================
-   */
-
   {
     path: 'login',
     component: LoginComponent,
   },
-
   {
     path: 'register',
     component: RegisterComponent,
   },
-
-
-  /**
-   * ===============================
-   * PRIVATE ROUTES
-   * ===============================
-   */
-
   {
     path: '',
-
-    canActivate: [
-      authGuard,
-    ],
-
+    canActivate: [authGuard],
     children: [
-
-      /**
-       * Danh sách
-       */
       {
         path: '',
-
-        component:
-          DanhMucTheoNhomComponent,
-
+        component: DanhMucTheoNhomComponent,
       },
-
       {
         path: 'transaction-log',
-
-        component:
-          TransactionLogComponent,
-
-        canActivate: [
-          roleGuard,
-        ],
-
+        component: TransactionLogComponent,
+        canActivate: [roleGuard],
         data: {
-          roles: [
-            'ROLE_ADMIN',
-            'ROLE_MAKER',
-            'ROLE_CHECKER',
-            'ROLE_VIEWER',
-          ],
+          roles: ['ROLE_ADMIN', 'ROLE_MAKER', 'ROLE_CHECKER', 'ROLE_VIEWER'],
         },
       },
 
       {
         path: 'new',
-
-        component:
-          DanhMucFormComponent,
-
-        canActivate: [
-          roleGuard,
-        ],
-
+        component: DanhMucFormComponent,
+        canActivate: [roleGuard],
         data: {
           mode: 'add',
-
-          roles: [
-            'ROLE_ADMIN',
-            'ROLE_MAKER',
-          ],
+          roles: ['ROLE_ADMIN', 'ROLE_MAKER'],
         },
-
       },
-
       {
         path: 'update/:id',
-
-        component:
-          DanhMucFormComponent,
-
-        canActivate: [
-          roleGuard,
-        ],
-
+        component: DanhMucFormComponent,
+        canActivate: [roleGuard],
         data: {
           mode: 'edit',
-
-          roles: [
-            'ROLE_ADMIN',
-            'ROLE_MAKER',
-          ],
+          roles: ['ROLE_ADMIN', 'ROLE_MAKER'],
         },
       },
-
     ],
   },
-
-
-  /**
-   * ===============================
-   * NOT FOUND
-   * ===============================
-   */
-
   {
     path: '**',
     redirectTo: 'login',
   },
-
 ];

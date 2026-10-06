@@ -1,0 +1,180 @@
+<section class="card table-card">
+  <!-- =====================================================
+       TOOLBAR
+  ====================================================== -->
+
+  <div class="table-card__toolbar">
+    <div class="toolbar-title-group">
+      <h2>Danh sách giao dịch</h2>
+
+      <span class="count-badge">
+        {{ totalElements }}
+        bản ghi
+      </span>
+    </div>
+
+    <div class="toolbar-actions">
+      <!-- =================================================
+           DANH SÁCH FILE XUẤT
+      ================================================== -->
+
+      <button
+        type="button"
+        class="btn-files-manager"
+        (click)="toggleFilesDrawer.emit()"
+        title="Xem danh sách file xuất"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+
+          <polyline points="14 2 14 8 20 8" />
+
+          <line x1="16" y1="13" x2="8" y2="13" />
+
+          <line x1="16" y1="17" x2="8" y2="17" />
+        </svg>
+
+        <span> Danh sách file xuất </span>
+
+        @if (readyFilesCount > 0) {
+          <span class="badge-ready">
+            {{ readyFilesCount }}
+            sẵn sàng
+          </span>
+        }
+      </button>
+
+      <!-- =================================================
+           INLINE EXPORT PROGRESS
+      ================================================== -->
+
+      @if (progress; as p) {
+        @if (p.isExporting) {
+          <div class="inline-export-progress" role="status" aria-live="polite">
+            <div class="inline-progress-top">
+              <!-- Spinner -->
+              <span class="inline-progress-spinner"></span>
+
+              <!-- Nội dung -->
+              <span class="inline-progress-text">
+                {{ p.currentStepMessage }}
+              </span>
+
+              <!-- % -->
+              <span class="inline-progress-percent"> {{ p.progressPercent }}% </span>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="inline-progress-track">
+              <div class="inline-progress-fill" [style.width.%]="p.progressPercent">
+                <div class="inline-shimmer"></div>
+              </div>
+            </div>
+          </div>
+        }
+      }
+
+      <!-- =================================================
+           XUẤT EXCEL
+      ================================================== -->
+
+      <button
+        tuiButton
+        appearance="outline"
+        type="button"
+        [disabled]="progress?.isExporting || exporting || downloading"
+        (click)="exportExcel.emit()"
+        style="color: white"
+      >
+        @if (downloading) {
+          Đang tải file...
+        } @else {
+          Xuất Excel
+        }
+      </button>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       TOAST NOTIFICATION
+  ====================================================== -->
+
+  @if (toast?.show) {
+    <div class="toast-notification">
+      <div class="toast-notification__header">
+        <!-- ICON -->
+        <div class="toast-notification__icon">
+          @if (toast?.action === 'error') {
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" fill="#ef4444" />
+
+              <path d="M9 9l6 6M15 9l-6 6" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" />
+            </svg>
+          } @else {
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" fill="#10b981" />
+
+              <path
+                d="M8.5 12.5l2.5 2.5 4.5-5"
+                stroke="#ffffff"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          }
+        </div>
+
+        <!-- CONTENT -->
+        <div class="toast-notification__titles">
+          <div class="toast-notification__title">
+            @switch (toast?.action) {
+              @case ('success') {
+                Xuất Excel thành công
+              }
+              @case ('export') {
+                Tải Excel thành công
+              }
+              @case ('error') {
+                Có lỗi xảy ra!!!
+              }
+            }
+          </div>
+
+          @if (toast?.message; as message) {
+            <div class="toast-notification__subtitle">
+              {{ message }}
+            </div>
+          }
+        </div>
+
+        <!-- CLOSE -->
+        <button class="toast-notification__close" type="button" (click)="closeToast.emit()" title="Đóng">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="toast-notification__actions">
+        <button type="button" class="toast-action toast-action--secondary" (click)="closeToast.emit()">Đóng</button>
+      </div>
+    </div>
+  }
+
+  <!-- =====================================================
+       AG GRID
+  ====================================================== -->
+
+  <div class="table-container">
+    <ag-grid-angular
+      class="ph-grid ag-theme-quartz"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [gridOptions]="gridOptions"
+      [datasource]="datasource"
+      (gridReady)="onGridReady($event)"
+    >
+    </ag-grid-angular>
+  </div>
+</section>

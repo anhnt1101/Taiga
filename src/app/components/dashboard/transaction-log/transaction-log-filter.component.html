@@ -1,0 +1,122 @@
+<section class="card filters">
+  <div class="filters__grid">
+    <!-- Mã giao dịch -->
+    <div class="field">
+      <label>Mã giao dịch</label>
+
+      <tui-textfield [tuiTextfieldCleaner]="true">
+        <input
+          tuiInput
+          type="text"
+          placeholder="Nhập mã giao dịch"
+          [(ngModel)]="filters.transactionCode"
+          (keyup.enter)="onSearch()"
+        />
+      </tui-textfield>
+    </div>
+
+    <!-- Số tài khoản -->
+    <div class="field">
+      <label>Số tài khoản</label>
+
+      <tui-textfield [tuiTextfieldCleaner]="true">
+        <input
+          tuiInput
+          type="text"
+          placeholder="Nhập số tài khoản"
+          [(ngModel)]="filters.accountNo"
+          (keyup.enter)="onSearch()"
+        />
+      </tui-textfield>
+    </div>
+
+    <!-- Trạng thái -->
+    <div class="field">
+      <label>Trạng thái</label>
+
+      <tui-textfield tuiChevron [stringify]="stringifyStatus" [tuiTextfieldCleaner]="true">
+        <input tuiSelect placeholder="Chọn trạng thái" [(ngModel)]="filters.status" />
+
+        <tui-data-list-wrapper *tuiDropdown [items]="statusItems" />
+      </tui-textfield>
+    </div>
+
+    <!-- Số tiền -->
+    <div class="field">
+      <label>Số tiền</label>
+
+      <div class="amount-range">
+        <tui-textfield [tuiTextfieldCleaner]="true">
+          <input
+            tuiInput
+            type="number"
+            min="0"
+            placeholder="Tối thiểu"
+            [(ngModel)]="filters.minAmount"
+            (keyup.enter)="onSearch()"
+          />
+        </tui-textfield>
+
+        <tui-textfield [tuiTextfieldCleaner]="true">
+          <input
+            tuiInput
+            type="number"
+            min="0"
+            placeholder="Tối đa"
+            [(ngModel)]="filters.maxAmount"
+            (keyup.enter)="onSearch()"
+          />
+        </tui-textfield>
+      </div>
+    </div>
+
+    <!-- Từ ngày -->
+    <div class="field">
+      <label>Từ ngày</label>
+
+      <tui-textfield [tuiTextfieldCleaner]="true">
+        <input
+          tuiInputDateTime
+          placeholder="Chọn từ ngày"
+          [timeMode]="'HH:MM'"
+          [ngModel]="fromDateValue"
+          (ngModelChange)="onFromDateChange($event)"
+        />
+
+        <tui-calendar *tuiDropdown />
+      </tui-textfield>
+    </div>
+
+    <!-- Đến ngày -->
+    <div class="field">
+      <label>Đến ngày</label>
+
+      <tui-textfield [tuiTextfieldCleaner]="true">
+        <input
+          tuiInputDateTime
+          placeholder="Chọn đến ngày"
+          [timeMode]="'HH:MM'"
+          [ngModel]="toDateValue"
+          (ngModelChange)="onToDateChange($event)"
+        />
+
+        <tui-calendar *tuiDropdown />
+      </tui-textfield>
+    </div>
+
+    <!-- Actions -->
+    <div class="filters__actions">
+      <button tuiButton appearance="secondary" type="button" [disabled]="loading()" (click)="onClearFilters()">
+        Xóa bộ lọc
+      </button>
+
+      <button tuiButton appearance="primary" type="button" [disabled]="loading()" (click)="onSearch()">
+        @if (loading()) {
+          Đang tìm kiếm...
+        } @else {
+          Tìm kiếm
+        }
+      </button>
+    </div>
+  </div>
+</section>
