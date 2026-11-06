@@ -58,7 +58,6 @@ export class TransactionLogComponent implements OnInit, OnDestroy {
   readonly exportDrawerOpen = signal<boolean>(false);
   readonly exportFileActiveTab = signal<ExportFileTab>('ready');
   readonly exportFileSearchKeyword = signal<string>('');
-  private readonly hiddenExportFileIds = signal<Set<number>>(new Set<number>());
   readonly readyExportFiles = computed(() => this.exportFiles().filter((file) => file.status === 'ready'));
   readonly readyExportFilesCount = computed(() => this.readyExportFiles().length);
   readonly displayedExportFiles = computed(() => {
@@ -263,10 +262,8 @@ export class TransactionLogComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          const hiddenIds = this.hiddenExportFileIds();
           const files = (response ?? [])
             .filter((item) => item.exportStatus === 'COMPLETED')
-            .filter((item) => !hiddenIds.has(item.id))
             .map((item) => this.toExportFile(item))
             .sort((a, b) => b.id - a.id);
           this.exportFiles.set(files);
@@ -303,10 +300,19 @@ export class TransactionLogComponent implements OnInit, OnDestroy {
   }
 
   onDeleteExportFile(id: number): void {
-    const next = new Set(this.hiddenExportFileIds());
-    next.add(id);
-    this.hiddenExportFileIds.set(next);
-    this.exportFiles.update((files) => files.filter((file) => file.id !== id));
+    this.exportService
+      .deleteRequest(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.exportFiles.update((files) => files.filter((file) => file.id !== id));
+          this.loadExportFiles();
+        },
+        error: (error) => {
+          console.error('[EXPORT FILES] DELETE ERROR', error);
+          this.showToast('error', this.getHttpErrorMessage(error, 'Không thể xóa file'));
+        },
+      });
   }
 
   //DOWNLOAD
@@ -323,9 +329,8 @@ export class TransactionLogComponent implements OnInit, OnDestroy {
           this.downloading.set(false);
           this.triggerBrowserDownload(response.url, file.fileName);
           this.loadExportFiles();
-          this.exportService.deleteRequest(file.id).subscribe();
-
           this.showToast('export', 'Tải file thành công');
+          this.onDeleteExportFile(file.id);
         },
         error: (error) => {
           this.downloading.set(false);

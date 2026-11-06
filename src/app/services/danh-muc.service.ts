@@ -283,22 +283,4 @@ export class DanhMucService {
   exportAll(filters: DanhMucFilterParams): Observable<HttpResponse<Blob>> {
     return this.http.post(`${this.apiUrl}/exportAll`, filters, { observe: 'response', responseType: 'blob' });
   }
-
-  connectChangeEvent(): Observable<MessageEvent> {
-    return new Observable((observer) => {
-      const eventSource = new EventSource('http://localhost:8080/api/group-category/events');
-
-      eventSource.addEventListener('group-category-changed', (event) => {
-        observer.next(event as MessageEvent);
-      });
-
-      eventSource.onerror = (error) => {
-        console.warn('SSE connection lost:', error);
-      };
-
-      return () => {
-        eventSource.close();
-      };
-    });
-  }
 }

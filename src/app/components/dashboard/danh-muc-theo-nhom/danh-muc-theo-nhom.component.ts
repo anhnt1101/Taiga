@@ -11,7 +11,7 @@ import { TableComponent } from '../table/table.component';
 import { DetailModalComponent } from '../detail-modal/detail-modal.component';
 //test
 import { Observable } from 'rxjs';
-import { HasRoleDirective, } from '../../../directives/has-role.directive';
+import { HasRoleDirective } from '../../../directives/has-role.directive';
 
 export { DanhMucRow };
 @Component({
@@ -24,13 +24,12 @@ export { DanhMucRow };
     FilterComponent,
     TableComponent,
     DetailModalComponent,
-    HasRoleDirective
+    HasRoleDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './danh-muc-theo-nhom.component.html',
   styleUrl: './danh-muc-theo-nhom.component.scss',
 })
-
 export class DanhMucTheoNhomComponent implements OnInit {
   private readonly danhMucService = inject(DanhMucService);
   private readonly router = inject(Router);
@@ -41,7 +40,7 @@ export class DanhMucTheoNhomComponent implements OnInit {
   readonly toastNotification = signal<{
     show: boolean;
     row: DanhMucRow | null;
-    action: ToastAction
+    action: ToastAction;
   } | null>(null);
 
   readonly batchModal = signal<{
@@ -78,17 +77,6 @@ export class DanhMucTheoNhomComponent implements OnInit {
     }
 
     this.search();
-
-    this.danhMucService.connectChangeEvent().subscribe({
-      next: () => {
-        console.log('GroupCategory đã thay đổi');
-
-        this.callSearchApi();
-      },
-      error: err => {
-        console.error('SSE error:', err);
-      }
-    });
   }
 
   loadData(): void {
@@ -129,15 +117,14 @@ export class DanhMucTheoNhomComponent implements OnInit {
 
   private callSearchApi(): void {
     this.loading.set(true);
-    this.danhMucService.search(this.filters)
-      .pipe(
-        finalize(() => this.loading.set(false))
-      )
+    this.danhMucService
+      .search(this.filters)
+      .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: (res) => {
           const dataWithStt = res.content.map((item, index) => ({
             ...item,
-            stt: res.number * res.size + index + 1
+            stt: res.number * res.size + index + 1,
           }));
           this.rowData.set(dataWithStt);
           this.currentPage = res.number;
@@ -148,7 +135,7 @@ export class DanhMucTheoNhomComponent implements OnInit {
           console.error(err);
           this.rowData.set([]);
           this.totalElements = 0;
-        }
+        },
       });
   }
 
@@ -163,37 +150,35 @@ export class DanhMucTheoNhomComponent implements OnInit {
   }
 
   async exportExcel(): Promise<void> {
-    this.danhMucService
-      .exportAll(this.filters)
-      .subscribe({
-        next: async (response) => {
-          try {
-            const blob = new Blob(
-              [response.body!], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }
-            );
-            const fileHandle = await (window as any).showSaveFilePicker({
-              suggestedName: 'GroupCategories.xlsx',
-              types: [
-                {
-                  description: 'Excel File',
-                  accept: {
-                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx']
-                  }
-                }
-              ]
-            });
-            const writable = await fileHandle.createWritable();
-            await writable.write(blob);
-            await writable.close();
-            this.showAddSuccessToast(null, 'export');
-          } catch (error) {
-            console.error('Lỗi lưu file:', error);
-          }
-        },
-        error: (err) => {
-          console.error('Export API lỗi:', err);
+    this.danhMucService.exportAll(this.filters).subscribe({
+      next: async (response) => {
+        try {
+          const blob = new Blob([response.body!], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          });
+          const fileHandle = await (window as any).showSaveFilePicker({
+            suggestedName: 'GroupCategories.xlsx',
+            types: [
+              {
+                description: 'Excel File',
+                accept: {
+                  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+                },
+              },
+            ],
+          });
+          const writable = await fileHandle.createWritable();
+          await writable.write(blob);
+          await writable.close();
+          this.showAddSuccessToast(null, 'export');
+        } catch (error) {
+          console.error('Lỗi lưu file:', error);
         }
-      });
+      },
+      error: (err) => {
+        console.error('Export API lỗi:', err);
+      },
+    });
   }
 
   addNew(): void {
@@ -227,7 +212,7 @@ export class DanhMucTheoNhomComponent implements OnInit {
     row: DanhMucRow,
     action: Observable<any>,
     errorMessage: string,
-    successAction?: () => void
+    successAction?: () => void,
   ): void {
     if (!row?.id) {
       return;
@@ -242,56 +227,43 @@ export class DanhMucTheoNhomComponent implements OnInit {
       error: (err) => {
         console.error(errorMessage, err);
         this.showAddSuccessToast(null, 'error');
-
-      }
+      },
     });
   }
 
   submitApprovalFromDetail(row: DanhMucRow): void {
-    this.executeApproveAction(
-      row,
-      this.danhMucService.submitApproval([row.id], 3),
-      'Submit approve failed:',
-      () => this.showAddSuccessToast(null, 'submitApproval')
+    this.executeApproveAction(row, this.danhMucService.submitApproval([row.id], 3), 'Submit approve failed:', () =>
+      this.showAddSuccessToast(null, 'submitApproval'),
     );
   }
 
   approveFromDetail(row: DanhMucRow): void {
-    this.executeApproveAction(
-      row,
-      this.danhMucService.approve([row.id], 4),
-      'Approve failed:',
-      () => this.showAddSuccessToast(null, 'approve')
+    this.executeApproveAction(row, this.danhMucService.approve([row.id], 4), 'Approve failed:', () =>
+      this.showAddSuccessToast(null, 'approve'),
     );
   }
 
   cancelApproveFromDetail(row: DanhMucRow): void {
-    this.executeApproveAction(
-      row,
-      this.danhMucService.cancelApprove([row.id], 7),
-      'Cancel approve failed:',
-      () => this.showAddSuccessToast(null, 'cancelApprove')
+    this.executeApproveAction(row, this.danhMucService.cancelApprove([row.id], 7), 'Cancel approve failed:', () =>
+      this.showAddSuccessToast(null, 'cancelApprove'),
     );
   }
 
   rejectFromDetail(row: DanhMucRow): void {
-    this.executeApproveAction(
-      row,
-      this.danhMucService.reject([row.id], 5),
-      'Reject failed:',
-      () => this.showAddSuccessToast(null, 'reject')
+    this.executeApproveAction(row, this.danhMucService.reject([row.id], 5), 'Reject failed:', () =>
+      this.showAddSuccessToast(null, 'reject'),
     );
   }
 
   confirmDelete(): void {
-    if (!this.selectedDeleteRow) { return; }
-    this.danhMucService
-      .delete(this.selectedDeleteRow.id || this.selectedDeleteRow.stt)
-      .subscribe(() => {
-        this.callSearchApi();
-        this.showAddSuccessToast(null, 'delete');
-        this.closeDeleteConfirm();
-      });
+    if (!this.selectedDeleteRow) {
+      return;
+    }
+    this.danhMucService.delete(this.selectedDeleteRow.id || this.selectedDeleteRow.stt).subscribe(() => {
+      this.callSearchApi();
+      this.showAddSuccessToast(null, 'delete');
+      this.closeDeleteConfirm();
+    });
   }
 
   deleteFromDetail(row: DanhMucRow): void {
@@ -337,7 +309,7 @@ export class DanhMucTheoNhomComponent implements OnInit {
       type: 'cancel',
       title: 'Xác nhận hủy duyệt',
       message: `Bạn có chắc chắn muốn hủy duyệt ${rows.length} bản ghi?`,
-      items: rows.map(r => r.id),
+      items: rows.map((r) => r.id),
     });
   }
 
@@ -347,7 +319,7 @@ export class DanhMucTheoNhomComponent implements OnInit {
       type: 'approve',
       title: 'Xác nhận phê duyệt',
       message: `Bạn có chắc chắn muốn duyệt ${rows.length} bản ghi?`,
-      items: rows.map(r => r.id!),
+      items: rows.map((r) => r.id!),
       rows: rows,
     });
   }
@@ -358,9 +330,10 @@ export class DanhMucTheoNhomComponent implements OnInit {
       this.closeBatchModal();
       return;
     }
-    const action$ = modal.type === 'approve'
-      ? this.danhMucService.approve(modal.items, 4)
-      : this.danhMucService.cancelApprove(modal.items, 7);
+    const action$ =
+      modal.type === 'approve'
+        ? this.danhMucService.approve(modal.items, 4)
+        : this.danhMucService.cancelApprove(modal.items, 7);
     action$.subscribe({
       next: () => {
         this.closeBatchModal();
@@ -375,12 +348,11 @@ export class DanhMucTheoNhomComponent implements OnInit {
         console.error(err);
         this.closeBatchModal();
         this.showAddSuccessToast(null, 'error');
-      }
+      },
     });
   }
 
   closeBatchModal(): void {
     this.batchModal.set(null);
   }
-
 }
